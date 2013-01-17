@@ -30,27 +30,27 @@ public class OrthoCameraTransform extends AbstractCameraTransform {
     
     
     
-    public double getNearPlane() {
+    public double nearPlane() {
         return mNearPlane;
     }
 
     
-    public double getFarPlane() {
+    public double farPlane() {
         return mFarPlane;
     }
 
     
-    public void setViewSize(double viewSize) {
+    public void setViewSize( double viewSize ) {
         mViewSize = viewSize;
     }
     
     
-    public void fitViewSizeToTarget(Aabb target) {
+    public void fitViewSizeToTarget( Aabb target ) {
         mViewSize = target.maxDim() * 1.1;
     }
     
     
-    public void setProjectionDepth(double nearPlane, double farPlane) {
+    public void setProjectionDepth( double nearPlane, double farPlane ) {
         if(mNearPlane == nearPlane && mFarPlane == farPlane)
             return;
         
@@ -59,12 +59,12 @@ public class OrthoCameraTransform extends AbstractCameraTransform {
     }
     
     
-    public void fitProjectionDepthToTarget(Aabb target) {
-        if(target == null) {
-            setProjectionDepth(0.0, 1000.0);
-        }else{
+    public void fitProjectionDepthToTarget( Aabb target ) {
+        if( target == null ) {
+            setProjectionDepth( 0.0, 1000.0 );
+        } else {
             double far = target.maxDim();
-            setProjectionDepth(0.0, far * 2.0);
+            setProjectionDepth( 0.0, far * 2.0 );
         }
     }
     

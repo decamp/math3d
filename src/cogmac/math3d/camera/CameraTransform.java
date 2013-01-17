@@ -16,7 +16,13 @@ public interface CameraTransform {
      * @return the spatial object that determines this CameraTransform's position and orientation.
      */
     public SpatialObject getCameraObject();
-        
+    
+    
+    public double nearPlane();
+    
+    
+    public double farPlane();
+    
     /**
      * Computes transform from model-axis-coordinates to camera-axis-coordinates. 
      * 

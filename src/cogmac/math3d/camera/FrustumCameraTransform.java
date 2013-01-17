@@ -30,47 +30,41 @@ public class FrustumCameraTransform extends AbstractCameraTransform {
     
     
     
-    public double getNearPlane() {
+    public double nearPlane() {
         return mNearPlane;
     }
     
     
-    public double getFarPlane() {
+    public double farPlane() {
         return mFarPlane;
     }
     
     
     public void setProjectionDepth( double nearPlane, double farPlane ) {
-        if(mNearPlane == nearPlane && mFarPlane == farPlane)
-            return;
-        
         mNearPlane = nearPlane;
-        mFarPlane  = farPlane;
+        mFarPlane = farPlane;
     }
     
     
-    public void fitProjectionDepthToTarget( Aabb target ) {
-        if(target == null) {
-            setProjectionDepth(2.0, 1000.0);
-        }else{
-            double far = target.maxDim();
-            setProjectionDepth(far / 500.0, far);
-        }
-    }
-    
-    
-    public double getFov() {
+    public double fov() {
         return mFov;
     }
     
     
-    public void setFov( double fovDegrees ) {
-        if(mFov == fovDegrees)
-            return;
-        
+    public FrustumCameraTransform fov( double fovDegrees ) {
         mFov = fovDegrees;
+        return this;
     }
     
+    
+    public void fitProjectionDepthToTarget( Aabb target ) {
+        if( target == null ) {
+            setProjectionDepth( 2.0, 1000.0 );
+        } else {
+            double far = target.maxDim();
+            setProjectionDepth( far / 500.0, far );
+        }
+    }
     
     
     public synchronized void computeModelToCameraMatrix( LongRect viewport, LongRect subViewport, double[] out ) {
@@ -121,5 +115,39 @@ public class FrustumCameraTransform extends AbstractCameraTransform {
         
         Matrices.computeFrustumMatrix( left, right, bottom, top, near, far, out );
     }
+    
+    
+
+    /**
+     * @deprecated Use nearPlane()
+     */
+    public double getNearPlane() {
+        return mNearPlane;
+    }
+
+    /**
+     * @deprecated Use farPlane()
+     */
+    public double getFarPlane() {
+        return mFarPlane;
+    }
+    
+    /**
+     * @deprecated Use fov()
+     */
+    public double getFov() {
+        return mFov;
+    }
+    
+    /**
+     * @deprecated Use fov()
+     */
+    public void setFov( double fovDegrees ) {
+        if(mFov == fovDegrees)
+            return;
+        
+        mFov = fovDegrees;
+    }
+    
     
 }

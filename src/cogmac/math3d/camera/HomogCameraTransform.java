@@ -52,24 +52,24 @@ public class HomogCameraTransform extends AbstractCameraTransform {
     
     
     HomogCameraTransform( SpatialObject camera, double[] projectionMat, double[] modelviewMat ) {
-        super(camera);
+        super( camera );
         mRawProjectionMat = projectionMat;
         mProjectionMat    = projectionMat.clone();
         mModelviewMat     = modelviewMat;
         
-        double[] p = computeDepthPlanes(projectionMat);
+        double[] p = computeDepthPlanes( projectionMat );
         mRawNearPlane = mNearPlane = p[0];
         mRawFarPlane  = mFarPlane  = p[1];
     }
     
 
     
-    public double getNearPlane() {
+    public double nearPlane() {
         return mNearPlane;
     }
     
     
-    public double getFarPlane() {
+    public double farPlane() {
         return mFarPlane;
     }
     
@@ -116,18 +116,18 @@ public class HomogCameraTransform extends AbstractCameraTransform {
     
     private static double[] computeDepthPlanes( double[] projectionMat ) {
         double[] inv = new double[16];
-        Matrices.invertMat(projectionMat.clone(), new double[16], inv);
+        Matrices.invertMat( projectionMat.clone(), new double[16], inv );
         
         double[] va = {0, 0, -1};
         double[] vb = {0, 0, 0};
-        Matrices.multMatVec(inv, va, vb);
-        double nearPlane = Vectors.hypot(vb);
+        Matrices.multMatVec( inv, va, vb );
+        double nearPlane = Vectors.hypot( vb );
         
         va[2] = 1.0;
-        Matrices.multMatVec(inv, va, vb);
-        double farPlane = Vectors.hypot(vb);
+        Matrices.multMatVec( inv, va, vb );
+        double farPlane = Vectors.hypot( vb );
         
-        return new double[] {nearPlane, farPlane};   
+        return new double[] { nearPlane, farPlane };   
     }
     
 }

@@ -138,7 +138,7 @@ public class Actor extends SpatialObject {
         w0[2] = 0.0;
         
         Matrices.multMatVec( mRot, w0, w1 );
-        translate( w1[0], w1[1], w1[2] );
+        translate( w1[0], w1[1], dz );
     }
     
 
