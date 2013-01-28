@@ -5,13 +5,15 @@ package cogmac.math3d;
  */
 public final class Tolerance {
     
-    public static final double EPS         = 0x0.0000000000001P-1;    // 64-bit machine epsilon
-    public static final double ABS_ERR     = 0x0.0000000000001P-1017; // Double.MIN_VALUE * 32.0
-    public static final double REL_ERR     = 0x0.0000000000001P4;     // EPS * 32.0
+    public static final double EPS          = 0x0.0000000000001P-1;    // 64-bit machine epsilon
+    public static final double ABS_ERR      = 0x0.0000000000001P-1017; // Double.MIN_VALUE * 32.0
+    public static final double REL_ERR      = 0x0.0000000000001P4;     // EPS * 32.0
+    public static final double SQRT_ABS_ERR = Math.sqrt( ABS_ERR );
     
-    public static final float  FEPS        = 0x0.000002P-1f;          // 32-bit machine epsilon
-    public static final float  FABS_ERR    = 0x0.000002P-121f;        // Float.MIN_VALUE * 32.0f
-    public static final float  FREL_ERR    = 0x0.000002P4f;           // FEPS * 32.0f
+    public static final float  FEPS          = 0x0.000002P-1f;          // 32-bit machine epsilon
+    public static final float  FABS_ERR      = 0x0.000002P-121f;        // Float.MIN_VALUE * 32.0f
+    public static final float  FREL_ERR      = 0x0.000002P4f;           // FEPS * 32.0f
+    public static final float  FSQRT_ABS_ERR = (float)Math.sqrt( FABS_ERR ); 
     
     
     @Deprecated 
@@ -142,7 +144,7 @@ public final class Tolerance {
 
     
     public static void main( String[] args ) {
-                
+        System.out.println( REL_ERR );
     }
     
 }

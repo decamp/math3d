@@ -15,11 +15,10 @@ public class ActorCoords {
                                                   0,  0,  0,  1 };
     
     private static final double[] INVERSE_AXIS_MATRIX = new double[16];
-
+    
     
     static {
-        double[] w = new double[16];
-        Matrices.invertMat(AXIS_MATRIX.clone(), w, INVERSE_AXIS_MATRIX); 
+        Matrices.invert( AXIS_MATRIX, INVERSE_AXIS_MATRIX ); 
     }
     
 

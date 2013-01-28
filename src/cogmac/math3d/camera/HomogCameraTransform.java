@@ -20,20 +20,18 @@ public class HomogCameraTransform extends AbstractCameraTransform {
         
         double[] proj = new double[16];
         double[] mod  = new double[16];
-        double[] inv  = new double[16];
         double[] rot  = camera.mRot;
         
-        System.arraycopy( modelviewMat, 0, mod, 0, 16 );
-        Matrices.invertMat( mod, proj, inv );
-        System.arraycopy( modelviewMat, 0, mod, 0, 16 );
         System.arraycopy( projectionMat, 0, proj, 0, 16 );
+        System.arraycopy( modelviewMat, 0, mod, 0, 16 );
         
-        double[] vec = {0, 0, 0};
-        double[] pos = camera.mPos;
+        double[] pos   = camera.mPos;
+        double[] vec   = {0, 0, 0};
+        double[] trans = new double[16];
         
         Matrices.multMatVec( modelviewMat, vec, pos );
-        Matrices.computeTranslationMatrix( -pos[0], -pos[1], -pos[2], inv );
-        Matrices.multMatMat( inv, mod, rot );
+        Matrices.computeTranslationMatrix( -pos[0], -pos[1], -pos[2], trans );
+        Matrices.multMatMat( trans, mod, rot );
         
         return new HomogCameraTransform( camera, proj, mod );
     }
@@ -102,7 +100,6 @@ public class HomogCameraTransform extends AbstractCameraTransform {
     }
     
     
-    
     public void computeModelToCameraMatrix( LongRect viewport, LongRect subViewport, double[] outMat ) {
         System.arraycopy( mModelviewMat, 0, outMat, 0, 16 );
     }
@@ -116,7 +113,7 @@ public class HomogCameraTransform extends AbstractCameraTransform {
     
     private static double[] computeDepthPlanes( double[] projectionMat ) {
         double[] inv = new double[16];
-        Matrices.invertMat( projectionMat.clone(), new double[16], inv );
+        Matrices.invert( projectionMat, inv );
         
         double[] va = {0, 0, -1};
         double[] vb = {0, 0, 0};

@@ -219,9 +219,6 @@ public final class Vectors {
      * @return true if any adjustment made, false if output is identical to input
      */
     public static boolean clampToCone( double[] vec, double[] coneAxis, double coneRads, double[] outVec, double[] outMat ) {
-        
-        double d1     = Vectors.hypot(vec);
-        double d2     = Vectors.hypot(coneAxis);
         double cosAng = cosAng(vec, coneAxis);
         double ang    = Math.acos(cosAng);
         

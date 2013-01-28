@@ -1,6 +1,5 @@
 package cogmac.math3d;
 
-import java.util.*;
 import static cogmac.math3d.Tolerance.*;
 
 
@@ -35,12 +34,22 @@ public final class Matrices {
         out[15] = a[ 3]*b[12] + a[ 7]*b[13] + a[11]*b[14] + a[15]*b[15];
     }
     
-    
+    /**
+     * @deprecated Until I figure out if this is correct or not. 
+     */
     public static void multMatMatHomog(double[] a, double[] b, double[] out) {
         multMatMat(a, b, out);
-        double scale = 1.0 / (out[3] + out[7]+ out[11] + out[15]);
         
-        for(int i = 0; i < 16; i++) {
+        // Don't think this is right.
+        //double scale = 1.0 / (out[3] + out[7]+ out[11] + out[15]);
+        //for(int i = 0; i < 16; i++) {
+        //    out[i] *= scale;
+        //}
+                
+        double scale = 1.0 / out[15];
+        out[15] = 1.0;
+        
+        for(int i = 0; i < 15; i++) {
             out[i] *= scale;
         }
     }
@@ -72,8 +81,6 @@ public final class Matrices {
             out[2+offOut] /= w;
         }
     }
-
-
     
     
     
@@ -364,48 +371,109 @@ public final class Matrices {
     }
     
        
+    /**
+     * @param mat    Input matrix
+     * @param out    Array to hold inverted matrix on return.
+     * @return true if matrix determinant is not near zero and accurate inverse was found.
+     */    
+    public static boolean invert( double[] mat, double[] out ) {
+        double s0 = mat[0+0*4] * mat[1+1*4] - mat[1+0*4] * mat[0+1*4];
+        double s1 = mat[0+0*4] * mat[1+2*4] - mat[1+0*4] * mat[0+2*4];
+        double s2 = mat[0+0*4] * mat[1+3*4] - mat[1+0*4] * mat[0+3*4];
+        double s3 = mat[0+1*4] * mat[1+2*4] - mat[1+1*4] * mat[0+2*4];
+        double s4 = mat[0+1*4] * mat[1+3*4] - mat[1+1*4] * mat[0+3*4];
+        double s5 = mat[0+2*4] * mat[1+3*4] - mat[1+2*4] * mat[0+3*4];
+
+        double c5 = mat[2+2*4] * mat[3+3*4] - mat[3+2*4] * mat[2+3*4];
+        double c4 = mat[2+1*4] * mat[3+3*4] - mat[3+1*4] * mat[2+3*4];
+        double c3 = mat[2+1*4] * mat[3+2*4] - mat[3+1*4] * mat[2+2*4];
+        double c2 = mat[2+0*4] * mat[3+3*4] - mat[3+0*4] * mat[2+3*4];
+        double c1 = mat[2+0*4] * mat[3+2*4] - mat[3+0*4] * mat[2+2*4];
+        double c0 = mat[2+0*4] * mat[3+1*4] - mat[3+0*4] * mat[2+1*4];
+
+        // Should check for 0 determinant.
+        double invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
+        boolean ret   = invdet > Tolerance.SQRT_ABS_ERR || -invdet > Tolerance.SQRT_ABS_ERR;
+        invdet = 1.0 / invdet;
+        
+        out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
+        out[0+1*4] = (-mat[0+1*4] * c5 + mat[0+2*4] * c4 - mat[0+3*4] * c3) * invdet;
+        out[0+2*4] = ( mat[3+1*4] * s5 - mat[3+2*4] * s4 + mat[3+3*4] * s3) * invdet;
+        out[0+3*4] = (-mat[2+1*4] * s5 + mat[2+2*4] * s4 - mat[2+3*4] * s3) * invdet;
+
+        out[1+0*4] = (-mat[1+0*4] * c5 + mat[1+2*4] * c2 - mat[1+3*4] * c1) * invdet;
+        out[1+1*4] = ( mat[0+0*4] * c5 - mat[0+2*4] * c2 + mat[0+3*4] * c1) * invdet;
+        out[1+2*4] = (-mat[3+0*4] * s5 + mat[3+2*4] * s2 - mat[3+3*4] * s1) * invdet;
+        out[1+3*4] = ( mat[2+0*4] * s5 - mat[2+2*4] * s2 + mat[2+3*4] * s1) * invdet;
+
+        out[2+0*4] = ( mat[1+0*4] * c4 - mat[1+1*4] * c2 + mat[1+3*4] * c0) * invdet;
+        out[2+1*4] = (-mat[0+0*4] * c4 + mat[0+1*4] * c2 - mat[0+3*4] * c0) * invdet;
+        out[2+2*4] = ( mat[3+0*4] * s4 - mat[3+1*4] * s2 + mat[3+3*4] * s0) * invdet;
+        out[2+3*4] = (-mat[2+0*4] * s4 + mat[2+1*4] * s2 - mat[2+3*4] * s0) * invdet;
+
+        out[3+0*4] = (-mat[1+0*4] * c3 + mat[1+1*4] * c1 - mat[1+2*4] * c0) * invdet;
+        out[3+1*4] = ( mat[0+0*4] * c3 - mat[0+1*4] * c1 + mat[0+2*4] * c0) * invdet;
+        out[3+2*4] = (-mat[3+0*4] * s3 + mat[3+1*4] * s1 - mat[3+2*4] * s0) * invdet;
+        out[3+3*4] = ( mat[2+0*4] * s3 - mat[2+1*4] * s1 + mat[2+2*4] * s0) * invdet;
+            
+        return ret;
+    }
+    
+    
+    public static String format( double[] mat ) {
+        StringBuilder sb = new StringBuilder();
+        for( int r = 0; r < 4; r++ ) {
+            if ( r == 0 ) {
+                sb.append( "[[ " );
+            } else {
+                sb.append( " [ " );
+            }
+            
+            sb.append( String.format( "% 7.4f  % 7.4f  % 7.4f  % 7.4f", mat[r   ], mat[r+4], mat[r+8], mat[r+12] ) );
+            
+            if( r == 3 ) {
+                sb.append( " ]]" );
+            } else {
+                sb.append( " ]\n" );
+            }
+        }
+            
+        return sb.toString();
+    }
+
+
+    
+    
     
     /**
      * @param mat    Input matrix
      * @param work0  Working matrix.  Contents don't matter, but is overwritten.  
      * @param work1  Working matrix.  Contents don't matter, but is overwritten.
      * @param out    Array to hold inverted matrix on return.
+     * @deprecated <code>invert( mat, out )</code> is much faster and requires no workspace matrices. 
      */
+    @Deprecated
     public static void invertMat(double[] mat, double[] work0, double[] work1, double[] out) {
-        System.arraycopy(mat, 0, work0, 0, 16);
-        invertMat(work0, work1, out);
+        invert( mat, out );
     }
     
     /**
-     * PLEASE READ because matrix <code>a</code> is scrambled when you call
-     * this method. 
-     * 
-     * @param a Input matrix, which is also used as work space
-     * @param w Working matrix.  Doesn't matter what it contains.
-     * @param out Array to hold inverted matrix on return. 
+     * @deprecated invert( mat, out ) is faster and easier to use. 
      */
+    @Deprecated
     public static void invertMat(double[] a, double[] w, double[] out) {
-        int[] p = new int[4];      //Pivots
-        
-        if(w == null) {
-            w = new double[]{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
-        }else{
-            Arrays.fill(w, 0);
-            w[ 0] = 1.0;
-            w[ 5] = 1.0;
-            w[10] = 1.0;
-            w[15] = 1.0;    
-        }
-        
-        decompPlu(a, p);
-        solvePlu(a, p, w, 4, out);
+        invert( a, out );
     }
 
     
-    public static void decompPlu(double[] a, int[] p) {
+    /**
+     * @deprecated Since no longer used for inversion, should be generalized or removed.
+     */
+    @Deprecated
+    public static void decompPlu( double[] a, int[] p ) {
         final int m = 4;
         final int n = 4;
-        final int d = Math.min(m, n);
+        final int d = Math.min( m, n );
         int pivSign = 1;
 
         for(int i = 0; i < m; i++)
@@ -415,29 +483,30 @@ public final class Matrices {
         for(int j = 0; j < n; j++) {
 
             //Apply previous transformations.
-            for(int i = 0; i < m; i++) {
-                int kmax = Math.min(i,j);
+            for( int i = 0; i < m; i++ ) {
+                int kmax = Math.min( i, j );
                 double s = 0.0;
                 
-                for(int k = 0; k < kmax; k++){
-                    s += a[i+k*m]*a[k+j*m];
+                for( int k = 0; k < kmax; k++ ){
+                    s += a[ i + k * m ] * a[ k + j * m ];
                 }
                 
-                a[i+j*m] -= s;
+                a[ i + j * m ] -= s;
             }
             
             //Find pivot and exchange if necessary.
             int piv = j;
-            for(int i = j+1; i < m; i++) {
-                if(Math.abs(a[i+j*m]) > Math.abs(a[piv+j*m]))
+            for( int i = j + 1; i < m; i++ ) {
+                if( Math.abs( a[ i + j * m ] ) > Math.abs( a[ piv + j * m ] ) ) {
                     piv = i;
+                }
             }
             
-            if(piv != j) {
-                for(int k = 0; k < n; k++) {
-                    double t = a[piv+k*m];
-                    a[piv+k*m] = a[j+k*m];
-                    a[j+k*m] = t;
+            if( piv != j ) {
+                for( int k = 0; k < n; k++ ) {
+                    double t = a[ piv + k * m ];
+                    a[ piv + k * m ] = a[ j + k * m ];
+                    a[ j + k * m ] = t;
                 }
                 
                 int k = p[piv];
@@ -456,63 +525,57 @@ public final class Matrices {
     }
 
     
-    public static void solvePlu(double[] lu, int[] p, double[] b, int nx, double[] out) {
+    /**
+     * @param lu
+     * @param p
+     * @param b
+     * @param nx
+     * @param out
+     * @deprecated Since no longer used for inversion, sohuld be generalized or removed.
+     */
+    @Deprecated
+    public static void solvePlu( double[] lu, int[] p, double[] b, int nx, double[] out ) {
         final int m = 4;
         final int n = 4;
         
         //Reorder rows.
-        for(int i = 0; i < m; i++) {
+        for ( int i = 0; i < m; i++ ) {
             final int k = p[i];
             
-            for(int j = 0; j < n; j++) {
+            for ( int j = 0; j < n; j++ ) {
                 out[i+j*m] = b[k+j*m];
             }
         } 
                 
         //Solve L*Y = B(piv,:)
-        for(int k = 0; k < n; k++) {
-            for(int i = k+1; i < m; i++) {
-                for(int j = 0; j < nx; j++) {
+        for ( int k = 0; k < n; k++ ) {
+            for ( int i = k + 1; i < m; i++) {
+                for ( int j = 0; j < nx; j++ ) {
                     out[i+j*m] -= out[k+j*m] * lu[i+k*m];
                 }
             }
         }
         
         //Solve U*X = Y
-        for(int k = Math.min(m,n)-1; k >= 0; k--) {
-            for(int j = 0; j < nx; j++) {
+        for ( int k = Math.min( m, n ) - 1; k >= 0; k-- ) {
+            for( int j = 0; j < nx; j++ ) {
                 out[k+j*m] /= lu[k+k*m];
             }
             
-            for(int i = 0; i < k; i++) {
-                for(int j = 0; j < nx; j++) {
+            for( int i = 0; i < k; i++ ) {
+                for( int j = 0; j < nx; j++ ) {
                     out[i+j*m] -= out[k+j*m] * lu[i+k*m];
                 }
             }
         }
     }
 
-    
-    public static String matToString(double[] mat) {
-        StringBuilder sb = new StringBuilder();
-        
-        for(int r = 0; r < 4; r++) {
-            if(r == 0) {
-                sb.append("[[ ");
-            }else{
-                sb.append(" [ ");
-            }
-            
-            sb.append(String.format("% 7.4f  % 7.4f  % 7.4f  % 7.4f", mat[r   ], mat[r+4], mat[r+8], mat[r+12]));
-            
-            if(r == 3) {
-                sb.append(" ]]");
-            }else{
-                sb.append(" ]\n");
-            }
-        }
-            
-        return sb.toString();
+
+    /**
+     * @deprecated Use format()
+     */
+    public static String matToString( double[] mat ) {
+        return format( mat );
     }
 
     

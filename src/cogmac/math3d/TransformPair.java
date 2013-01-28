@@ -87,7 +87,7 @@ public class TransformPair {
             return;
         
         System.arraycopy(mInverse, 0, mWork1, 0, 16);
-        Matrices.invertMat(mWork1, mWork2, mTransform);
+        Matrices.invert( mWork1, mTransform );
         mTransformValid = true;
     }
     
@@ -97,7 +97,7 @@ public class TransformPair {
             return;
         
         System.arraycopy(mTransform, 0, mWork1, 0, 16);
-        Matrices.invertMat(mWork1, mWork2, mInverse);
+        Matrices.invert(mWork1, mInverse);
         mInverseValid = true;
     }
             
