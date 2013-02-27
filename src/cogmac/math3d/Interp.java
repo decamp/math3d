@@ -1,43 +1,26 @@
 package cogmac.math3d;
 
+
 /**
- * Different methods for interpolation.
- * <p>
- * Ported from a webpage posted by Paul Bourke.
- * 
+ * Methods for interpolation. 
  * 
  * @author decamp
  */
 public final class Interp {
     
+    
     /**
      * Linear interpolation.
      * 
-     * @param x0 Point before sample
-     * @param x1 Point after sample
-     * @param t  Curve position to sample, parameterized between [0,1].  
-     * @return interpolated point
+     * @param x0 Value before sample
+     * @param x1 Value after sample
+     * @param t  Parameterized position to sample, parameterized between [0,1].  
+     * @return   interpolated value
      */
-    public static double lerp(double x0, double x1, double t) {
-        return x0 * (1.0 - t) + x1 * t;
+    public static double lerp( double x0, double x1, double t ) {
+        return x0 * ( 1.0 - t ) + x1 * t;
     }
     
-    /**
-     * Cosine interpolation.  
-     * <p>
-     * Not truly continuous, but smoother than
-     * a lerp and without the need for outside points.
-     * 
-     * @param x0 Point before sample.
-     * @param x1 Point after sample.
-     * @param t  Curve position to sample, parameterized between [0,1].
-     * @return interpolated point
-     */
-    public static double cos(double x0, double x1, double t) {
-        t = (1.0 - Math.cos(t * Math.PI)) * 0.5;
-        return x0 * (1.0 - t) + x1 * t;
-    }
-
     /**
      * Cubic spline interpolation.
      *  
@@ -48,14 +31,13 @@ public final class Interp {
      * @param t  Curve position to sample, parameterized between [0,1].
      * @return interpolated point.
      */
-    public static double cubic(double x0, double x1, double x2, double x3, double t) {
-        double pp = t*t;
+    public static double cubic( double x0, double x1, double x2, double x3, double t ) {
+        double tt = t * t;
         double a0 = x3 - x2 - x0 + x1;
         double a1 = x0 - x1 - a0;
         double a2 = x2 - x0;
-        double a3 = x1;
-
-        return(a0*t*pp+a1*pp+a2*t+a3);
+        
+        return a0 * t * tt + a1 * tt + a2 * t + x1;
     }
     
     /**
@@ -71,20 +53,17 @@ public final class Interp {
      * @param t  Curve position to sample, parameterized between [0,1].
      * @return interpolated point.
      */
-    public static double catmull(double x0, double x1, double x2, double x3, double t) {
-        double pp = t*t;
+    public static double catmull( double x0, double x1, double x2, double x3, double t ) {
+        double tt = t * t;
         double a0 = -0.5 * x0 + 1.5 * x1 - 1.5 * x2 + 0.5 * x3;
         double a1 = x0 - 2.5 * x1 + 2 * x2 - 0.5 * x3;
         double a2 = -0.5 * x0 + 0.5 * x2;
-        double a3 = x1;
         
-        return(a0*t*pp+a1*pp+a2*t+a3);
+        return a0 * t * tt + a1 * tt + a2 * t + x1;
     }
 
     /**
      * Hermite spline interpolation.
-     * <p>
-     * Somewhat 
      * 
      * @param x0 Point before point before sample
      * @param x1 Point before sample
@@ -105,24 +84,24 @@ public final class Interp {
     {
         double tt  = t * t;
         double ttt = tt * t;
-        double m0  = (x1-x0) * (1+bias) * (1-tension) / 2;
-        m0 += (x2-x1) * (1-bias) * (1-tension) / 2;
+        tension = 1.0 - tension;
         
-        double m1 = (x2-x1) * (1+bias) * (1-tension) / 2;
-        m1 += (x3-x2) * (1-bias) * (1-tension) / 2;
+        double m0  = (x1-x0) * (1+bias) * tension / 2 +
+                     (x2-x1) * (1-bias) * tension / 2;
         
-        double a0 =  2 * ttt - 3 * tt + 1;
-        double a1 =      ttt - 2 * tt + t;
-        double a2 =      ttt -     tt;
-        double a3 = -2 * ttt + 3 * tt;
+        double m1 = (x2-x1) * (1+bias) * tension / 2 +
+                    (x3-x2) * (1-bias) * tension / 2;
         
-        return(a0*x1 + a1*m0 + a2*m1 + a3*x2);
+        double a0 =  2 * ttt - 3 * tt     + 1;
+        double a1 =      ttt - 2 * tt + t    ;
+        double a2 =      ttt -     tt        ;
+        double a3 = -2 * ttt + 3 * tt        ;
+        
+        return a0*x1 + a1*m0 + a2*m1 + a3*x2;
     }
-
     
-
     
     
     private Interp() {}
-
+    
 }
