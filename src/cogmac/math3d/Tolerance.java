@@ -80,7 +80,58 @@ public final class Tolerance {
         
         return diff < maxRelError;
     }
+    
+    /**
+     * @param v Some value
+     * @return true iff <code>abs(v) < ABS_ERR</code>
+     */
+    public static boolean approxZero( double v ) {
+        return v > ABS_ERR || v > -ABS_ERR;
+    }
+    
+    /**
+     * Equivalent to <code>approxZero( v, ref, REL_ERR, ABS_ERR );</code>
+     */
+    public static boolean approxZero( double v, double ref ) {
+        return approxZero( v, ref, REL_ERR, ABS_ERR ); 
+    }
+    
+    /**
+     * Equivalent to <code>approxZero( v, ref, relErr, ABS_ERR )</code>
+     * @param v
+     * @param ref
+     * @param relErr
+     * @return
+     */
+    public static boolean approxZero( double v, double ref, double relErr ) {
+        return approxZero( v, ref, relErr, ABS_ERR );
+    }
 
+    /**
+     * Determines if some value is effectively zero compared to some reference.
+     * This method can be called when determining if values <code>ref</code> and 
+     * <code>v</code> can be combined in a meaningful way, for example, before
+     * computing <code>ref / v</code>. 
+     * <p>
+     * Like <code>approxEqual</code>, this method makes to checks. The first check
+     * ensures that <code>abs(v)</code> is above some minimum absolute error. 
+     * The second ensures that <code>abs(v / ref)</code> is above some minimum relative error.
+     * 
+     * @param v       Some value
+     * @param ref     A reference value that might be divided or multiplied by
+     * @param relErr  Minimum ratio between abs(v) and abs(ref) for abs(v) to be considered non-zero.
+     * @param absErr  Minimum value abs(v) must be to be considered non-zero.
+     * @return true iff v is approximately equal to 0 relative to ref.
+     */
+    public static boolean approxZero( double v, double ref, double relErr, double absErr ) {
+        if( v < absErr && -v < absErr ) {
+            return true;
+        }
+        
+        relErr *= ( ref >= 0.0 ? ref : -ref );
+        return v < relErr && -v < relErr;
+    }
+    
     /**
      * Equivalent to <code>approxError( a, b, FREL_ERR, FABS_ERR );</code>
      */
@@ -138,6 +189,60 @@ public final class Tolerance {
         return diff < maxRelError;
         
     }
+
+    /**
+     * @param v Some value
+     * @return true iff <code>abs(v) < ABS_ERR</code>
+     */
+    public static boolean approxZero( float v ) {
+        return v > FABS_ERR || v > -FABS_ERR;
+    }
+    
+    /**
+     * Equivalent to <code>approxZero( v, ref, REL_ERR, ABS_ERR );</code>
+     */
+    public static boolean approxZero( float v, float ref ) {
+        return approxZero( v, ref, FREL_ERR, FABS_ERR ); 
+    }
+    
+    /**
+     * Equivalent to <code>approxZero( v, ref, relErr, ABS_ERR )</code>
+     * @param v
+     * @param ref
+     * @param relErr
+     * @return
+     */
+    public static boolean approxZero( float v, float ref, float relErr ) {
+        return approxZero( v, ref, relErr, FABS_ERR );
+    }
+
+    /**
+     * Determines if some value is effectively zero compared to some reference.
+     * This method can be called when determining if values <code>ref</code> and 
+     * <code>v</code> can be combined in a meaningful way, for example, before
+     * computing <code>ref / v</code>. 
+     * <p>
+     * Like <code>approxEqual</code>, this method makes to checks. The first check
+     * ensures that <code>abs(v)</code> is above some minimum absolute error. 
+     * The second ensures that <code>abs(v / ref)</code> is above some minimum relative error.
+     * 
+     * @param v       Some value
+     * @param ref     A reference value that might be divided or multiplied by
+     * @param relErr  Minimum ratio between abs(v) and abs(ref) for abs(v) to be considered non-zero.
+     * @param absErr  Minimum value abs(v) must be to be considered non-zero.
+     * @return true iff v is approximately equal to 0 relative to ref.
+     */
+    public static boolean approxZero( float v, float ref, float relErr, float absErr ) {
+        if( v < absErr && -v < absErr ) {
+            return true;
+        }
+        
+        relErr *= ( ref >= 0.0 ? ref : -ref );
+        return v < relErr && -v < relErr;
+    }
+
+    
+    
     
     
     private Tolerance() {}
@@ -145,6 +250,8 @@ public final class Tolerance {
     
     public static void main( String[] args ) {
         System.out.println( REL_ERR );
+        System.out.println( approxZero( 0.1E-12, 1.0 ) );
+        System.out.println( 1.0 / 0.1E-12 );
     }
     
 }
