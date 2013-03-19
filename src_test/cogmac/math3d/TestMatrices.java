@@ -42,13 +42,9 @@ public class TestMatrices {
 
     
     @Test
-    @SuppressWarnings( "deprecation" )
     public void testInverseSpeed() {
-        
         double[] a = new double[16];
         double[] c = new double[16];
-        double[] w0 = new double[16];
-        double[] w1 = new double[16];
         Random rand = new Random( 100 );
         
         long t0 = 0;
@@ -69,7 +65,7 @@ public class TestMatrices {
             start = System.nanoTime();
             
             for( int j = 0; j < 10; j++) {
-                Matrices.invertMat( a, w0, w1, c );
+                //Matrices.invert2( a, c );
             }
             
             t1 += System.nanoTime() - start;
@@ -101,7 +97,6 @@ public class TestMatrices {
     static void rotXyz( double rx, double ry, double rz, double[] out ) {
         double[] a = new double[16];
         double[] b = new double[16];
-        double[] c = new double[16];
         
         Matrices.computeRotationMatrix( rx, 1, 0, 0, a );
         Matrices.computeRotationMatrix( ry, 0, 1, 0, out );

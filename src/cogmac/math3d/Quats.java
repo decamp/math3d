@@ -9,7 +9,13 @@ package cogmac.math3d;
 public final class Quats {
     
     
+    public static double sum( double[] q ) {
+        return q[0] + q[1] + q[2] + q[3];
+    }
+    
+    
     public static void mult( double[] a, double[] b, double[] out ) {
+        // These local copies had no effect in performance tests, but whatevs. 
         final double a0 = a[0];
         final double a1 = a[1];
         final double a2 = a[2];
@@ -42,7 +48,7 @@ public final class Quats {
     
     
     public static void normalize( double[] q ) {
-        double r = 1.0 / Math.sqrt( q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3] );
+        double r = 1.0 / ( q[0] + q[1] + q[2] + q[3] );
         q[0] *= r;
         q[1] *= r;
         q[2] *= r;
@@ -55,10 +61,10 @@ public final class Quats {
         final double r11 = mat[ 5];
         final double r22 = mat[10];
         
-        double q0 = (  r00 + r11 + r22 + 1.0 ) * 0.25;
-        double q1 = (  r00 - r11 - r22 + 1.0 ) * 0.25;
-        double q2 = ( -r00 + r11 - r22 + 1.0 ) * 0.25;
-        double q3 = ( -r00 - r11 + r22 + 1.0 ) * 0.25;
+        double q0 = (  r00 + r11 + r22 + 1.0 );// * 0.25;
+        double q1 = (  r00 - r11 - r22 + 1.0 );// * 0.25;
+        double q2 = ( -r00 + r11 - r22 + 1.0 );// * 0.25;
+        double q3 = ( -r00 - r11 + r22 + 1.0 );// * 0.25;
         
         q0 = q0 < 0.0 ? 0.0 : Math.sqrt( q0 );
         q1 = q1 < 0.0 ? 0.0 : Math.sqrt( q1 );

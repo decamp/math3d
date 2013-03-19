@@ -1,16 +1,16 @@
 package cogmac.math3d;
 
-import java.util.Random;
+import java.util.*;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-public class TestQuaternions {
+public class TestQuats {
     
     
     @Test
     public void testRandMatrixConversions() {
-        Random rand = new Random( 5 );
+        Random rand = new Random( 6 );
         
         double[] rotIn  = new double[16];
         double[] q      = new double[4];
@@ -61,12 +61,75 @@ public class TestQuaternions {
         }
     }
     
+
+    @Test
+    public void testMultSpeed() {
+        double[] a  = new double[4];
+        double[] b  = new double[4];
+        double[] c  = new double[4];
+        Random rand = new Random( 100 );
+        
+        long t0 = 0;
+        long t1 = 0;
+        
+        for( int i = 0; i < 100000; i++ ) {
+            uniformRandQuat( rand, a );
+            uniformRandQuat( rand, b );
+            
+            long start = System.nanoTime();
+            
+            for( int j = 0; j < 200; j++ ) {
+                Quats.mult( a, b, c );
+            }
+            
+            t0 += System.nanoTime() - start;
+            start = System.nanoTime();
+            
+            for( int j = 0; j < 200; j++) {
+                Quats.mult( a, b, c );
+            }
+            
+            t1 += System.nanoTime() - start;
+        }
+        
+        System.out.println( "Time0: " + ( t0 / 1000000000.0 ) );
+        System.out.println( "Time1: " + ( t1 / 1000000000.0 ) );
+    }
+    
+
+    
+    private static void uniformRandQuat( Random rand, double[] out ) {
+        // Draw three uniform samples.
+        double u0 = rand.nextDouble();
+        double u1 = rand.nextDouble();
+        double u2 = rand.nextDouble();
+        // Sort smallest to largest.
+        if( u0 > u1 ) {
+            double t = u0;
+            u0 = u1;
+            u1 = t;
+        }
+        if( u1 > u2 ) {
+            double t = u1;
+            u1 = u2;
+            u2 = t;
+        }
+        if( u0 > u1 ) {
+            double t = u0;
+            u0 = u1;
+            u1 = t;
+        }
+        
+        out[0] = u0;
+        out[1] = u1 - u0;
+        out[2] = u2 - u1;
+        out[3] = 1.0 - u2;
+    }
     
     
-    static void rotXyz( double rx, double ry, double rz, double[] out ) {
+    private static void rotXyz( double rx, double ry, double rz, double[] out ) {
         double[] a = new double[16];
         double[] b = new double[16];
-        double[] c = new double[16];
         
         Matrices.computeRotationMatrix( rx, 1, 0, 0, a );
         Matrices.computeRotationMatrix( ry, 0, 1, 0, out );
@@ -78,7 +141,7 @@ public class TestQuaternions {
     
     private static boolean matEquals( double[] a, double[] b ) {
         for( int i = 0; i < 16; i++ ) {
-            if( !Tolerance.approxEqual( a[i], b[i], 1E-5, 1E-5 ) ) {
+            if( !Tolerance.approxEqual( a[i], b[i], 1E-8, 1E-8 ) ) {
                 return false;
             }
         }

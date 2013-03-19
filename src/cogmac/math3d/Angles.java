@@ -89,9 +89,9 @@ public class Angles {
     private static double asincos( double sinAng, double cosAng ) {
         if( cosAng >= 1.0 ) {
             return cosAng < 1.0 + Tolerance.REL_ERR ? 0.0 : Double.NaN;
-        }else if(cosAng <= -1.0) {
+        } else if( cosAng <= -1.0 ) {
             return cosAng > -1.0 - Tolerance.REL_ERR ? Math.PI : Double.NaN; 
-        }else{
+        } else {
             return ( sinAng >= 0.0 ? Math.acos( cosAng ) : -Math.acos( cosAng ) );
         }
     }
