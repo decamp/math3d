@@ -18,6 +18,13 @@ public final class Vectors {
     }
     
     
+    public static void add( double[] a, double[] b, double[] out ) {
+        out[0] = a[0] + b[0];
+        out[1] = a[1] + b[1];
+        out[2] = a[2] + b[2];
+    }   
+    
+    
     public static void addInto( double[] vec, double vecScale, double[] out ) {
         out[0] += vec[0] * vecScale;
         out[1] += vec[1] * vecScale;
@@ -415,6 +422,12 @@ public final class Vectors {
         return true;
     }
     
+    
+    public static boolean isValid( double[] vec ) {
+        return !Double.isNaN( vec[0] ) &&
+               !Double.isNaN( vec[1] ) &&
+               !Double.isNaN( vec[2] );
+    }
     
     
     private Vectors() {}

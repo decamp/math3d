@@ -5,10 +5,13 @@ import cogmac.math3d.*;
 
 /**
  * @author decamp
+ * @deprecated
  */
 public class Povs {
     
-    
+    /**
+     * @deprecated Use Vectors.isValid()
+     */
     public static void assertValidPos( double[] pos ) {
         for( int i = 0; i < 3; i++ ) {
             if( Double.isNaN( pos[i] ) ) {
@@ -18,7 +21,10 @@ public class Povs {
         }
     }
 
-    
+
+    /**
+     * @deprecated Use Matrices.isValid()
+     */
     public static void assertValidRot( double[] rot ) {
         // TODO: Complete this method.
         for(int i = 0; i < 16; i++) {
@@ -30,6 +36,9 @@ public class Povs {
     }
     
     
+    /**
+     * @deprecated Has bugs. Not smooth.
+     */
     public static final void lerpRots( double[] rotA, 
                                        double[] rotB, 
                                        double p, 
@@ -98,6 +107,8 @@ public class Povs {
      * @param norm      Normal vector of plane.
      * @param out       Output matrix in which to hold new orientation. 
      *                  X-axis and Y-axis of new rotation will be parallel to <code>norm</code>.
+     *                  
+     * @deprecated Is anyone using this?                 
      */
     public static void clampGazeToPlane( double[] rot, 
                                          double[] norm,

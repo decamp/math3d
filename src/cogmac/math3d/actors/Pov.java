@@ -2,6 +2,7 @@ package cogmac.math3d.actors;
 
 import java.io.IOException;
 import cogmac.blob.Blob;
+import cogmac.math3d.*;
 
 
 /**
@@ -102,8 +103,8 @@ public class Pov {
     }
     
     public void assertValid() {
-        Povs.assertValidPos(mPos);
-        Povs.assertValidRot(mRot);
+        assert( Vectors.isValid( mPos ) );
+        assert( Matrices.isValid( mRot ) );
     }
 
 }

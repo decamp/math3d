@@ -344,14 +344,14 @@ public final class Matrices {
     }
     
     
-    public static void axesToTransform(double[] x, double[] y, double[] out) {
+    public static void axesToTransform( double[] x, double[] y, double[] out ) {
         double[] z = new double[3];
-        Vectors.cross(x, y, z);
-        axesToTransform(x, y, z, out);
+        Vectors.cross( x, y, z );
+        axesToTransform( x, y, z, out );
     }
     
     
-    public static void axesToTransform(double[] x, double[] y, double[] z, double[] out) {
+    public static void axesToTransform( double[] x, double[] y, double[] z, double[] out ) {
         out[ 0] = x[0];
         out[ 1] = x[1];
         out[ 2] = x[2];
@@ -369,7 +369,6 @@ public final class Matrices {
         out[14] = 0.0;
         out[15] = 1.0;
     }
-    
        
     /**
      * @param mat    Input matrix
@@ -420,6 +419,24 @@ public final class Matrices {
     }
     
     
+    public static void slerpRotations( double[] a,
+                                      double[] b,
+                                      double t,
+                                      double[] workQuatA,
+                                      double[] workQuatB,
+                                      double[] workQuatC,
+                                      double[] out )
+    {
+        Quats.rotationMatToQuat( a, workQuatA );
+        Quats.rotationMatToQuat( b, workQuatB );
+        Quats.slerp( workQuatA, workQuatB, t, workQuatC );
+        Quats.quatToRotationMat( workQuatC, out );
+    }
+                                      
+    
+    
+    
+    
     public static String format( double[] mat ) {
         StringBuilder sb = new StringBuilder();
         for( int r = 0; r < 4; r++ ) {
@@ -442,6 +459,14 @@ public final class Matrices {
     }
 
 
+    public static boolean isValid( double[] mat ) {
+        for( int i = 0; i < 16; i++ ) {
+            if( Double.isNaN( mat[i] ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
     
     
     

@@ -1,10 +1,8 @@
 package cogmac.math3d;
 
-import static org.junit.Assert.*;
-
 import java.util.*;
-
-import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.*;
 
 public class TestMatrices {
     
@@ -82,4 +80,35 @@ public class TestMatrices {
         System.out.println( "Time1: " + ( t1 / 1000000000.0 ) );
     }
     
+
+    @Test
+    @Ignore
+    public void testSlerp() {
+        double[] a = new double[16];
+        double[] b = new double[16];
+        double[] c = new double[16];
+        
+        rotXyz( Math.PI * 0.5, 0.0, 0.0, a );
+        rotXyz( 0, 0, 0, b );
+        
+        Matrices.slerpRotations( a, b, 0.5, new double[4], new double[4], new double[4], c );
+        
+        //System.out.println( Matrices.format( a ) );
+        //System.out.println( Matrices.format( c ) );
+    }
+    
+    
+    static void rotXyz( double rx, double ry, double rz, double[] out ) {
+        double[] a = new double[16];
+        double[] b = new double[16];
+        double[] c = new double[16];
+        
+        Matrices.computeRotationMatrix( rx, 1, 0, 0, a );
+        Matrices.computeRotationMatrix( ry, 0, 1, 0, out );
+        Matrices.multMatMat( out, a, b );
+        Matrices.computeRotationMatrix( rz, 0, 0, 1, a );
+        Matrices.multMatMat( a, b, out );
+    }
+
+
 }
