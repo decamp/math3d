@@ -427,10 +427,10 @@ public final class Matrices {
                                       double[] workQuatC,
                                       double[] out )
     {
-        Quats.rotationMatToQuat( a, workQuatA );
-        Quats.rotationMatToQuat( b, workQuatB );
+        Quats.matToQuat( a, workQuatA );
+        Quats.matToQuat( b, workQuatB );
         Quats.slerp( workQuatA, workQuatB, t, workQuatC );
-        Quats.quatToRotationMat( workQuatC, out );
+        Quats.quatToMat( workQuatC, out );
     }
                                       
     

@@ -24,6 +24,9 @@ public class Actor extends SpatialObject {
     
     private final double[][] mWorkVecs = new double[3][3];
     
+    /**
+     * @deprecated
+     */
     @Override
     public void updateTime( double time ) {
         double prevTime = mTime;

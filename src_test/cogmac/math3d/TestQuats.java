@@ -22,8 +22,8 @@ public class TestQuats {
                     rand.nextDouble() * Math.PI,
                     rotIn );
             
-            Quats.rotationMatToQuat( rotIn, q );
-            Quats.quatToRotationMat( q, rotOut );
+            Quats.matToQuat( rotIn, q );
+            Quats.quatToMat( q, rotOut );
             
             if( !matEquals( rotIn, rotOut ) ) {
                 System.out.println( Matrices.format( rotIn ) );
@@ -47,8 +47,8 @@ public class TestQuats {
             double rz = ( i / 16 % 4 ) * Math.PI * 0.5;
                         
             rotXyz( rx, ry, rz, rotIn );
-            Quats.rotationMatToQuat( rotIn, q );
-            Quats.quatToRotationMat( q, rotOut );
+            Quats.matToQuat( rotIn, q );
+            Quats.quatToMat( q, rotOut );
 
             //System.out.println( Quats.format( q ) );
             

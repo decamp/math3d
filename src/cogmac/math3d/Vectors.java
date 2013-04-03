@@ -428,6 +428,12 @@ public final class Vectors {
                !Double.isNaN( vec[1] ) &&
                !Double.isNaN( vec[2] );
     }
+
+    
+    public static String format( double[] vec ) {
+        return String.format( "[ % 7.4f, % 7.4f, % 7.4f ]", vec[0], vec[1], vec[2] );
+    }
+    
     
     
     private Vectors() {}

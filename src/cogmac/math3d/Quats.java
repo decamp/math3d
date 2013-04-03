@@ -45,10 +45,15 @@ public final class Quats {
         a[2] = a0 * b2 - a1 * b3 + a2 * b0 + a3 * b1;
         a[3] = a0 * b3 + a1 * b2 - a2 * b1 + a3 * b0;
     }
+
+    
+    public static double length( double[] q ) {
+        return Math.sqrt( q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3] );
+    }
     
     
     public static void normalize( double[] q ) {
-        double r = 1.0 / ( q[0] + q[1] + q[2] + q[3] );
+        double r = 1.0 / Math.sqrt( q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3] );
         q[0] *= r;
         q[1] *= r;
         q[2] *= r;
@@ -56,7 +61,18 @@ public final class Quats {
     }
     
     
-    public static void rotationMatToQuat( double[] mat, double[] out ) {
+    public static void rotation( double rads, double x, double y, double z, double[] out ) {
+        double cos = Math.cos( rads * 0.5 );
+        double len = Math.sqrt( x * x + y * y + z * z );
+        double sin = Math.sin( rads * 0.5 ) / len;
+        out[0] = cos;
+        out[1] = sin * x;
+        out[2] = sin * y;
+        out[3] = sin * z;
+    }
+    
+    
+    public static void matToQuat( double[] mat, double[] out ) {
         final double r00 = mat[ 0];
         final double r11 = mat[ 5];
         final double r22 = mat[10];
@@ -101,7 +117,7 @@ public final class Quats {
     }
     
     
-    public static void quatToRotationMat( double[] quat, double[] out ) {
+    public static void quatToMat( double[] quat, double[] out ) {
         final double q0 = quat[0];
         final double q1 = quat[1];
         final double q2 = quat[2];
@@ -129,6 +145,25 @@ public final class Quats {
     }
     
     
+    public static void multVec( double[] quat, double[] vec, double[] out ) {
+        final double q0 = quat[0];
+        final double q1 = quat[1];
+        final double q2 = quat[2];
+        final double q3 = quat[3];
+        
+        out[0] = ( q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3 ) * vec[0] +
+                 ( 2.0 * ( q1 * q2 - q0 * q3 ) )           * vec[1] +
+                 ( 2.0 * ( q1 * q3 + q0 * q2 ) )           * vec[2];
+        
+        out[1] = ( 2.0 * ( q1 * q2 + q0 * q3 ) )           * vec[0] +
+                 ( q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3 ) * vec[1] +
+                 ( 2.0 * ( q2 * q3 - q0 * q1 ) )           * vec[2];
+        
+        out[2] = ( 2.0 * ( q1 * q3 - q0 * q2 ) )           * vec[0] +
+                 ( 2.0 * ( q2 * q3 + q0 * q1 ) )           * vec[1] +
+                 ( q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 ) * vec[2];
+    }
+    
     /**
      * Computes spherical interpolation between two quaternions. 
      * @param qa
@@ -137,7 +172,7 @@ public final class Quats {
      * @param out
      */
     public static void slerp( double[] qa, double[] qb, double t, double[] out ) {
-        // Calculate angle between them.*
+        // Calculate angle between them.
         double cosHalfTheta = qa[0] * qb[0] + qa[1] * qb[1] + qa[2] * qb[2] + qa[3] * qb[3];
         
         // if qa=qb or qa=-qb then theta = 0 and we can return qa
@@ -154,7 +189,7 @@ public final class Quats {
 
         // if theta = 180 degrees then result is not fully defined
         // we could rotate around any axis normal to qa or qb
-        if( sinHalfTheta < 0.001 && sinHalfTheta > -0.001 ) {
+        if( sinHalfTheta < 0.00001 && sinHalfTheta > -0.00001 ) {
             out[0] = ( qa[0] * 0.5 + qb[0] * 0.5 );
             out[1] = ( qa[1] * 0.5 + qb[1] * 0.5 );
             out[2] = ( qa[2] * 0.5 + qb[2] * 0.5 );

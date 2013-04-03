@@ -15,33 +15,35 @@ public class SpatialObject implements DepthSortable {
     /**
      * Object position as 3-vector.
      */
-    public double[] mPos = {0,0,0};
+    public final double[] mPos = {0,0,0};
     
     /**
      * Object rotation as 4x4-matrix. 
      */
-    public double[] mRot = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
+    public final double[] mRot = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
     
     /**
      * Local scaling 3-vector.
      */
-    public double[] mScale = {1,1,1};
+    public final double[] mScale = {1,1,1};
     
     /**
      * Linear velocity as 3-vector.
+     * @deprecated
      */
-    public double[] mVel = {0,0,0};
+    public final double[] mVel = {0,0,0};
     
     /**
      * Angular velocity as 3-vector.
+     * @deprecated
      */
-    public double[] mAngVel = {0,0,0};
+    public final double[] mAngVel = {0,0,0};
     
     /**
      * 3-vector that may be used to hold postion in 
      * normalized device coordinates for sorting.
      */
-    public double[] mNormPos = {0,0,0};
+    public final double[] mNormPos = {0,0,0};
     
     
     double[][] mWork = null;
@@ -53,6 +55,7 @@ public class SpatialObject implements DepthSortable {
     /**
      * Changes time without updating position/rotation. 
      * @param time
+     * @deprecated
      */
     public void resetTime( double time ) {
         mTime = time;
@@ -61,6 +64,7 @@ public class SpatialObject implements DepthSortable {
     /**
      * Changes time, updating position and rotation according to translation and rotation speeds.
      * @param time
+     * @deprecated
      */
     public void updateTime( double time ) {
         if( time == mTime )
@@ -78,6 +82,7 @@ public class SpatialObject implements DepthSortable {
 
     /**
      * @return current time for this object
+     * @deprecated
      */
     public double time() {
         return mTime;
@@ -107,18 +112,15 @@ public class SpatialObject implements DepthSortable {
      * @param rz z-component of axis
      */
     public void rotate( double rads, double rx, double ry, double rz ) {
-        if( Math.abs( rads ) < Tolerance.ABS_ERR )
+        if( Math.abs( rads ) < Tolerance.ABS_ERR ) {
             return;
-        
-        if( mWork == null )
+        }
+        if( mWork == null ) {
             mWork = new double[2][16];
-        
+        }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );
         Matrices.multMatMat( mRot, mWork[0], mWork[1] );
-        double[] m = mRot;
-        mRot = mWork[1];
-        mWork[1] = m;
-        
+        System.arraycopy( mWork[1], 0, mRot, 0, 16 );
         if( ++mRotationCount > ROTATIONS_PER_NORMALIZATION ) {
             normalizeRotation();
         }
@@ -134,18 +136,15 @@ public class SpatialObject implements DepthSortable {
      * @param rz z-component of axis
      */
     public void preRotate( double rads, double rx, double ry, double rz ) {
-        if( Math.abs( rads ) < Tolerance.ABS_ERR )
+        if( Math.abs( rads ) < Tolerance.ABS_ERR ) {
             return;
-        
-        if( mWork == null )
+        }
+        if( mWork == null ) {
             mWork = new double[2][16];
-        
+        }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );
         Matrices.multMatMat( mWork[0], mRot, mWork[1] );
-        double[] m = mRot;
-        mRot = mWork[1];
-        mWork[1] = m;
-        
+        System.arraycopy( mWork[1], 0, mRot, 0, 16 );
         if( ++mRotationCount > ROTATIONS_PER_NORMALIZATION ) {
             normalizeRotation();
         }
