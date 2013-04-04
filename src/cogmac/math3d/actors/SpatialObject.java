@@ -46,7 +46,7 @@ public class SpatialObject implements DepthSortable {
     public final double[] mNormPos = {0,0,0};
     
     
-    double[][] mWork = null;
+    protected final double[][] mWork = new double[2][16];
     int mRotationCount = 0;
     double mTime = 0.0;
     
@@ -115,9 +115,6 @@ public class SpatialObject implements DepthSortable {
         if( Math.abs( rads ) < Tolerance.ABS_ERR ) {
             return;
         }
-        if( mWork == null ) {
-            mWork = new double[2][16];
-        }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );
         Matrices.multMatMat( mRot, mWork[0], mWork[1] );
         System.arraycopy( mWork[1], 0, mRot, 0, 16 );
@@ -138,9 +135,6 @@ public class SpatialObject implements DepthSortable {
     public void preRotate( double rads, double rx, double ry, double rz ) {
         if( Math.abs( rads ) < Tolerance.ABS_ERR ) {
             return;
-        }
-        if( mWork == null ) {
-            mWork = new double[2][16];
         }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );
         Matrices.multMatMat( mWork[0], mRot, mWork[1] );
