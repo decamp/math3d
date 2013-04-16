@@ -185,7 +185,7 @@ public final class Aabb implements Cloneable, Serializable, Volume {
      * @param bounds - Aabb in which to fit <code>this</code> Aabb.
      * @returns a new Aabb.
      */
-    public Aabb clamp(Aabb bounds) {
+    public Aabb clamp( Aabb bounds ) {
         double left, right, top, bottom, front, back;
         
         
@@ -267,43 +267,43 @@ public final class Aabb implements Cloneable, Serializable, Volume {
      * @returns the doubleersection between <code>this</code> Aabb and the Parameter Aabb.
      * If the two Aabbs do not overlap, a Aabb with 0 size is returned.
      */
-    public Aabb clip(Aabb bounds){
-        return new Aabb(Math.max(mX0, bounds.mX0),
-                        Math.max(mY0, bounds.mY0),
-                        Math.max(mZ0, bounds.mZ0),
-                        Math.min(mX1, bounds.mX1),
-                        Math.min(mY1, bounds.mY1),
-                        Math.min(mZ1, bounds.mZ1));
+    public Aabb clip( Aabb bounds ){
+        return new Aabb( Math.max( mX0, bounds.mX0 ),
+                         Math.max( mY0, bounds.mY0 ),
+                         Math.max( mZ0, bounds.mZ0 ),
+                         Math.min( mX1, bounds.mX1 ),
+                         Math.min( mY1, bounds.mY1 ),
+                         Math.min( mZ1, bounds.mZ1 ) );
     }
     
     /**
-     * Scales the size of the Aabb without changing the center podouble.
+     * Scales the size of the Aabb without changing the center point.
      * 
      * @param scaleX - Amount to scale width.
      * @param scaleY - Amount to scale height.
      * @param scaleZ - Amount to scale depth.
      * @returns new Aabb with scaled width and height.
      */
-    public Aabb inflate(double scaleX, double scaleY, double scaleZ) {
+    public Aabb inflate( double scaleX, double scaleY, double scaleZ ) {
         return Aabb.fromCenter( centerX(), 
                                 centerY(),
                                 centerZ(),
-                                (spanX() * scaleX + 0.5f), 
-                                (spanY() * scaleY + 0.5f),
-                                (spanZ() * scaleZ + 0.5f));
+                                ( spanX() * scaleX ), 
+                                ( spanY() * scaleY ),
+                                ( spanZ() * scaleZ ) );
     }
     
     /**
      * @returns the union between <code>this</code> Aabb and the parameter Aabb.  The
      * union may contain area not covered by either input Aabb.
      */
-    public Aabb union(Aabb r) {
-        return new Aabb(Math.min(mX0, r.mX0),
-                        Math.min(mY0, r.mY0),
-                        Math.min(mZ0, r.mZ0),
-                        Math.max(mX1, r.mX1),
-                        Math.max(mY1, r.mY1),
-                        Math.max(mZ1, r.mZ1));
+    public Aabb union( Aabb r ) {
+        return new Aabb( Math.min( mX0, r.mX0 ),
+                         Math.min( mY0, r.mY0 ),
+                         Math.min( mZ0, r.mZ0 ),
+                         Math.max( mX1, r.mX1 ),
+                         Math.max( mY1, r.mY1 ),
+                         Math.max( mZ1, r.mZ1 ) );
     }
 
     /**
