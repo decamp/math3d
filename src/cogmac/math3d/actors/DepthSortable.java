@@ -29,14 +29,20 @@ public interface DepthSortable {
     
     public static final Comparator<DepthSortable> BACK_TO_FRONT_ORDER = new Comparator<DepthSortable>() {
         public int compare( DepthSortable a, DepthSortable b ) {
-            return a.normDepth() < b.normDepth() ? 1 : -1;
+            double aa = a.normDepth();
+            double bb = b.normDepth();
+            return aa > bb ? -1 :
+                   aa < bb ?  1 : 0;
         }
     };
 
     
     public static final Comparator<DepthSortable> FRONT_TO_BACK_ORDER = new Comparator<DepthSortable>() {
         public int compare( DepthSortable a, DepthSortable b ) {
-            return a.normDepth() > b.normDepth() ? 1 : -1;
+            double aa = a.normDepth();
+            double bb = b.normDepth();
+            return aa < bb ? -1 :
+                   aa > bb ?  1 : 0;
         }
     };
     
