@@ -8,6 +8,27 @@ package cogmac.math3d;
  */
 public final class Box2 {
 
+    /**
+     * Sets center of box.
+     */
+    public static void center( float[] box, float cx, float cy, float[] out ) {
+        float dx = cx - ( box[0] + box[2] ) * 0.5f;
+        float dy = cy - ( box[1] + box[3] ) * 0.5f;
+        out[0] = box[0] + dx;
+        out[1] = box[1] + dy;
+        out[2] = box[2] + dx;
+        out[3] = box[3] + dy;
+    }
+    
+    /**
+     * Scales size of box.
+     */
+    public static void scale( float[] box, float sx, float sy, float[] out ) {
+        out[0] = box[0] * sx;
+        out[1] = box[1] * sy;
+        out[2] = box[2] * sx;
+        out[3] = box[3] * sy;
+    }
     
     /**
      * Scales size of box without changing center point.
