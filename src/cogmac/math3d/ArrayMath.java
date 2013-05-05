@@ -1,7 +1,7 @@
 package cogmac.math3d;
 
 /**
- * @author decamp
+ * @deprecated
  */
 public class ArrayMath {
 

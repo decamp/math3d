@@ -28,10 +28,10 @@ public class TestMatrices {
             Matrices.multMatMat( a, b, c );
             
             for( int j = 0; j < 16; j++ ) {
-                boolean eq = Tolerance.approxEqual( c[j], 
-                                                    eye[j],
-                                                    0.000001,
-                                                    0.000001 );
+                boolean eq = Tol.approxEqual( c[j], 
+                                              eye[j],
+                                              0.000001,
+                                              0.000001 );
                 assertTrue( eq ); 
             }
         }

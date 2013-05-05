@@ -1,7 +1,7 @@
 package cogmac.math3d.actors;
 
 import cogmac.math3d.Matrices;
-import cogmac.math3d.Tolerance;
+import cogmac.math3d.Tol;
 import cogmac.math3d.Vectors;
 
 /**
@@ -175,7 +175,7 @@ public class ActorCoords {
         double d = Vectors.hypot(forward);
         
         //Normalize forward-vector.  Choose default if provided vector is zero-length.
-        if(d > Tolerance.TOL) {
+        if( d > Tol.SQRT_ABS_ERR ) {
             forward[0] /= d;
             forward[1] /= d;
             forward[2] /= d;
@@ -192,11 +192,11 @@ public class ActorCoords {
         d = Vectors.hypot(up);
         
         //Normalize up-vector.  Choose arbitrary orthogonal vector if zero-length.
-        if(d > Tolerance.TOL) {
+        if( d > Tol.SQRT_ABS_ERR ) {
             up[0] /= d;
             up[1] /= d;
             up[2] /= d;
-        }else{
+        } else {
             Vectors.chooseOrtho(forward[0], forward[1], forward[2], up);
         }
         

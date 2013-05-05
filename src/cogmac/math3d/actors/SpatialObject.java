@@ -112,7 +112,7 @@ public class SpatialObject implements DepthSortable {
      * @param rz z-component of axis
      */
     public void rotate( double rads, double rx, double ry, double rz ) {
-        if( Math.abs( rads ) < Tolerance.ABS_ERR ) {
+        if( Math.abs( rads ) < Tol.ABS_ERR ) {
             return;
         }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );
@@ -133,7 +133,7 @@ public class SpatialObject implements DepthSortable {
      * @param rz z-component of axis
      */
     public void preRotate( double rads, double rx, double ry, double rz ) {
-        if( Math.abs( rads ) < Tolerance.ABS_ERR ) {
+        if( Math.abs( rads ) < Tol.ABS_ERR ) {
             return;
         }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );

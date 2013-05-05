@@ -1,7 +1,7 @@
 package cogmac.math3d;
 
 
-import static cogmac.math3d.Tolerance.*;
+import static cogmac.math3d.Tol.*;
 
 
 /** 
@@ -438,21 +438,5 @@ public final class Vectors {
     
     private Vectors() {}
 
-    
-    public static void main(String[] args) {
-        double[] a0 = {0,0,0};
-        double[] a1 = {10,0,0};
-        double[] b0 = {60, 10, 10};
-        double[] b1 = {50,-10, 10};
-        
-        double[] oa = new double[3];
-        double[] ob = new double[3];
-        
-        System.out.println(lineLineIntersection(a0, a1, b0, b1, oa, ob));
-        
-        System.out.println(oa[0] + "  " + oa[1] + "  " + oa[2]);
-        System.out.println(ob[0] + "  " + ob[1] + "  " + ob[2]);
-        
-    }
     
 }

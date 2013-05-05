@@ -1,6 +1,6 @@
 package cogmac.math3d.geom;
 
-import static cogmac.math3d.Tolerance.*;
+import static cogmac.math3d.Tol.*;
 
 
 /**

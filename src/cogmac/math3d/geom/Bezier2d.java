@@ -1,7 +1,7 @@
 package cogmac.math3d.geom;
 
 import java.awt.geom.Path2D;
-import static cogmac.math3d.Tolerance.*;
+import static cogmac.math3d.Tol.*;
 
 
 /**

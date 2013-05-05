@@ -1,10 +1,11 @@
 package cogmac.math3d;
 
-/** 
- * @author Philip DeCamp
- * @deprecated Use Tol  
+/**
+ * Methods for managing tolerance.
+ *  
+ * @author Philip DeCamp  
  */
-public final class Tolerance {
+public final class Tol {
     
     public static final double EPS          = 0x0.0000000000001P-1;    // 64-bit machine epsilon
     public static final double ABS_ERR      = 0x0.0000000000001P-1017; // Double.MIN_VALUE * 32.0
@@ -246,7 +247,7 @@ public final class Tolerance {
     
     
     
-    private Tolerance() {}
+    private Tol() {}
 
     
     public static void main( String[] args ) {

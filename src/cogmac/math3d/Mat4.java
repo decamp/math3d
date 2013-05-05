@@ -1,6 +1,6 @@
 package cogmac.math3d;
 
-import static cogmac.math3d.Tolerance.*;
+import static cogmac.math3d.Tol.*;
 
 
 
@@ -381,7 +381,7 @@ public final class Mat4 {
 
         // Should check for 0 determinant.
         float invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
-        boolean ret   = invdet > Tolerance.SQRT_ABS_ERR || -invdet > Tolerance.SQRT_ABS_ERR;
+        boolean ret   = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
         invdet = 1.0f / invdet;
         
         out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;

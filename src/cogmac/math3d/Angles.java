@@ -12,16 +12,24 @@ public class Angles {
     public static double normalize( double angle ) {
         angle %= Math.PI * 2.0;
         
-        if( angle <= -Math.PI )
-            return angle + Math.PI * 2.0;
-        
-        if( angle > Math.PI )
-            return angle - Math.PI * 2.0;
-        
-        return angle;
+        return angle <= -Math.PI ? angle + Math.PI * 2.0 :
+               angle >   Math.PI ? angle - Math.PI * 2.0 : angle;
+    }
+    
+    
+    private static double asincos( double sinAng, double cosAng ) {
+        if( cosAng >= 1.0 ) {
+            return cosAng < 1.0 + Tol.SQRT_ABS_ERR ? 0.0 : Double.NaN;
+        } else if( cosAng <= -1.0 ) {
+            return cosAng > -1.0 - Tol.SQRT_ABS_ERR ? Math.PI : Double.NaN; 
+        } else {
+            return ( sinAng >= 0.0 ? Math.acos( cosAng ) : -Math.acos( cosAng ) );
+        }
     }
 
     
+    
+    @Deprecated
     public static void matrixToZyxAngles( double[] mat4x4, double[] out3x1 ) {
         double[] mat = mat4x4.clone();
         Matrices.normalizeRotationMatrix( mat );
@@ -29,6 +37,7 @@ public class Angles {
     }
     
     
+    @Deprecated
     public static void rotationMatrixToZyxAngles( double[] mat4x4, double[] out3x1 ) {
         final double[] mat = mat4x4;
         double a0, a1, a2;
@@ -56,6 +65,7 @@ public class Angles {
     }
     
     
+    @Deprecated
     public static void zyxAnglesToRotationMatrix( double[] angs3x1, double[] out4x4 ) {
         final double s0 = Math.sin( angs3x1[0] );
         final double c0 = Math.cos( angs3x1[0] );
@@ -84,16 +94,6 @@ public class Angles {
         out4x4[14] = 0;
         out4x4[15] = 1;
     }
-        
-    
-    private static double asincos( double sinAng, double cosAng ) {
-        if( cosAng >= 1.0 ) {
-            return cosAng < 1.0 + Tolerance.REL_ERR ? 0.0 : Double.NaN;
-        } else if( cosAng <= -1.0 ) {
-            return cosAng > -1.0 - Tolerance.REL_ERR ? Math.PI : Double.NaN; 
-        } else {
-            return ( sinAng >= 0.0 ? Math.acos( cosAng ) : -Math.acos( cosAng ) );
-        }
-    }
 
+    
 }

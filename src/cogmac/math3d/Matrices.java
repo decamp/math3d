@@ -1,6 +1,6 @@
 package cogmac.math3d;
 
-import static cogmac.math3d.Tolerance.*;
+import static cogmac.math3d.Tol.*;
 
 
 
@@ -32,26 +32,6 @@ public final class Matrices {
         out[13] = a[ 1]*b[12] + a[ 5]*b[13] + a[ 9]*b[14] + a[13]*b[15];
         out[14] = a[ 2]*b[12] + a[ 6]*b[13] + a[10]*b[14] + a[14]*b[15];
         out[15] = a[ 3]*b[12] + a[ 7]*b[13] + a[11]*b[14] + a[15]*b[15];
-    }
-    
-    /**
-     * @deprecated Until I figure out if this is correct or not. 
-     */
-    public static void multMatMatHomog(double[] a, double[] b, double[] out) {
-        multMatMat(a, b, out);
-        
-        // Don't think this is right.
-        //double scale = 1.0 / (out[3] + out[7]+ out[11] + out[15]);
-        //for(int i = 0; i < 16; i++) {
-        //    out[i] *= scale;
-        //}
-                
-        double scale = 1.0 / out[15];
-        out[15] = 1.0;
-        
-        for(int i = 0; i < 15; i++) {
-            out[i] *= scale;
-        }
     }
     
     
@@ -392,7 +372,7 @@ public final class Matrices {
 
         // Should check for 0 determinant.
         double invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
-        boolean ret   = invdet > Tolerance.SQRT_ABS_ERR || -invdet > Tolerance.SQRT_ABS_ERR;
+        boolean ret   = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
         invdet = 1.0 / invdet;
         
         out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
@@ -418,14 +398,24 @@ public final class Matrices {
         return ret;
     }
     
-    
+    /**
+     * Performs spherical interpolation of rotation matrices.
+     * 
+     * @param a
+     * @param b
+     * @param t
+     * @param workQuatA
+     * @param workQuatB
+     * @param workQuatC
+     * @param out
+     */
     public static void slerpRotations( double[] a,
-                                      double[] b,
-                                      double t,
-                                      double[] workQuatA,
-                                      double[] workQuatB,
-                                      double[] workQuatC,
-                                      double[] out )
+                                       double[] b,
+                                       double t,
+                                       double[] workQuatA,
+                                       double[] workQuatB,
+                                       double[] workQuatC,
+                                       double[] out )
     {
         Quats.matToQuat( a, workQuatA );
         Quats.matToQuat( b, workQuatB );
@@ -433,8 +423,6 @@ public final class Matrices {
         Quats.quatToMat( workQuatC, out );
     }
                                       
-    
-    
     
     
     public static String format( double[] mat ) {
@@ -470,6 +458,7 @@ public final class Matrices {
     
     
     
+    
     /**
      * @param mat    Input matrix
      * @param work0  Working matrix.  Contents don't matter, but is overwritten.  
@@ -489,7 +478,6 @@ public final class Matrices {
     public static void invertMat(double[] a, double[] w, double[] out) {
         invert( a, out );
     }
-
     
     /**
      * @deprecated Since no longer used for inversion, should be generalized or removed.
@@ -548,7 +536,6 @@ public final class Matrices {
             }
         }
     }
-
     
     /**
      * @param lu
@@ -602,9 +589,34 @@ public final class Matrices {
     public static String matToString( double[] mat ) {
         return format( mat );
     }
+    
+    
+    /**
+     * @deprecated Until I figure out if this is correct or not. 
+     */
+    public static void multMatMatHomog(double[] a, double[] b, double[] out) {
+        multMatMat(a, b, out);
+        
+        // Don't think this is right.
+        //double scale = 1.0 / (out[3] + out[7]+ out[11] + out[15]);
+        //for(int i = 0; i < 16; i++) {
+        //    out[i] *= scale;
+        //}
+                
+        double scale = 1.0 / out[15];
+        out[15] = 1.0;
+        
+        for(int i = 0; i < 15; i++) {
+            out[i] *= scale;
+        }
+    }
 
     
     
     private Matrices() {}
 
+    
+    
+    
+    
 }

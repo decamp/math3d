@@ -1,6 +1,6 @@
 package cogmac.math3d.func;
 
-import static cogmac.math3d.Tolerance.approxEqual;
+import static cogmac.math3d.Tol.approxEqual;
 
 /**
  * @author decamp

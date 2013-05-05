@@ -1,7 +1,7 @@
 package cogmac.math3d;
 
 
-import static cogmac.math3d.Tolerance.*;
+import static cogmac.math3d.Tol.*;
 
 
 /** 
@@ -162,16 +162,6 @@ public final class Vec3 {
         out[1] = q * a[1] + p * b[1];
         out[2] = q * a[2] + p * b[2];
     }
-    
-    
-    public static void lerp( float[] a, int offA, float[] b, int offB, int len, float p, float[] out, int offOut ) {
-        float q = 1.0f - p;
-        
-        for(int i = 0; i < len; i++) {
-            out[i + offOut] = q * a[i + offA] + p * b[i + offB];
-        }
-    }
-    
     
     
     /**
@@ -430,20 +420,14 @@ public final class Vec3 {
     private Vec3() {}
 
     
-    public static void main(String[] args) {
-        float[] a0 = {0,0,0};
-        float[] a1 = {10,0,0};
-        float[] b0 = {60, 10, 10};
-        float[] b1 = {50,-10, 10};
+    
+    @Deprecated
+    public static void lerp( float[] a, int offA, float[] b, int offB, int len, float p, float[] out, int offOut ) {
+        float q = 1.0f - p;
         
-        float[] oa = new float[3];
-        float[] ob = new float[3];
-        
-        System.out.println(lineLineIntersection(a0, a1, b0, b1, oa, ob));
-        
-        System.out.println(oa[0] + "  " + oa[1] + "  " + oa[2]);
-        System.out.println(ob[0] + "  " + ob[1] + "  " + ob[2]);
-        
+        for(int i = 0; i < len; i++) {
+            out[i + offOut] = q * a[i + offA] + p * b[i + offB];
+        }
     }
     
 }
