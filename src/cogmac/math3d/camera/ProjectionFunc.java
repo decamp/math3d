@@ -6,5 +6,5 @@ public interface ProjectionFunc {
     public float farPlane();
     public ProjectionFunc farPlane( float farPlane );
     
-    public void computeProjectionMat( float[] viewport, float[] tileViewport, double[] outMat );
+    public void computeProjectionMat( int[] viewport, int[] tileViewport, double[] outMat );
 }

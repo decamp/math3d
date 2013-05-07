@@ -50,7 +50,7 @@ public class RelativeOrthoFunc implements ProjectionFunc {
 
     
     @Override
-    public void computeProjectionMat( float[] viewport, float[] tileViewport, double[] outMat ) {
+    public void computeProjectionMat( int[] viewport, int[] tileViewport, double[] outMat ) {
         final float w = viewport[2] - viewport[0];
         final float h = viewport[3] - viewport[1];
         

@@ -41,12 +41,12 @@ public class FovFunc implements ProjectionFunc {
     }
 
     @Override
-    public void computeProjectionMat( float[] viewport, float[] tileViewport, double[] outMat ) {
+    public void computeProjectionMat( int[] viewport, int[] tileViewport, double[] outMat ) {
         // Scale far/near based on size of camera target.
         double near   = mNear;
         double far    = mFar;
         
-        double aspect = ( viewport[2] - viewport[0] ) / ( viewport[3] - viewport[1] );
+        double aspect = (double)( viewport[2] - viewport[0] ) / ( viewport[3] - viewport[1] );
         double ymax   = near * Math.tan( mFov * 0.5f );
         double ymin   = -ymax;
         double xmax   = aspect * ymax;
