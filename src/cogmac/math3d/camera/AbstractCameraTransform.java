@@ -8,6 +8,7 @@ import cogmac.math3d.actors.SpatialObject;
  * Convenience method that implements several CameraTransform methods.
  * 
  * @author decamp
+ * @deprecated
  */
 public abstract class AbstractCameraTransform implements CameraTransform {
     

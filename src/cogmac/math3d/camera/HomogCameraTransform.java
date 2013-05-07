@@ -11,6 +11,7 @@ import cogmac.math3d.geom.Aabb;
  * that cannot be changed.
  * 
  * @author decamp
+ * @deprecated
  */
 public class HomogCameraTransform extends AbstractCameraTransform {
     

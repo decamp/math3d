@@ -7,6 +7,7 @@ import cogmac.math3d.geom.Aabb;
 
 /**
  * @author decamp
+ * @deprecated
  */
 public class FrustumCameraTransform extends AbstractCameraTransform {
     

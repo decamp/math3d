@@ -9,6 +9,7 @@ import cogmac.math3d.actors.SpatialObject;
  * Computes the transformations associated with a given camera object.
  * 
  * @author decamp
+ * @deprecated
  */
 public interface CameraTransform {
 
