@@ -421,6 +421,36 @@ public final class Vectors {
         
         return true;
     }
+
+    /**
+     * Finds signed axis-aligned unit-vector nearest to input vector.
+     * For example, the nearest axis to [ 0.8, -1.3, 0.1 ] is [ 0.0, -1.0, 0.0 ].
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param out
+     */
+    public static void nearestAxis( double x, double y, double z, double[] out ) {
+        double ax = x >= 0 ? x : -x;
+        double ay = y >= 0 ? y : -y;
+        double az = z >= 0 ? z : -z;
+        
+        if( ax > ay && ax > az ) {
+            out[0] = x >= 0 ? 1 : -1;
+            out[1] = 0;
+            out[2] = 0;
+        } else if( ay > az ) {
+            out[0] = 0;
+            out[1] = y >= 0 ? 1 : -1;
+            out[2] = 0;
+        } else {
+            out[0] = 0;
+            out[1] = 0;
+            out[2] = z >= 0 ? 1 : -1;
+        }
+    }
+    
     
     
     public static boolean isValid( double[] vec ) {

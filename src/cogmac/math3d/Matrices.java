@@ -62,7 +62,54 @@ public final class Matrices {
         }
     }
     
-    
+    /**
+     * @param mat    Input matrix
+     * @param out    Array to hold inverted matrix on return.
+     * @return true if matrix determinant is not near zero and accurate inverse was found.
+     */    
+    public static boolean invert( double[] mat, double[] out ) {
+        double s0 = mat[0+0*4] * mat[1+1*4] - mat[1+0*4] * mat[0+1*4];
+        double s1 = mat[0+0*4] * mat[1+2*4] - mat[1+0*4] * mat[0+2*4];
+        double s2 = mat[0+0*4] * mat[1+3*4] - mat[1+0*4] * mat[0+3*4];
+        double s3 = mat[0+1*4] * mat[1+2*4] - mat[1+1*4] * mat[0+2*4];
+        double s4 = mat[0+1*4] * mat[1+3*4] - mat[1+1*4] * mat[0+3*4];
+        double s5 = mat[0+2*4] * mat[1+3*4] - mat[1+2*4] * mat[0+3*4];
+
+        double c5 = mat[2+2*4] * mat[3+3*4] - mat[3+2*4] * mat[2+3*4];
+        double c4 = mat[2+1*4] * mat[3+3*4] - mat[3+1*4] * mat[2+3*4];
+        double c3 = mat[2+1*4] * mat[3+2*4] - mat[3+1*4] * mat[2+2*4];
+        double c2 = mat[2+0*4] * mat[3+3*4] - mat[3+0*4] * mat[2+3*4];
+        double c1 = mat[2+0*4] * mat[3+2*4] - mat[3+0*4] * mat[2+2*4];
+        double c0 = mat[2+0*4] * mat[3+1*4] - mat[3+0*4] * mat[2+1*4];
+
+        // Should check for 0 determinant.
+        double invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
+        boolean ret   = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
+        invdet = 1.0 / invdet;
+        
+        out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
+        out[0+1*4] = (-mat[0+1*4] * c5 + mat[0+2*4] * c4 - mat[0+3*4] * c3) * invdet;
+        out[0+2*4] = ( mat[3+1*4] * s5 - mat[3+2*4] * s4 + mat[3+3*4] * s3) * invdet;
+        out[0+3*4] = (-mat[2+1*4] * s5 + mat[2+2*4] * s4 - mat[2+3*4] * s3) * invdet;
+
+        out[1+0*4] = (-mat[1+0*4] * c5 + mat[1+2*4] * c2 - mat[1+3*4] * c1) * invdet;
+        out[1+1*4] = ( mat[0+0*4] * c5 - mat[0+2*4] * c2 + mat[0+3*4] * c1) * invdet;
+        out[1+2*4] = (-mat[3+0*4] * s5 + mat[3+2*4] * s2 - mat[3+3*4] * s1) * invdet;
+        out[1+3*4] = ( mat[2+0*4] * s5 - mat[2+2*4] * s2 + mat[2+3*4] * s1) * invdet;
+
+        out[2+0*4] = ( mat[1+0*4] * c4 - mat[1+1*4] * c2 + mat[1+3*4] * c0) * invdet;
+        out[2+1*4] = (-mat[0+0*4] * c4 + mat[0+1*4] * c2 - mat[0+3*4] * c0) * invdet;
+        out[2+2*4] = ( mat[3+0*4] * s4 - mat[3+1*4] * s2 + mat[3+3*4] * s0) * invdet;
+        out[2+3*4] = (-mat[2+0*4] * s4 + mat[2+1*4] * s2 - mat[2+3*4] * s0) * invdet;
+
+        out[3+0*4] = (-mat[1+0*4] * c3 + mat[1+1*4] * c1 - mat[1+2*4] * c0) * invdet;
+        out[3+1*4] = ( mat[0+0*4] * c3 - mat[0+1*4] * c1 + mat[0+2*4] * c0) * invdet;
+        out[3+2*4] = (-mat[3+0*4] * s3 + mat[3+1*4] * s1 - mat[3+2*4] * s0) * invdet;
+        out[3+3*4] = ( mat[2+0*4] * s3 - mat[2+1*4] * s1 + mat[2+2*4] * s0) * invdet;
+            
+        return ret;
+    }
+
     
     public static void setToIdentity(double[] out) {
         out[ 0] = 1.0;
@@ -267,6 +314,11 @@ public final class Matrices {
         out[15] = 1.0;
     }
     
+    
+    //************************************
+    // Rotation methods.
+    //************************************
+    
     /**
      * Removes any translation/scaling/skew or other non-rotation 
      * transformations from a matrix.  
@@ -349,54 +401,46 @@ public final class Matrices {
         out[14] = 0.0;
         out[15] = 1.0;
     }
-       
+    
+
     /**
-     * @param mat    Input matrix
-     * @param out    Array to hold inverted matrix on return.
-     * @return true if matrix determinant is not near zero and accurate inverse was found.
-     */    
-    public static boolean invert( double[] mat, double[] out ) {
-        double s0 = mat[0+0*4] * mat[1+1*4] - mat[1+0*4] * mat[0+1*4];
-        double s1 = mat[0+0*4] * mat[1+2*4] - mat[1+0*4] * mat[0+2*4];
-        double s2 = mat[0+0*4] * mat[1+3*4] - mat[1+0*4] * mat[0+3*4];
-        double s3 = mat[0+1*4] * mat[1+2*4] - mat[1+1*4] * mat[0+2*4];
-        double s4 = mat[0+1*4] * mat[1+3*4] - mat[1+1*4] * mat[0+3*4];
-        double s5 = mat[0+2*4] * mat[1+3*4] - mat[1+2*4] * mat[0+3*4];
-
-        double c5 = mat[2+2*4] * mat[3+3*4] - mat[3+2*4] * mat[2+3*4];
-        double c4 = mat[2+1*4] * mat[3+3*4] - mat[3+1*4] * mat[2+3*4];
-        double c3 = mat[2+1*4] * mat[3+2*4] - mat[3+1*4] * mat[2+2*4];
-        double c2 = mat[2+0*4] * mat[3+3*4] - mat[3+0*4] * mat[2+3*4];
-        double c1 = mat[2+0*4] * mat[3+2*4] - mat[3+0*4] * mat[2+2*4];
-        double c0 = mat[2+0*4] * mat[3+1*4] - mat[3+0*4] * mat[2+1*4];
-
-        // Should check for 0 determinant.
-        double invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
-        boolean ret   = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
-        invdet = 1.0 / invdet;
+     * This method will adjust a rotation matrix so that one of the basis vectors will
+     * be parallel to an axis.
+     * 
+     * @param mat   Input rotation matrix.
+     * @param basis Basis vector to align to axis. <code>0 == x-basis, 1 == y-basis, 2 == z-basis</code>.
+     * @param out   Holds modified rotation matrix on output.
+     */
+    public static void alignBasisVectorToAxis( double[] mat, int basis, double[] out ) {
+        out[12] = mat[basis*4  ];
+        out[13] = mat[basis*4+1];
+        out[14] = mat[basis*4+2];
         
-        out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
-        out[0+1*4] = (-mat[0+1*4] * c5 + mat[0+2*4] * c4 - mat[0+3*4] * c3) * invdet;
-        out[0+2*4] = ( mat[3+1*4] * s5 - mat[3+2*4] * s4 + mat[3+3*4] * s3) * invdet;
-        out[0+3*4] = (-mat[2+1*4] * s5 + mat[2+2*4] * s4 - mat[2+3*4] * s3) * invdet;
-
-        out[1+0*4] = (-mat[1+0*4] * c5 + mat[1+2*4] * c2 - mat[1+3*4] * c1) * invdet;
-        out[1+1*4] = ( mat[0+0*4] * c5 - mat[0+2*4] * c2 + mat[0+3*4] * c1) * invdet;
-        out[1+2*4] = (-mat[3+0*4] * s5 + mat[3+2*4] * s2 - mat[3+3*4] * s1) * invdet;
-        out[1+3*4] = ( mat[2+0*4] * s5 - mat[2+2*4] * s2 + mat[2+3*4] * s1) * invdet;
-
-        out[2+0*4] = ( mat[1+0*4] * c4 - mat[1+1*4] * c2 + mat[1+3*4] * c0) * invdet;
-        out[2+1*4] = (-mat[0+0*4] * c4 + mat[0+1*4] * c2 - mat[0+3*4] * c0) * invdet;
-        out[2+2*4] = ( mat[3+0*4] * s4 - mat[3+1*4] * s2 + mat[3+3*4] * s0) * invdet;
-        out[2+3*4] = (-mat[2+0*4] * s4 + mat[2+1*4] * s2 - mat[2+3*4] * s0) * invdet;
-
-        out[3+0*4] = (-mat[1+0*4] * c3 + mat[1+1*4] * c1 - mat[1+2*4] * c0) * invdet;
-        out[3+1*4] = ( mat[0+0*4] * c3 - mat[0+1*4] * c1 + mat[0+2*4] * c0) * invdet;
-        out[3+2*4] = (-mat[3+0*4] * s3 + mat[3+1*4] * s1 - mat[3+2*4] * s0) * invdet;
-        out[3+3*4] = ( mat[2+0*4] * s3 - mat[2+1*4] * s1 + mat[2+2*4] * s0) * invdet;
-            
-        return ret;
+        // Clamp specified vector to nearest axis.
+        Vectors.nearestAxis( mat[basis*4  ], mat[basis*4+1], mat[basis*4+2], out );
+        
+        // Move into correct column.
+        out[basis*4  ] = out[0];
+        out[basis*4+1] = out[1];
+        out[basis*4+2] = out[2];
+        
+        // Cross with next axis.
+        final int basis1 = ( basis + 1 ) % 3;
+        final int basis2 = ( basis + 2 ) % 3;
+        
+        Vectors.cross( out, basis*4, mat, basis1*4, out, basis2*4 );
+        Vectors.normalize( out, basis2*4, 1.0 );
+        Vectors.cross( out, basis2*4, out, basis*4, out, basis1*4 );
+        
+        out[ 3] = 0.0;
+        out[ 7] = 0.0;
+        out[11] = 0.0;
+        out[12] = 0.0;
+        out[13] = 0.0;
+        out[14] = 0.0;
+        out[15] = 1.0;
     }
+    
     
     /**
      * Performs spherical interpolation of rotation matrices.

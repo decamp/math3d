@@ -9,11 +9,6 @@ package cogmac.math3d;
 public final class Quats {
     
     
-    public static double sum( double[] q ) {
-        return q[0] + q[1] + q[2] + q[3];
-    }
-    
-    
     public static void mult( double[] a, double[] b, double[] out ) {
         // These local copies had no effect in performance tests, but whatevs. 
         final double a0 = a[0];
@@ -109,11 +104,7 @@ public final class Quats {
             if( mat[6] + mat[9] < 0 ) q2 = -q2;
         }
         
-        double r = 1.0 / Math.sqrt( q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3 );
-        out[0] = q0 * r;
-        out[1] = q1 * r;
-        out[2] = q2 * r;
-        out[3] = q3 * r;
+        normalize( out );
     }
     
     
@@ -205,7 +196,32 @@ public final class Quats {
         out[2] = ( qa[2] * ratioA + qb[2] * ratioB );
         out[3] = ( qa[3] * ratioA + qb[3] * ratioB );
     }
-     
+
+    
+    public static void uniformNoiseToQuat( double rand0, double rand1, double rand2, double[] out ) {
+        if( rand0 > rand1 ) {
+            double swap = rand0;
+            rand0 = rand1;
+            rand1 = swap;
+        }
+        if( rand1 > rand2 ) {
+            double swap = rand1;
+            rand1 = rand2;
+            rand2 = swap;
+        }
+        if( rand0 > rand1 ) {
+            double swap = rand0;
+            rand0 = rand1;
+            rand1 = swap;
+        }
+        
+        out[0] = rand0;
+        out[1] = rand1 - rand0;
+        out[2] = rand2 - rand1;
+        out[3] = 1.0 - rand2;
+        normalize( out );
+    }
+        
     
     public static String format( double[] quat ) {
         return String.format( "[ % 7.4f, % 7.4f, % 7.4f, % 7.4f ]", quat[0], quat[1], quat[2], quat[3] );

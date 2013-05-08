@@ -163,7 +163,6 @@ public final class Vec3 {
         out[2] = q * a[2] + p * b[2];
     }
     
-    
     /**
      * Performs smallest possible modification to <code>vec</code> to make it
      * orthogonal to some <code>reference</code> vector.
@@ -171,7 +170,7 @@ public final class Vec3 {
      * @param vec           Vector to modify.
      * @param reference     Reference vector.
      */
-    public static void makePerpendicularTo( float[] vec, float[] reference ) {
+    public static void makeOrthoTo( float[] vec, float[] reference ) {
         float lenRef = reference[0] * reference[0] + reference[1] * reference[1] + reference[2] * reference[2];
         if( lenRef < FSQRT_ABS_ERR ) {
             return;
@@ -249,23 +248,125 @@ public final class Vec3 {
     }
     
     /**
+     * Finds signed axis-aligned unit-vector nearest to input vector.
+     * For example, the nearest axis to [ 0.8, -1.3, 0.1 ] is [ 0.0, -1.0, 0.0 ].
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param out
+     */
+    public static void nearestAxis( float x, float y, float z, float[] out ) {
+        float ax = x >= 0 ? x : -x;
+        float ay = y >= 0 ? y : -y;
+        float az = z >= 0 ? z : -z;
+        
+        if( ax > ay && ax > az ) {
+            out[0] = x >= 0 ? 1 : -1;
+            out[1] = 0;
+            out[2] = 0;
+        } else if( ay > az ) {
+            out[0] = 0;
+            out[1] = y >= 0 ? 1 : -1;
+            out[2] = 0;
+        } else {
+            out[0] = 0;
+            out[1] = 0;
+            out[2] = z >= 0 ? 1 : -1;
+        }
+    }
+    
+    /**
      * Picks a unit-length vector that is orthogonal to the input vector.
      */
     public static void chooseOrtho( float x, float y, float z, float[] out3x1 ) {
-        float d = y * y + z * z;
-        
-        if( d > FSQRT_ABS_ERR ) {
-            d = (float)Math.sqrt( z * z / d );
-            float sign = ( y * z >= 0.0f ? -1.0f : 1.0f );
-            out3x1[0] = 0;
-            out3x1[1] = d;
-            out3x1[2] = (float)Math.sqrt( 1 - d * d ) * sign;
-        }else{
-            out3x1[0] = 0;
-            out3x1[1] = 1;
-            out3x1[2] = 0;
-        }
+        chooseOrtho( x, y, z, 2, out3x1 );
     }
+    
+    /**
+     * Picks a unitl-length vector that is orthogonal to the input vector.
+     * <p>
+     * This method allows the user to define a "zero-dimension", where the
+     * vector that is returned by this method is guaranteed to have a zero coordinate
+     * for that dimension. Additionally, the coordinate after the zero-dimension will
+     * hold a non-negative value.
+     * <p>
+     * For example, <br/>
+     * <code>chooseOrtho( 1.0f, 1.0f, 1.0f, 0, out )</code><br/>
+     * will set <br/>
+     * <code>out = [  0.0000,  0.7071, -0.7071 ] </code><br/>
+     * where <code>out[0]</code> is zero and <code>out[1]</code> is non-negative. <br> 
+     * <code>chooseOrtho( 1.0f, 1.0f, 1.0f, 2, out )</code><br/>
+     * will set <br/>
+     * <code>out = [  0.7071, -0.7071,  0.0000 ] </code><br/> 
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param zeroDim
+     * @param out
+     */
+    public static void chooseOrtho( float x, float y, float z, int zeroDim, float[] out ) {
+        switch( zeroDim ) {
+        case 2:
+            if( y > FSQRT_ABS_ERR || -y > FSQRT_ABS_ERR ) {
+                out[0] = 1;
+                out[1] = -x/y;
+                out[2] = 0;
+            } else if ( x > FSQRT_ABS_ERR || -x > FSQRT_ABS_ERR ) {
+                out[0] = -y/x;
+                out[1] = 1;
+                out[2] = 0;
+            } else {
+                out[0] = 1;
+                out[1] = 0;
+                out[2] = 0;
+                // No need to normalize.
+                return;
+            }
+            break;
+        
+        case 1:
+            if( x > FSQRT_ABS_ERR || -x > FSQRT_ABS_ERR ) {
+                out[0] = -z / x;
+                out[1] = 0;
+                out[2] = 1;
+            } else if( z > FSQRT_ABS_ERR || -z > FSQRT_ABS_ERR ) {
+                out[0] = 1;
+                out[1] = 0;
+                out[2] = -x / z;
+            } else {
+                out[0] = 0;
+                out[1] = 0;
+                out[2] = 1;
+                // No need to normalize.
+                return;
+            }
+            break;
+        
+        default:
+            if( z > FSQRT_ABS_ERR || -z > FSQRT_ABS_ERR ) {
+                out[0] = 0;
+                out[1] = 1;
+                out[2] = -y / z;                
+            } else if( y > FSQRT_ABS_ERR || -y > FSQRT_ABS_ERR ) {
+                out[0] = 0;
+                out[1] = -z / y;
+                out[2] = 1;
+            } else {
+                out[0] = 0;
+                out[1] = 1;
+                out[2] = 0;
+                // No need to normalize.
+                return;
+            }
+            break;
+        }
+        
+        normalize( out, 1f );
+    }
+    
+    
     
     /**
      * Returns shortest distance between a line defined and a point.
@@ -320,42 +421,47 @@ public final class Vec3 {
     }
     
     /**
-     * Finds intersection of line and plane.  The output is only defined if this method returns 1, 
-     * indicating that the line and plane intersect at one point. 
+     * Finds intersection of line and plane. The intersection point is 
+     * only defined if this method returns 1, indicating that the line and
+     * plane intersect at one point. 
      * 
      * @param line0      First point on line.
      * @param line1      Second point on line.
      * @param planePoint A Point on the plane.
      * @param planeNorm  Normal vector of plane.
-     * @param out        3x1 array to hold output point.  May be <code>null</code>
-     * @return 0 if no intersection, 1 if point intersection, 2 if complete intersection.
+     * @param optOut     length-3 array to hold point of intersection. May be <code>null</code>
+     * @return 0 if no intersection, 
+     *         1 if point intersection ( line crosses plane )
+     *         2 if line intersection ( line lies on plane )
      */
     public static int intersectLineWithPlane( float[] line0, 
                                               float[] line1, 
                                               float[] planePoint, 
                                               float[] planeNorm, 
-                                              float[] out ) 
+                                              float[] optOut ) 
     {
         float dx = line1[0] - line0[0];
         float dy = line1[1] - line0[1];
         float dz = line1[2] - line0[2];
         
         float num = (planePoint[0] - line0[0]) * planeNorm[0] + 
-                     (planePoint[1] - line0[1]) * planeNorm[1] +
-                     (planePoint[2] - line0[2]) * planeNorm[2];
+                    (planePoint[1] - line0[1]) * planeNorm[1] +
+                    (planePoint[2] - line0[2]) * planeNorm[2];
         
         float den = dx * planeNorm[0] + dy * planeNorm[1] + dz * planeNorm[2];
         
-        if( Math.abs(den) < ABS_ERR )
-            return Math.abs(num) < ABS_ERR ? 2 : 0;
+        if( Math.abs( den ) < FSQRT_ABS_ERR  ) {
+            return Math.abs(num) < FSQRT_ABS_ERR ? 2 : 0;
+        }
         
-        if(out == null)
+        if( optOut == null ) {
             return 1;
+        }
         
         float d = num / den;
-        out[0] = d * dx + line0[0];
-        out[1] = d * dy + line0[1];
-        out[2] = d * dz + line0[2];
+        optOut[0] = d * dx + line0[0];
+        optOut[1] = d * dy + line0[1];
+        optOut[2] = d * dz + line0[2];
         
         return 1;
     }
@@ -364,20 +470,20 @@ public final class Vec3 {
      * Finds "intersection", or smallest connecting line, between two 3d lines.
      * (Lines, not line segments).
      * 
-     * @param a0   First point on line a
-     * @param a1   Second point on line a 
-     * @param b0   First point on line b
-     * @param b1   Second point on line b
-     * @param outA Point on line a nearest to line b (optional)
-     * @param outB Point on line b nearest to line a (optional)
+     * @param a0       First point on line a
+     * @param a1       Second point on line a 
+     * @param b0       First point on line b
+     * @param b1       Second point on line b
+     * @param optOutA  On return, holds point on line a nearest to line b (optional)
+     * @param optOutB  On return, holds point on line b nearest to line a (optional)
      * @return true if lines are not parallel and intersection was found.  False if lines are parallel.
      */
     public static boolean lineLineIntersection( float[] a0, 
                                                 float[] a1, 
                                                 float[] b0, 
                                                 float[] b1, 
-                                                float[] outA, 
-                                                float[] outB )
+                                                float[] optOutA, 
+                                                float[] optOutB )
     {
         float da0b0b1b0 = (a0[0] - b0[0]) * (b1[0] - b0[0]) + (a0[1] - b0[1]) * (b1[1] - b0[1]) + (a0[2] - b0[2]) * (b1[2] - b0[2]); 
         float db1b0a1a0 = (b1[0] - b0[0]) * (a1[0] - a0[0]) + (b1[1] - b0[1]) * (a1[1] - a0[1]) + (b1[2] - b0[2]) * (a1[2] - a0[2]); 
@@ -392,16 +498,17 @@ public final class Vec3 {
             return false;
         }
         float mua = num / den;
-        if( outA != null ) {
-            Vec3.add( a0, 1.0f - mua, a1, mua, outA );
+        if( optOutA != null ) {
+            Vec3.add( a0, 1.0f - mua, a1, mua, optOutA );
         }
-        if( outB != null ) {
+        if( optOutB != null ) {
             float mub = ( da0b0b1b0 + mua * db1b0a1a0 ) / db1b0b1b0;
-            Vec3.add( b0, 1.0f - mub, b1, mub, outB );
+            Vec3.add( b0, 1.0f - mub, b1, mub, optOutB );
         }
         
         return true;
     }
+    
     
     
     public static boolean isValid( float[] vec ) {
@@ -417,8 +524,21 @@ public final class Vec3 {
     
     
     
+    
     private Vec3() {}
 
+
+    
+    public static void main( String[] args ) {
+        float[] f = { 1f, 1f, 1f };
+        float[] out = new float[3];
+        chooseOrtho( f[0], f[1], f[2], 0, out );
+        System.out.println( format( out ) );
+        System.out.println( dot( f, out ) );
+        chooseOrtho( f[0], f[1], f[2], 2, out );
+        System.out.println( format( out ) );
+        System.out.println( dot( f, out ) );
+    }
     
     
     @Deprecated
@@ -428,6 +548,26 @@ public final class Vec3 {
         for(int i = 0; i < len; i++) {
             out[i + offOut] = q * a[i + offA] + p * b[i + offB];
         }
+    }
+
+    
+    /**
+     * Performs smallest possible modification to <code>vec</code> to make it
+     * orthogonal to some <code>reference</code> vector.
+     * 
+     * @param vec           Vector to modify.
+     * @param reference     Reference vector.
+     * @deprecated Use makeOrthoTo(), which has a shorter name.
+     */
+    public static void makePerpendicularTo( float[] vec, float[] reference ) {
+        float lenRef = reference[0] * reference[0] + reference[1] * reference[1] + reference[2] * reference[2];
+        if( lenRef < FSQRT_ABS_ERR ) {
+            return;
+        }
+        float parScale = dot( vec, reference ) / lenRef;
+        vec[0] -= reference[0] * parScale;
+        vec[1] -= reference[1] * parScale;
+        vec[2] -= reference[2] * parScale;
     }
     
 }
