@@ -169,35 +169,42 @@ public final class Box2 {
      * @param y
      * @param box
      * @param outXY
+     * @param outOff
      */
-    public static void modelToBox( float x, float y, float[] box, float[] outXY ) {
-        outXY[0] = ( x - box[0] ) / ( box[2] - box[0] );
-        outXY[1] = ( y - box[1] ) / ( box[3] - box[1] );
+    public static void modelToBox( float x, float y, float[] box, float[] outXY, int outOff ) {
+        outXY[outOff  ] = ( x - box[0] ) / ( box[2] - box[0] );
+        outXY[outOff+1] = ( y - box[1] ) / ( box[3] - box[1] );
     }
     
     /**
      * Maps a point in box coordinates into model coordinates.
      */
-    public static void boxToModel( float x, float y, float[] box, float[] outXY ) {
-        outXY[0] = x * ( box[2] - box[0] ) + box[0];
-        outXY[1] = y * ( box[3] - box[1] ) + box[1];
+    public static void boxToModel( float x, float y, float[] box, float[] outXY, int outOff ) {
+        outXY[outOff  ] = x * ( box[2] - box[0] ) + box[0];
+        outXY[outOff+1] = y * ( box[3] - box[1] ) + box[1];
     }
     
     /**
      * Performs linear mapping of some coordinate in a space defined by 
      * <code>src</code> into the coordinate space defined by <code>dst</code>.
      * 
-     * @param x
-     * @param y
-     * @param src
-     * @param dst
-     * @param outXY
+     * @param x         Input x-coordinate
+     * @param y         Input y-coordinate
+     * @param srcDomain Box defining domain of input coordinate. 
+     * @param dstDomain Box defining destination domain (codomain). 
+     * @param outXY     Array to hold resulting xy coordinates.
+     * @param outOff    Offset into output array.
      */
-    public static void map( float x, float y, float[] src, float[] dst, float[] outXY ) {
-        outXY[0] = ( x - src[0] ) / ( src[2] - src[0] ) * ( dst[2] - dst[0] ) + dst[0];
-        outXY[1] = ( y - src[1] ) / ( src[3] - src[1] ) * ( dst[3] - dst[1] ) + dst[1];
+    public static void map( float x, 
+                            float y, 
+                            float[] srcDomain, 
+                            float[] dstDomain, 
+                            float[] outXY, 
+                            int outOff ) 
+    {
+        outXY[outOff  ] = ( x - srcDomain[0] ) / ( srcDomain[2] - srcDomain[0] ) * ( dstDomain[2] - dstDomain[0] ) + dstDomain[0];
+        outXY[outOff+1] = ( y - srcDomain[1] ) / ( srcDomain[3] - srcDomain[1] ) * ( dstDomain[3] - dstDomain[1] ) + dstDomain[1];
     }
-    
     
     /**
      * Ensures box has defines non-negative space.
