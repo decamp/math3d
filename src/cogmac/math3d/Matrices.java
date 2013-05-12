@@ -401,7 +401,79 @@ public final class Matrices {
         out[14] = 0.0;
         out[15] = 1.0;
     }
-    
+
+    /**
+     * Creates a rotation matrix that uses two provided vectors as bases.
+     * If the two input vectors are not orthogonal, the second vector
+     * will be orthogonalized. If the two vectors are parallel, the
+     * orthogonalization will be performed arbitrarily with valid but
+     * undefined results. Input vectors need not be normalized.
+     * 
+     * @param v0     Primary vector to use as basis. 
+     * @param axis0  Axis of primary vector ( 0 == x, 1 == y, 2 == z )
+     * @param v1     Secondary vector to use as basis.
+     * @param axis1  Axis of secondary vector ( 0 == x, 1 == y, 2 == z )
+     *               Results are undefined if axis0 == axis1.
+     * @param out    On return, holds computed rotation matrix.
+     */
+    public static void basisVecsToRotation( double[] v0, int axis0, double[] v1, int axis1, double[] out ) {
+        axis0 %= 3;
+        axis1 %= 3;
+        int axis2;
+        boolean forward;
+        
+        if( axis1 == ( axis0 + 1 ) % 3 ) {
+            axis2 = ( axis0 + 2 ) % 3;
+            forward = true;
+        } else if( axis1 == ( axis0 + 2 ) % 3 ) {
+            axis2 = ( axis0 + 1 ) % 3;
+            forward = false;
+        } else {
+            axis1 = ( axis0 + 1 ) % 3;
+            axis2 = ( axis0 + 2 ) % 3;
+            forward = true;
+        }
+        
+        // Compute axis2.
+        if( forward ) {
+            Vectors.cross( v0, 0, v1, 0, out, axis2*4 );
+        } else {
+            Vectors.cross( v1, 0, v0, 0, out, axis2*4 );
+        }
+        
+        // Normalize axis2.
+        // If zero, select arbitrary axis ortohgonal to axis0.
+        double d = Vectors.lenSquared( out, axis2*4 );
+        if( d < Tol.SQRT_ABS_ERR ) {
+            Vectors.chooseOrtho( out[axis2*4], out[axis2*4+1], out[axis2*4+2], out );
+            System.arraycopy( out, 0, out, axis2*4,3 );
+        } else {
+            d = 1.0 / Math.sqrt( d );
+            out[axis2*4  ] *= d;
+            out[axis2*4+1] *= d;
+            out[axis2*4+2] *= d;
+        }
+        
+        // Copy and normalize axis0.
+        System.arraycopy( v0, 0, out, axis0*4, 3 );
+        Vectors.normalize( out, axis0*4, 1.0 );
+        
+        // Compute axis1.
+        if( forward ) {
+            Vectors.cross( out, axis2*4, out, axis0*4, out, axis1*4 );
+        } else {
+            Vectors.cross( out, axis0*4, out, axis2*4, out, axis1*4 );
+        }
+        
+        // Initialize rest of matrix.
+        out[ 3] = 0;
+        out[ 7] = 0;
+        out[11] = 0;
+        out[12] = 0;
+        out[13] = 0;
+        out[14] = 0;
+        out[15] = 1;
+    }
 
     /**
      * This method will adjust a rotation matrix so that one of the basis vectors will
@@ -441,6 +513,32 @@ public final class Matrices {
         out[15] = 1.0;
     }
     
+    /**
+     * Computes rotation matrix of smallest rotation angle needed to 
+     * rotate vector <code>src</code> to vector <code>dst</code>.
+     * 
+     * @param src  Input vector
+     * @param dst  Destination vector
+     * @param outMat On output, holds rotation matrix that will transform src to dst.
+     */
+    public static void computeMinRotation( double[] src, double[] dst, double[] outMat ) {
+        double cosAng = Vectors.cosAng( src, dst );
+        double ang    = Math.acos( cosAng );
+        if( Double.isNaN( ang ) ) {
+            ang = cosAng > 0 ? 0 : Math.PI;
+        }
+        
+        if( Tol.approxZero( ang, Math.PI ) ) {
+            setToIdentity( outMat );
+            return;
+        } else if( ang < Math.PI * ( 1.0 - Tol.REL_ERR ) ) {
+            Vectors.cross( src, dst, outMat );
+            Matrices.computeRotationMatrix( ang, outMat[0], outMat[1], outMat[2], outMat ); 
+        } else {
+            Vectors.chooseOrtho( src[0], src[1], src[2], outMat );
+            Matrices.computeRotationMatrix( Math.PI, outMat[0], outMat[1], outMat[2], outMat );
+        }
+    }
     
     /**
      * Performs spherical interpolation of rotation matrices.
@@ -466,7 +564,7 @@ public final class Matrices {
         Quats.slerp( workQuatA, workQuatB, t, workQuatC );
         Quats.quatToMat( workQuatC, out );
     }
-                                      
+    
     
     
     public static String format( double[] mat ) {
@@ -491,6 +589,7 @@ public final class Matrices {
     }
 
 
+    
     public static boolean isValid( double[] mat ) {
         for( int i = 0; i < 16; i++ ) {
             if( Double.isNaN( mat[i] ) ) {
@@ -659,8 +758,4 @@ public final class Matrices {
     
     private Matrices() {}
 
-    
-    
-    
-    
 }

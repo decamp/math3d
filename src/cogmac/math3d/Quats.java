@@ -104,7 +104,11 @@ public final class Quats {
             if( mat[6] + mat[9] < 0 ) q2 = -q2;
         }
         
-        normalize( out );
+        double r = 1.0 / Math.sqrt( q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3 );
+        out[0] = q0 * r;
+        out[1] = q1 * r;
+        out[2] = q2 * r;
+        out[3] = q3 * r;
     }
     
     

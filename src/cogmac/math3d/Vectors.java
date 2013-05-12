@@ -70,6 +70,13 @@ public final class Vectors {
                           vec[2+off] * vec[2+off] );
     }
     
+
+    public static double lenSquared( double[] vec, int off ) {
+        return vec[  off] * vec[  off] + 
+               vec[1+off] * vec[1+off] + 
+               vec[2+off] * vec[2+off];
+    }
+    
     
     public static double dist( double[] point0, double[] point1 ) {
         double dx = point0[0] - point1[0];
@@ -225,45 +232,47 @@ public final class Vectors {
      * @param outMat    Rotation matrix used to rotate vector onto cone.  May be <code>null</code>
      * @return true if any adjustment made, false if output is identical to input
      */
-    public static boolean clampToCone( double[] vec, double[] coneAxis, double coneRads, double[] outVec, double[] outMat ) {
-        double cosAng = cosAng(vec, coneAxis);
-        double ang    = Math.acos(cosAng);
-        
-        if(Double.isNaN(ang)) {
-            ang = cosAng > 0.0 ? 0 : Math.PI;
+    public static boolean clampToCone( double[] vec, 
+                                       double[] coneAxis, 
+                                       double coneRads, 
+                                       double[] outVec, 
+                                       double[] outMat ) 
+    {
+        double cosAng = cosAng( vec, coneAxis );
+        double ang    = Math.acos( cosAng );
+        if( Double.isNaN( ang ) ) {
+            ang = cosAng > 0 ? 0 : Math.PI;
         }
         
-        if(ang <= coneRads) {
-            if(outVec != null) {
+        if( ang <= coneRads ) {
+            if( outVec != null ) {
                 outVec[0] = vec[0];
                 outVec[1] = vec[1];
                 outVec[2] = vec[2];
             }
-            
-            if(outMat != null) {
-                Matrices.setToIdentity(outMat);
+            if( outMat != null ) {
+                Matrices.setToIdentity( outMat );
             }
-            
             return false;
         }
         
         double[] rotAxis = new double[3];
         double[] rot     = outMat == null ? new double[16] : outMat;
         
-        if( ang < Math.PI * (1.0 + REL_ERR )) {
-            Vectors.cross(vec, coneAxis, rotAxis);
-        }else{
-            Vectors.chooseOrtho(coneAxis[0], coneAxis[1], coneAxis[2], rotAxis);
+        if( ang < Math.PI * ( 1.0 - REL_ERR ) ) {
+            Vectors.cross( vec, coneAxis, rotAxis );
+        } else {
+            Vectors.chooseOrtho( coneAxis[0], coneAxis[1], coneAxis[2], rotAxis ); 
         }
-
-        Matrices.computeRotationMatrix(ang - coneRads * (1.0 - REL_ERR), rotAxis[0], rotAxis[1], rotAxis[2], rot);
         
-        if(outVec != null) {
-            Matrices.multMatVec(rot, vec, outVec);
+        Matrices.computeRotationMatrix( ang - coneRads, rotAxis[0], rotAxis[1], rotAxis[2], rot );
+        if( outVec != null ) {
+            Matrices.multMatVec( rot, vec, outVec );
         }
         
         return true;
     }
+    
     
     /**
      * Picks a unit-length vector that is orthogonal to the input vector.
