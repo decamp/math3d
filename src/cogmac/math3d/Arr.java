@@ -4,6 +4,73 @@ package cogmac.math3d;
  * @author decamp
  */
 public final class Arr {
+
+    
+    public static void put( float[] src, float[] dst ) {
+        System.arraycopy( src, 0, dst, 0, src.length );
+    }
+
+    
+    public static void put( float[] src, int srcOff, float[] dst, int dstOff, int len ) {
+        System.arraycopy( src, srcOff, dst, dstOff, len );
+    }
+    
+    
+    public static void put( double[] src, double[] dst ) {
+        System.arraycopy( src, 0, dst, 0, src.length );
+    }
+    
+    
+    public static void put( double[] src, int srcOff, double[] dst, int dstOff, int len ) {
+        System.arraycopy( src, srcOff, dst, dstOff, len );
+    }
+
+    
+    public static void put( float[] src, double[] dst ) {
+        for( int i = 0; i < src.length; i++ ) {
+            dst[i] = src[i];
+        }
+    }
+    
+    
+    public static void put( float[] src, int srcOff, double[] dst, int dstOff, int len ) {
+        for( int i = 0; i < len; i++ ) {
+            dst[i+dstOff] = src[i+srcOff];
+        }
+    }
+
+    
+    public static void put( double[] src, float[] dst ) {
+        for( int i = 0; i < src.length; i++ ) {
+            dst[i] = (float)src[i];
+        }
+    }
+    
+    
+    public static void put( double[] src, int srcOff, float[] dst, int dstOff, int len ) {
+        for( int i = 0; i < len; i++ ) {
+            dst[i+dstOff] = (float)src[i+srcOff];
+        }
+    }    
+    
+    
+    public static float[] toFloats( double... vals ) {
+        float[] ret = new float[ vals.length ];
+        for( int i = 0; i < vals.length; i++ ) {
+            ret[i] = (float)vals[i];
+        }
+        return ret;
+    }
+    
+    
+    public static double[] toDoubles( float... vals ) {
+        double[] ret = new double[ vals.length ];
+        for( int i = 0; i < vals.length; i++ ) {
+            ret[i] = vals[i];
+        }
+        return ret;
+    }
+    
     
     
     public static float[] wrap( float... vals ) {

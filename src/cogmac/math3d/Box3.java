@@ -138,18 +138,42 @@ public final class Box3 {
     
     /**
      * Performs linear mapping of some coordinate in a space defined by 
-     * <code>src</code> into the coordinate space defined by <code>dst</code>.
+     * <code>srcDomain</code> into the coordinate space defined by <code>dstDomain</code>.
      * 
      * @param x
      * @param y
-     * @param src
-     * @param dst
+     * @param srcDomain
+     * @param dstDomain
      * @param outXYZ
      */
-    public static void map( float x, float y, float z, float[] src, float[] dst, float[] outXYZ ) {
-        outXYZ[0] = ( x - src[0] ) / ( src[3] - src[0] ) * ( dst[3] - dst[0] ) + dst[0];
-        outXYZ[1] = ( y - src[1] ) / ( src[4] - src[1] ) * ( dst[4] - dst[1] ) + dst[1];
-        outXYZ[2] = ( z - src[2] ) / ( src[5] - src[2] ) * ( dst[5] - dst[2] ) + dst[2];
+    public static void mapPoint( float x, float y, float z, float[] srcDomain, float[] dstDomain, float[] outXYZ ) {
+        outXYZ[0] = ( x - srcDomain[0] ) / ( srcDomain[3] - srcDomain[0] ) * ( dstDomain[3] - dstDomain[0] ) + dstDomain[0];
+        outXYZ[1] = ( y - srcDomain[1] ) / ( srcDomain[4] - srcDomain[1] ) * ( dstDomain[4] - dstDomain[1] ) + dstDomain[1];
+        outXYZ[2] = ( z - srcDomain[2] ) / ( srcDomain[5] - srcDomain[2] ) * ( dstDomain[5] - dstDomain[2] ) + dstDomain[2];
+    }
+
+    /**
+     * Performs linear mapping of a Box3 in a space defined by 
+     * <code>srcDomain</code> into the coordinate space defined by <code>dstDomain</code>.
+     * 
+     * @param in        Input box
+     * @param srcDomain Box defining domain of input coordinate. 
+     * @param dstDomain Box defining destination domain (codomain). 
+     * @param out       On return, holds mapped box. May be same is in.
+     */
+    public static void mapBox( float[] in, float[] srcDomain, float[] dstDomain, float[] out ) {
+        float sx = ( dstDomain[3] - dstDomain[0] ) / ( srcDomain[3] - srcDomain[0] );
+        float sy = ( dstDomain[4] - dstDomain[1] ) / ( srcDomain[4] - srcDomain[1] );
+        float sz = ( dstDomain[5] - dstDomain[2] ) / ( srcDomain[5] - srcDomain[2] );
+        float tx = dstDomain[0] - srcDomain[0] * sx;
+        float ty = dstDomain[1] - srcDomain[1] * sy;
+        float tz = dstDomain[2] - srcDomain[2] * sz;
+        out[0] = sx * in[0] + tx;
+        out[1] = sy * in[1] + ty;
+        out[2] = sz * in[2] + tz;
+        out[3] = sx * in[3] + tx;
+        out[4] = sy * in[4] + ty;
+        out[5] = tz * in[5] + tz;
     }
     
     /**

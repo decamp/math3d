@@ -9,6 +9,16 @@ package cogmac.math3d;
 public final class Box2 {
 
     /**
+     * Translates box.
+     */
+    public static void translate( float[] box, float tx, float ty, float[] out ) {
+        out[0] = box[0] + tx;
+        out[1] = box[1] + ty;
+        out[2] = box[2] + tx;
+        out[3] = box[3] + ty;
+    }
+
+    /**
      * Sets center of box.
      */
     public static void center( float[] box, float cx, float cy, float[] out ) {
@@ -185,8 +195,8 @@ public final class Box2 {
     }
     
     /**
-     * Performs linear mapping of some coordinate in a space defined by 
-     * <code>src</code> into the coordinate space defined by <code>dst</code>.
+     * Performs linear mapping of a coordinate in a space defined by 
+     * <code>srcDomain</code> into the coordinate space defined by <code>dstDomain</code>.
      * 
      * @param x         Input x-coordinate
      * @param y         Input y-coordinate
@@ -195,15 +205,40 @@ public final class Box2 {
      * @param outXY     Array to hold resulting xy coordinates.
      * @param outOff    Offset into output array.
      */
-    public static void map( float x, 
-                            float y, 
-                            float[] srcDomain, 
-                            float[] dstDomain, 
-                            float[] outXY, 
-                            int outOff ) 
+    public static void mapPoint( float x, 
+                                 float y, 
+                                 float[] srcDomain, 
+                                 float[] dstDomain, 
+                                 float[] outXY, 
+                                 int outOff ) 
     {
         outXY[outOff  ] = ( x - srcDomain[0] ) / ( srcDomain[2] - srcDomain[0] ) * ( dstDomain[2] - dstDomain[0] ) + dstDomain[0];
         outXY[outOff+1] = ( y - srcDomain[1] ) / ( srcDomain[3] - srcDomain[1] ) * ( dstDomain[3] - dstDomain[1] ) + dstDomain[1];
+    }
+    
+    /**
+     * Performs linear mapping of a Box2 in a space defined by 
+     * <code>srcDomain</code> into the coordinate space defined by <code>dstDomain</code>.
+     * 
+     * @param in        Input box
+     * @param srcDomain Box defining domain of input coordinate. 
+     * @param dstDomain Box defining destination domain (codomain). 
+     * @param out       On return, holds mapped box. May be same as <code>in</code>.
+     */
+    public static void mapBox( float[] in, 
+                               float[] srcDomain, 
+                               float[] dstDomain, 
+                               float[] out ) 
+    {
+        float sx = ( dstDomain[2] - dstDomain[0] ) / ( srcDomain[2] - srcDomain[0] );
+        float sy = ( dstDomain[3] - dstDomain[1] ) / ( srcDomain[3] - srcDomain[1] );
+        float tx = dstDomain[0] - srcDomain[0] * sx;
+        float ty = dstDomain[1] - srcDomain[1] * sy;
+        
+        out[0] = sx * in[0] + tx;
+        out[1] = sy * in[1] + ty;
+        out[2] = sx * in[2] + tx;
+        out[3] = sy * in[3] + ty;
     }
     
     /**
