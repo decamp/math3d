@@ -272,25 +272,96 @@ public final class Vectors {
         
         return true;
     }
-    
-    
+
     /**
      * Picks a unit-length vector that is orthogonal to the input vector.
+     * Equivalent to <code>chooseOrtho( x, y, z, 2, out )</code>
      */
     public static void chooseOrtho( double x, double y, double z, double[] out3x1 ) {
-        double d = y * y + z * z;
+        chooseOrtho( x, y, z, 2, out3x1 );
+    }
+    
+    /**
+     * Picks a unitl-length vector that is orthogonal to the input vector.
+     * <p>
+     * This method allows the user to define a "zero-dimension", where the
+     * vector that is returned by this method is guaranteed to have a zero coordinate
+     * for that dimension. Additionally, the coordinate after the zero-dimension will
+     * hold a non-negative value.
+     * <p>
+     * For example, <br/>
+     * <code>chooseOrtho( 1.0, 1.0, 1.0, 0, out )</code><br/>
+     * will set <br/>
+     * <code>out = [  0.0000,  0.7071, -0.7071 ] </code><br/>
+     * where <code>out[0]</code> is zero and <code>out[1]</code> is non-negative. <br> 
+     * <code>chooseOrtho( 1.0, 1.0, 1.0, 2, out )</code><br/>
+     * will set <br/>
+     * <code>out = [  0.7071, -0.7071,  0.0000 ] </code><br/> 
+     * 
+     * @param x
+     * @param y
+     * @param z
+     * @param zeroDim
+     * @param out3x1
+     */
+    public static void chooseOrtho( double x, double y, double z, int zeroDim, double[] out3x1 ) {
+        switch( zeroDim ) {
+        case 2:
+            if( y > SQRT_ABS_ERR || -y > SQRT_ABS_ERR ) {
+                out3x1[0] = 1;
+                out3x1[1] = -x/y;
+                out3x1[2] = 0;
+            } else if ( x > SQRT_ABS_ERR || -x > SQRT_ABS_ERR ) {
+                out3x1[0] = -y/x;
+                out3x1[1] = 1;
+                out3x1[2] = 0;
+            } else {
+                out3x1[0] = 1;
+                out3x1[1] = 0;
+                out3x1[2] = 0;
+                // No need to normalize.
+                return;
+            }
+            break;
         
-        if( d > ABS_ERR ) {
-            d = Math.sqrt( z * z / d );
-            double sign = ( y * z >= 0.0 ? -1.0 : 1.0 );
-            out3x1[0] = 0.0;
-            out3x1[1] = d;
-            out3x1[2] = Math.sqrt( 1 - d * d ) * sign;
-        }else{
-            out3x1[0] = 0.0;
-            out3x1[1] = 1.0;
-            out3x1[2] = 0.0;
+        case 1:
+            if( x > SQRT_ABS_ERR || -x > SQRT_ABS_ERR ) {
+                out3x1[0] = -z / x;
+                out3x1[1] = 0;
+                out3x1[2] = 1;
+            } else if( z > SQRT_ABS_ERR || -z > SQRT_ABS_ERR ) {
+                out3x1[0] = 1;
+                out3x1[1] = 0;
+                out3x1[2] = -x / z;
+            } else {
+                out3x1[0] = 0;
+                out3x1[1] = 0;
+                out3x1[2] = 1;
+                // No need to normalize.
+                return;
+            }
+            break;
+        
+        default:
+            if( z > SQRT_ABS_ERR || -z > SQRT_ABS_ERR ) {
+                out3x1[0] = 0;
+                out3x1[1] = 1;
+                out3x1[2] = -y / z;                
+            } else if( y > SQRT_ABS_ERR || -y > SQRT_ABS_ERR ) {
+                out3x1[0] = 0;
+                out3x1[1] = -z / y;
+                out3x1[2] = 1;
+            } else {
+                out3x1[0] = 0;
+                out3x1[1] = 1;
+                out3x1[2] = 0;
+                // No need to normalize.
+                return;
+            }
+            break;
         }
+        
+        normalize( out3x1, 1f );
     }
     
     /**
