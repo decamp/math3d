@@ -88,7 +88,7 @@ public final class Tol {
      * @return true iff <code>abs(v) < ABS_ERR</code>
      */
     public static boolean approxZero( double v ) {
-        return v > ABS_ERR || v > -ABS_ERR;
+        return v < ABS_ERR && -v < ABS_ERR;
     }
     
     /**
