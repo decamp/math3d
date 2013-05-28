@@ -315,6 +315,29 @@ public final class Matrices {
     }
     
     
+    public static void computeViewportDepthMatrix(double x, double y, double w, double h, double near, double far, double[] out) {
+        out[ 0] = w * 0.5;
+        out[ 1] = 0.0;
+        out[ 2] = 0.0;
+        out[ 3] = 0.0;
+        
+        out[ 4] = 0.0;
+        out[ 5] = h * 0.5;
+        out[ 6] = 0.0;
+        out[ 7] = 0.0;
+        
+        out[ 8] = 0.0;
+        out[ 9] = 0.0;
+        out[10] = ( far - near ) * 0.5;
+        out[11] = 0.0;
+        
+        out[12] = w * 0.5 + x;
+        out[13] = h * 0.5 + y;
+        out[14] = ( far + near ) * 0.5;
+        out[15] = 1.0;
+    }
+    
+    
     //************************************
     // Rotation methods.
     //************************************
