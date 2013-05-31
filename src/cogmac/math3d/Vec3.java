@@ -241,7 +241,7 @@ public final class Vec3 {
         }
         Mat4.rotation( ang - coneRads * (1.0f - FREL_ERR), rotAxis[0], rotAxis[1], rotAxis[2], rot );
         if( outVec != null ) {
-            Mat4.multVec( rot, vec, outVec );
+            Mat4.multVec3( rot, vec, outVec );
         }
         
         return true;

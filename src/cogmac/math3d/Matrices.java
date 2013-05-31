@@ -47,7 +47,7 @@ public final class Matrices {
             out[2] /= w;
         }
     }
-
+    
     
     public static void multMatVec(double[] a, int offA, double[] b, int offB, double[] out, int offOut ) {
         out[0+offOut]   = a[ 0+offA]*b[0+offB] + a[ 4+offA]*b[1+offB] + a[ 8+offA]*b[2+offB] + a[12+offA];
@@ -61,6 +61,15 @@ public final class Matrices {
             out[2+offOut] /= w;
         }
     }
+    
+    
+    public static void multVec4( double[] a, double[] b, double[] out ) {
+        out[0] = a[ 0]*b[0] + a[ 4]*b[1] + a[ 8]*b[2] + a[12]*b[3];
+        out[1] = a[ 1]*b[0] + a[ 5]*b[1] + a[ 9]*b[2] + a[13]*b[3];
+        out[2] = a[ 2]*b[0] + a[ 6]*b[1] + a[10]*b[2] + a[14]*b[3];
+        out[3] = a[ 3]*b[0] + a[ 7]*b[1] + a[11]*b[2] + a[15]*b[3];
+    }
+    
     
     /**
      * @param mat    Input matrix

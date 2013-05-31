@@ -35,7 +35,7 @@ public final class Mat4 {
     }
     
     
-    public static void multVec( float[] a, float[] b, float[] out ) {
+    public static void multVec3( float[] a, float[] b, float[] out ) {
         out[0]  = a[ 0]*b[0] + a[ 4]*b[1] + a[ 8]*b[2] + a[12];
         out[1]  = a[ 1]*b[0] + a[ 5]*b[1] + a[ 9]*b[2] + a[13];
         out[2]  = a[ 2]*b[0] + a[ 6]*b[1] + a[10]*b[2] + a[14];
@@ -50,7 +50,7 @@ public final class Mat4 {
     }
 
     
-    public static void multVec( float[] a, int offA, float[] b, int offB, float[] out, int offOut ) {
+    public static void multVec3( float[] a, int offA, float[] b, int offB, float[] out, int offOut ) {
         out[0+offOut] = a[ 0+offA]*b[0+offB] + a[ 4+offA]*b[1+offB] + a[ 8+offA]*b[2+offB] + a[12+offA];
         out[1+offOut] = a[ 1+offA]*b[0+offB] + a[ 5+offA]*b[1+offB] + a[ 9+offA]*b[2+offB] + a[13+offA];
         out[2+offOut] = a[ 2+offA]*b[0+offB] + a[ 6+offA]*b[1+offB] + a[10+offA]*b[2+offB] + a[14+offA];
@@ -63,6 +63,17 @@ public final class Mat4 {
             out[2+offOut] *= w;
         }
     }
+    
+    
+    public static void multVec4( float[] a, float[] b, float[] out ) {
+        out[0] = a[ 0]*b[0] + a[ 4]*b[1] + a[ 8]*b[2] + a[12]*b[3];
+        out[1] = a[ 1]*b[0] + a[ 5]*b[1] + a[ 9]*b[2] + a[13]*b[3];
+        out[2] = a[ 2]*b[0] + a[ 6]*b[1] + a[10]*b[2] + a[14]*b[3];
+        out[3] = a[ 3]*b[0] + a[ 7]*b[1] + a[11]*b[2] + a[15]*b[3];
+    }
+    
+    
+    
     
     /**
      * @param mat    Input matrix
