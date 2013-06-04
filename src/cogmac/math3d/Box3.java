@@ -121,19 +121,19 @@ public final class Box3 {
      * @param box
      * @param outXYZ
      */
-    public static void modelToBox( float x, float y, float z, float[] box, float[] outXYZ ) {
-        outXYZ[0] = ( x - box[0] ) / ( box[3] - box[0] );
-        outXYZ[1] = ( y - box[1] ) / ( box[4] - box[1] );
-        outXYZ[2] = ( z - box[2] ) / ( box[5] - box[2] );
+    public static void modelToBox( float x, float y, float z, float[] box, float[] outXYZ, int outOff ) {
+        outXYZ[0+outOff] = ( x - box[0] ) / ( box[3] - box[0] );
+        outXYZ[1+outOff] = ( y - box[1] ) / ( box[4] - box[1] );
+        outXYZ[2+outOff] = ( z - box[2] ) / ( box[5] - box[2] );
     }
     
     /**
      * Maps a point in box coordinates into model coordinates.
      */
-    public static void boxToModel( float x, float y, float z, float[] box, float[] outXYZ ) {
-        outXYZ[0] = x * ( box[3] - box[0] ) + box[0];
-        outXYZ[1] = y * ( box[4] - box[1] ) + box[1];
-        outXYZ[2] = z * ( box[5] - box[2] ) + box[2];
+    public static void boxToModel( float x, float y, float z, float[] box, float[] outXYZ, int outOff ) {
+        outXYZ[0+outOff] = x * ( box[3] - box[0] ) + box[0];
+        outXYZ[1+outOff] = y * ( box[4] - box[1] ) + box[1];
+        outXYZ[2+outOff] = z * ( box[5] - box[2] ) + box[2];
     }
     
     /**
@@ -146,10 +146,10 @@ public final class Box3 {
      * @param dstDomain
      * @param outXYZ
      */
-    public static void mapPoint( float x, float y, float z, float[] srcDomain, float[] dstDomain, float[] outXYZ ) {
-        outXYZ[0] = ( x - srcDomain[0] ) / ( srcDomain[3] - srcDomain[0] ) * ( dstDomain[3] - dstDomain[0] ) + dstDomain[0];
-        outXYZ[1] = ( y - srcDomain[1] ) / ( srcDomain[4] - srcDomain[1] ) * ( dstDomain[4] - dstDomain[1] ) + dstDomain[1];
-        outXYZ[2] = ( z - srcDomain[2] ) / ( srcDomain[5] - srcDomain[2] ) * ( dstDomain[5] - dstDomain[2] ) + dstDomain[2];
+    public static void mapPoint( float x, float y, float z, float[] srcDomain, float[] dstDomain, float[] outXYZ, int outOff ) {
+        outXYZ[0+outOff] = ( x - srcDomain[0] ) / ( srcDomain[3] - srcDomain[0] ) * ( dstDomain[3] - dstDomain[0] ) + dstDomain[0];
+        outXYZ[1+outOff] = ( y - srcDomain[1] ) / ( srcDomain[4] - srcDomain[1] ) * ( dstDomain[4] - dstDomain[1] ) + dstDomain[1];
+        outXYZ[2+outOff] = ( z - srcDomain[2] ) / ( srcDomain[5] - srcDomain[2] ) * ( dstDomain[5] - dstDomain[2] ) + dstDomain[2];
     }
 
     /**
