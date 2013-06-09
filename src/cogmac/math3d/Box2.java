@@ -21,7 +21,7 @@ public final class Box2 {
     /**
      * Sets center of box.
      */
-    public static void center( float[] box, float cx, float cy, float[] out ) {
+    public static void setCenter( float[] box, float cx, float cy, float[] out ) {
         float dx = cx - ( box[0] + box[2] ) * 0.5f;
         float dy = cy - ( box[1] + box[3] ) * 0.5f;
         out[0] = box[0] + dx;
@@ -181,7 +181,7 @@ public final class Box2 {
      * @param outXY
      * @param outOff
      */
-    public static void modelToBox( float x, float y, float[] box, float[] outXY, int outOff ) {
+    public static void worldToBox( float x, float y, float[] box, float[] outXY, int outOff ) {
         outXY[outOff  ] = ( x - box[0] ) / ( box[2] - box[0] );
         outXY[outOff+1] = ( y - box[1] ) / ( box[3] - box[1] );
     }
@@ -189,7 +189,7 @@ public final class Box2 {
     /**
      * Maps a point in box coordinates into model coordinates.
      */
-    public static void boxToModel( float x, float y, float[] box, float[] outXY, int outOff ) {
+    public static void boxToWorld( float x, float y, float[] box, float[] outXY, int outOff ) {
         outXY[outOff  ] = x * ( box[2] - box[0] ) + box[0];
         outXY[outOff+1] = y * ( box[3] - box[1] ) + box[1];
     }
@@ -261,6 +261,45 @@ public final class Box2 {
         return String.format( "box2[% 7.4f, % 7.4f][% 7.4f,% 7.4f]", v[0], v[1], v[2], v[3] );
     }
     
+    
+    /**
+     * Sets center of box.
+     * @deprecated
+     */
+    public static void center( float[] box, float cx, float cy, float[] out ) {
+        float dx = cx - ( box[0] + box[2] ) * 0.5f;
+        float dy = cy - ( box[1] + box[3] ) * 0.5f;
+        out[0] = box[0] + dx;
+        out[1] = box[1] + dy;
+        out[2] = box[2] + dx;
+        out[3] = box[3] + dy;
+    }
+
+    /**
+    * Maps a point in model coordinates to box coordinates, 
+    * where ( 0, 0 ) is the lower-left corner and ( 1, 1 ) is upper-right corner.
+    * 
+    * @param x
+    * @param y
+    * @param box
+    * @param outXY
+    * @param outOff
+    * @deprecated
+    */
+   public static void modelToBox( float x, float y, float[] box, float[] outXY, int outOff ) {
+       outXY[outOff  ] = ( x - box[0] ) / ( box[2] - box[0] );
+       outXY[outOff+1] = ( y - box[1] ) / ( box[3] - box[1] );
+   }
+   
+   /**
+    * Maps a point in box coordinates into model coordinates.
+    * @deprecated
+    */
+   public static void boxToModel( float x, float y, float[] box, float[] outXY, int outOff ) {
+       outXY[outOff  ] = x * ( box[2] - box[0] ) + box[0];
+       outXY[outOff+1] = y * ( box[3] - box[1] ) + box[1];
+   }
+   
     
     
     private Box2() {}

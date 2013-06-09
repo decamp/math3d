@@ -365,9 +365,7 @@ public final class Vec3 {
         
         normalize( out, 1f );
     }
-    
-    
-    
+        
     /**
      * Returns shortest distance between a line defined and a point.
      * @param n1 A point on the line
