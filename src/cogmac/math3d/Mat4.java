@@ -72,9 +72,6 @@ public final class Mat4 {
         out[3] = a[ 3]*b[0] + a[ 7]*b[1] + a[11]*b[2] + a[15]*b[3];
     }
     
-    
-    
-    
     /**
      * @param mat    Input matrix
      * @param out    Array to hold inverted matrix on return.
@@ -95,9 +92,11 @@ public final class Mat4 {
         float c1 = mat[2+0*4] * mat[3+2*4] - mat[3+0*4] * mat[2+2*4];
         float c0 = mat[2+0*4] * mat[3+1*4] - mat[3+0*4] * mat[2+1*4];
 
-        // Should check for 0 determinant.
+        // Compute determinant
         float invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
-        boolean ret   = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
+        // Check if invertible.
+        boolean ret  = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
+        // Invert determinant
         invdet = 1.0f / invdet;
         
         out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
@@ -119,9 +118,33 @@ public final class Mat4 {
         out[3+1*4] = ( mat[0+0*4] * c3 - mat[0+1*4] * c1 + mat[0+2*4] * c0) * invdet;
         out[3+2*4] = (-mat[3+0*4] * s3 + mat[3+1*4] * s1 - mat[3+2*4] * s0) * invdet;
         out[3+3*4] = ( mat[2+0*4] * s3 - mat[2+1*4] * s1 + mat[2+2*4] * s0) * invdet;
-            
+        
         return ret;
     }
+    
+    
+    public static void trans( float[] a, float[] out ) {
+        out[ 0] = a[ 0];
+        out[ 1] = a[ 4];
+        out[ 2] = a[ 8];
+        out[ 3] = a[12];
+        
+        out[ 4] = a[ 1];
+        out[ 5] = a[ 5];
+        out[ 6] = a[ 9];
+        out[ 7] = a[13];
+        
+        out[ 8] = a[ 2];
+        out[ 9] = a[ 6];
+        out[10] = a[10];
+        out[11] = a[14];
+        
+        out[12] = a[ 3];
+        out[13] = a[ 7];
+        out[14] = a[11];
+        out[15] = a[15];
+    }
+    
     
     
     public static void identity( float[] out ) {
@@ -460,21 +483,6 @@ public final class Mat4 {
     }
 
     
-    
-//    public static void slerpRotations( float[] a,
-//                                       float[] b,
-//                                       float t,
-//                                       float[] workQuatA,
-//                                       float[] workQuatB,
-//                                       float[] workQuatC,
-//                                       float[] out )
-//    {
-//        Quats.matToQuat( a, workQuatA );
-//        Quats.matToQuat( b, workQuatB );
-//        Quats.slerp( workQuatA, workQuatB, t, workQuatC );
-//        Quats.quatToMat( workQuatC, out );
-//    }
-    
     public static String format( float[] mat ) {
         StringBuilder sb = new StringBuilder();
         for( int r = 0; r < 4; r++ ) {
@@ -499,7 +507,7 @@ public final class Mat4 {
 
     public static boolean isValid( float[] mat ) {
         for( int i = 0; i < 16; i++ ) {
-            if( Double.isNaN( mat[i] ) ) {
+            if( Float.isNaN( mat[i] ) ) {
                 return false;
             }
         }
