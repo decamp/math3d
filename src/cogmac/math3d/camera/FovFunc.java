@@ -63,8 +63,8 @@ public class FovFunc implements ProjectionFunc {
         } else {
             left   = ( xmax - xmin ) * ( tileViewport[0] - viewport[0] ) / ( viewport[2] - viewport[0] ) + xmin;
             right  = ( xmax - xmin ) * ( tileViewport[2] - viewport[0] ) / ( viewport[2] - viewport[0] ) + xmin;
-            top    = ( ymax - ymin ) * ( tileViewport[1] - viewport[1] ) / ( viewport[3] - viewport[1] ) + ymin;
-            bottom = ( ymax - ymin ) * ( tileViewport[3] - viewport[1] ) / ( viewport[3] - viewport[1] ) + ymin;
+            bottom = ( ymax - ymin ) * ( tileViewport[1] - viewport[1] ) / ( viewport[3] - viewport[1] ) + ymin;
+            top    = ( ymax - ymin ) * ( tileViewport[3] - viewport[1] ) / ( viewport[3] - viewport[1] ) + ymin;
         }
         
         Matrices.computeFrustumMatrix( left, right, bottom, top, near, far, outMat );
