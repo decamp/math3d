@@ -254,7 +254,6 @@ public final class Arr {
     }
     
     
-    
     public static void lerp( float[] a, float[] b, float p, float[] out ) {
         lerp( a, 0, b, 0, a.length, p, out, 0 );
     }
@@ -332,27 +331,27 @@ public final class Arr {
     
     
     public static void normalize( float[] arr ) {
-        normalize( 1f, arr, 0, arr.length );
+        normalize( arr, 0, arr.length, 1f );
     }
     
     
     public static void normalize( double[] arr ) {
-        normalize( 1f, arr, 0, arr.length );
+        normalize( arr, 0, arr.length, 1.0 );
     }
     
     
-    public static void normalize( float length, float[] a, int off, int len ) {
-        length /= len( a, off, len );
+    public static void normalize( float[] a, int off, int len, float normLength ) {
+        normLength /= len( a, off, len );
         for( int i = 0; i < len; i++ ) {
-            a[i+off] *= length;
+            a[i+off] *= normLength;
         }
     }
     
-
-    public static void normalize( double length, double[] a, int off, int len ) {
-        length /= len( a, off, len );
+    
+    public static void normalize( double[] a, int off, int len, double normLength ) {
+        normLength /= len( a, off, len );
         for( int i = 0; i < len; i++ ) {
-            a[i+off] *= length;
+            a[i+off] *= normLength;
         }
     }
     
@@ -921,5 +920,24 @@ public final class Arr {
         }
     }
 
-        
+    /**
+     * @deprecated Use normalize( float[], int, int, float )
+     */
+    public static void normalize( float length, float[] a, int off, int len ) {
+        length /= len( a, off, len );
+        for( int i = 0; i < len; i++ ) {
+            a[i+off] *= length;
+        }
+    }
+    
+    /**
+     * @deprecated Use normalize( double[], int, int, double )
+     */
+    public static void normalize( double length, double[] a, int off, int len ) {
+        length /= len( a, off, len );
+        for( int i = 0; i < len; i++ ) {
+            a[i+off] *= length;
+        }
+    }
+    
 }

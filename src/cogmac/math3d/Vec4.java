@@ -25,6 +25,22 @@ public final class Vec4 {
         out[2] += a[2];
         out[3] += a[3];
     }
+
+
+    public static void subtract( float[] a, float[] b, float[] out ) {
+        out[0] = a[0] - b[0];
+        out[1] = a[1] - b[1];
+        out[2] = a[2] - b[2];
+        out[3] = a[3] - b[3];
+    }
+    
+    
+    public static void subtractFrom( float[] a, float[] out ) {
+        out[0] -= a[0];
+        out[1] -= a[1];
+        out[2] -= a[2];
+        out[3] -= a[3];
+    }
     
     
     public static void multAdd( float sa, float[] a, float sb, float[] b, float[] out ) {
@@ -43,8 +59,8 @@ public final class Vec4 {
     }
     
     
-    public static float len( float[] vec ) {
-        return (float)Math.sqrt( vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2] + vec[4] * vec[4] );
+    public static float len( float[] a ) {
+        return (float)Math.sqrt( lenSquared( a ) );
     }
     
     
@@ -68,29 +84,36 @@ public final class Vec4 {
     
     
     public static void normalize( float[] a ) {
-        normalize( a, 1f );
-    }
-    
-        
-    public static void normalize( float[] a, float len ) {
-        float d = len / len( a );
-        a[0] *= d;
-        a[1] *= d;
-        a[2] *= d;
-        a[3] *= d;
+        float s = 1f / len( a );
+        a[0] *= s;
+        a[1] *= s;
+        a[2] *= s;
+        a[3] *= s;
     }
     
     
-    public static void scale( float[] a, float scale ) {
-        scale( a, scale, a );
+    public static void normalize( float[] a, float normLength, float[] out ) {
+        float s = normLength / len( a );
+        out[0] = s * a[0];
+        out[1] = s * a[1];
+        out[2] = s * a[2];
+        out[3] = s * a[3];
     }
     
     
-    public static void scale( float[] a, float scale, float[] out ) {
-        out[0] = a[0] * scale;
-        out[1] = a[1] * scale;
-        out[2] = a[2] * scale;
-        out[3] = a[3] * scale;
+    public static void mult( float sa, float[] a ) {
+        a[0] *= sa;
+        a[1] *= sa;
+        a[2] *= sa;
+        a[3] *= sa;
+    }
+    
+    
+    public static void mult( float sa, float[] a, float[] out ) {
+        out[0] = sa * a[0];
+        out[1] = sa * a[1];
+        out[2] = sa * a[2];
+        out[3] = sa * a[3];
     }
     
     
@@ -107,12 +130,22 @@ public final class Vec4 {
     
    
     public static float cosAng( float[] a, float[] b ) {
-        return dot( a, b ) / ( len( a ) * len( b ) );
+        return dot( a, b ) / (float)Math.sqrt( len( a ) * len( b ) );
     }
     
     
     public static float cosAng( float[] origin, float[] a, float[] b ) {
-        return dot( origin, a, b ) / ( dist( origin, a ) * dist( origin, b ) );
+        float ax = a[0] - origin[0];
+        float ay = a[1] - origin[1];
+        float az = a[2] - origin[2];
+        float aw = a[3] - origin[3];
+        float bx = b[0] - origin[0];
+        float by = b[1] - origin[1];
+        float bz = b[2] - origin[2];
+        float bw = b[3] - origin[3];
+        
+        float dd = ( ax*ax + ay*ay + az*az + aw*aw ) * ( bx*bx + by*by + bz*bz + bw*bw );
+        return ( ax*by + ay*by + az*bz + aw*bw ) / (float)Math.sqrt( dd );
     }
 
     
@@ -135,8 +168,8 @@ public final class Vec4 {
     }
     
     /**
-     * Performs smallest possible modification to <code>vec</code> to make it
-     * orthogonal to some <code>reference</code> vector.
+     * Performs smallest possible modification to vector <code>a</code> to make it
+     * orthogonal to vector <code>ref</code>.
      * 
      * @param a    Vector to modify.
      * @param ref  Reference vector.
@@ -154,18 +187,18 @@ public final class Vec4 {
     }
 
     /**
-     * Performs smallest possible modification to <code>vec</code> to make it
-     * parallel to some <code>reference</code> vector.
+     * Performs smallest possible modification to vector <code>a</code> to make it
+     * parallel to vector <code>ref</code>.
      * 
-     * @param a           Vector to modify.
-     * @param reference     Reference vector.
+     * @param a    Vector to modify.
+     * @param ref  Reference vector.
      */
     public static void makeParallelTo( float[] a, float[] ref ) {
         float lenRef = lenSquared( ref );
         if( lenRef < FSQRT_ABS_ERR ) {
             return;
         }
-        float parScale = dot( a, ref ) / lenRef / lenRef;
+        float parScale = dot( a, ref ) / ( lenRef * lenRef );
         a[0] = ref[0] * parScale;
         a[1] = ref[1] * parScale;
         a[2] = ref[2] * parScale;
@@ -189,4 +222,34 @@ public final class Vec4 {
     
     private Vec4() {}
         
+
+    /**
+     * @deprecated Use normalize( float[], float, float[] )
+     */
+    public static void normalize( float[] a, float normLength ) {
+        float d = normLength / len( a );
+        a[0] *= d;
+        a[1] *= d;
+        a[2] *= d;
+        a[3] *= d;
+    }
+    
+    /**
+     * @deprecated Use mult( float, float[] )
+     */
+    public static void scale( float[] a, float scale ) {
+        scale( a, scale, a );
+    }
+    
+    /**
+     * @deprecated Use mult( float, float[], float[] )
+     */
+    public static void scale( float[] a, float scale, float[] out ) {
+        out[0] = a[0] * scale;
+        out[1] = a[1] * scale;
+        out[2] = a[2] * scale;
+        out[3] = a[3] * scale;
+    }
+    
+    
 }

@@ -11,26 +11,48 @@ import static cogmac.math3d.Tol.*;
  */
 public final class Vec3 {
     
-    public static void add( float[] a, float scaleA, float[] b, float scaleB, float[] out ) {
-        out[0] = a[0] * scaleA + b[0] * scaleB;
-        out[1] = a[1] * scaleA + b[1] * scaleB;
-        out[2] = a[2] * scaleA + b[2] * scaleB;
-    }
-    
     
     public static void add( float[] a, float[] b, float[] out ) {
         out[0] = a[0] + b[0];
         out[1] = a[1] + b[1];
         out[2] = a[2] + b[2];
-    }   
-    
-    
-    public static void addInto( float[] vec, float vecScale, float[] out ) {
-        out[0] += vec[0] * vecScale;
-        out[1] += vec[1] * vecScale;
-        out[2] += vec[2] * vecScale;
     }
     
+    
+    public static void addTo( float[] a, float[] out ) {
+        out[0] += a[0];
+        out[1] += a[1];
+        out[2] += a[2];
+    }
+
+
+    public static void subtract( float[] a, float[] b, float[] out ) {
+        out[0] = a[0] - b[0];
+        out[1] = a[1] - b[1];
+        out[2] = a[2] - b[2];
+    }
+    
+    
+    public static void subtractFrom( float[] a, float[] out ) {
+        out[0] -= a[0];
+        out[1] -= a[1];
+        out[2] -= a[2];
+    }
+
+    
+    public static void multAdd( float sa, float[] a, float sb, float[] b, float[] out ) {
+        out[0] = a[0] * sa + b[0] * sb;
+        out[1] = a[1] * sa + b[1] * sb;
+        out[2] = a[2] * sa + b[2] * sb;
+    }
+    
+    
+    public static void multAddTo( float sa, float[] a, float sOut, float[] out ) {
+        out[0] = sOut * out[0] + sa * a[0];
+        out[1] = sOut * out[1] + sa * a[1];
+        out[2] = sOut * out[2] + sa * a[2];
+    }
+
     
     public static void cross( float[] a, int offA, float[] b, int offB, float[] out, int offOut ) {
         out[0+offOut] = a[1+offA] * b[2+offB] - b[1+offB] * a[2+offA];
@@ -53,79 +75,61 @@ public final class Vec3 {
     }
     
     
-    public static float length( float dx, float dy, float dz ) {
-        return (float)Math.sqrt( dx * dx + dy * dy + dz * dz );
+    public static float len( float[] a ) {
+        return (float)Math.sqrt( lenSquared( a ) );
     }
     
     
-    public static float length( float[] vec ) {
-        return (float)Math.sqrt( vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2] );
+    public static float lenSquared( float[] a ) {
+        return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
     }
     
     
-    public static float length( float[] vec, int off ) {
-        return (float)Math.sqrt( vec[  off] * vec[  off] + 
-                                 vec[1+off] * vec[1+off] + 
-                                 vec[2+off] * vec[2+off] );
+    public static float dist( float[] a, float[] b ) {
+        return (float)Math.sqrt( distSquared( a, b ) );
     }
     
     
-    public static float dist( float[] point0, float[] point1 ) {
-        float dx = point0[0] - point1[0];
-        float dy = point0[1] - point1[1];
-        float dz = point0[2] - point1[2];
-        return (float)Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
-    
-    
-    public static void normalize( float[] vec, float normalLength ) {
-        float d = normalLength / length(vec);        
-        vec[0] *= d;
-        vec[1] *= d;
-        vec[2] *= d;
-    }
-
-    
-    public static void normalize( float[] vec, float normalLength, float[] out ) {
-        float d = normalLength / length(vec);
-        out[0] = vec[0] * d;
-        out[1] = vec[1] * d;
-        out[2] = vec[2] * d;
-    }
-
-    
-    public static void normalize( float[] arr, int off, float normalLength ) {
-        float d = normalLength / length( arr, off );
-        arr[  off] *= d;
-        arr[1+off] *= d;
-        arr[2+off] *= d;
-    }
-    
-    
-    public static void scale( float[] vec, float scale ) {
-        vec[0] *= scale;
-        vec[1] *= scale;
-        vec[2] *= scale;
-    }
-    
-    
-    public static void scale( float[] vec, float scale, float[] out ) {
-        out[0] = vec[0] * scale;
-        out[1] = vec[1] * scale;
-        out[2] = vec[2] * scale;
-    }
-    
-
-    public static float distSquared( float[] point0, float[] point1 ) {
-        float dx = point0[0] - point1[0];
-        float dy = point0[1] - point1[1];
-        float dz = point0[2] - point1[2];
+    public static float distSquared( float[] a, float[] b ) {
+        float dx = a[0] - b[0];
+        float dy = a[1] - b[1];
+        float dz = a[2] - b[2];
         return dx * dx + dy * dy + dz * dz;
     }
     
     
-    public static float dot( float[] vec0, float[] vec1 ) {
-        return vec0[0] * vec1[0] + vec0[1] * vec1[1] + vec0[2] * vec1[2];
+    public static void normalize( float[] a ) {
+        float s = 1f / len( a );
+        a[0] *= s;
+        a[1] *= s;
+        a[2] *= s;
+    }
+    
+    
+    public static void normalize( float[] a, float normLength, float[] out ) {
+        float d = normLength / len(a);
+        out[0] = a[0] * d;
+        out[1] = a[1] * d;
+        out[2] = a[2] * d;
+    }
+    
+    
+    public static void mult( float sa, float[] a ) {
+        a[0] *= sa;
+        a[1] *= sa;
+        a[2] *= sa;
+    }
+    
+    
+    public static void mult( float sa, float[] a, float[] out ) {
+        out[0] = sa * a[0];
+        out[1] = sa * a[1];
+        out[2] = sa * a[2];
+    }
+    
+    
+    public static float dot( float[] a, float[] b ) {
+        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
     }
     
     
@@ -136,23 +140,31 @@ public final class Vec3 {
     }
     
    
-    public static float cosAng( float[] vec0, float[] vec1 ) {
-        return dot( vec0, vec1 ) / ( length( vec0 ) * length( vec1 ) );
+    public static float cosAng( float[] a, float[] b ) {
+        return dot( a, b ) / (float)Math.sqrt( lenSquared( a ) * lenSquared( b ) );
     }
     
     
-    public static float cosAng( float[] origin, float[] vec0, float[] vec1 ) {
-        return dot(origin, vec0, vec1) / (dist(origin, vec0) * dist(origin, vec1));
+    public static float cosAng( float[] origin, float[] a, float[] b ) {
+        float ax = a[0] - origin[0];
+        float ay = a[1] - origin[1];
+        float az = a[2] - origin[2];
+        float bx = b[0] - origin[0];
+        float by = b[1] - origin[1];
+        float bz = b[2] - origin[2];
+        
+        float dd = ( ax*ax + ay*ay + az*az ) * ( bx*bx + by*by + bz*bz );
+        return ( ax*bx + ay*by + az*bz ) / (float)Math.sqrt( dd );
     }
 
     
-    public static float ang( float[] vec0, float[] vec1 ) {
-        return (float)Math.acos( cosAng( vec0, vec1 ) );
+    public static float ang( float[] a, float[] b ) {
+        return (float)Math.acos( cosAng( a, b ) );
     }
     
     
-    public static float ang( float[] origin, float[] vec0, float[] vec1 ) {
-        return (float)Math.acos( cosAng( origin, vec0, vec1 ) );
+    public static float ang( float[] origin, float[] a, float[] b ) {
+        return (float)Math.acos( cosAng( origin, a, b ) );
     }
     
     
@@ -164,39 +176,39 @@ public final class Vec3 {
     }
     
     /**
-     * Performs smallest possible modification to <code>vec</code> to make it
-     * orthogonal to some <code>reference</code> vector.
+     * Performs smallest possible modification to vector <code>a</code> to make it
+     * orthogonal to vector <code>ref</code>.
      * 
-     * @param vec           Vector to modify.
-     * @param reference     Reference vector.
+     * @param a    Vector to modify.
+     * @param ref  Reference vector.
      */
-    public static void makeOrthoTo( float[] vec, float[] reference ) {
-        float lenRef = reference[0] * reference[0] + reference[1] * reference[1] + reference[2] * reference[2];
+    public static void makeOrthoTo( float[] a, float[] ref ) {
+        float lenRef = ref[0] * ref[0] + ref[1] * ref[1] + ref[2] * ref[2];
         if( lenRef < FSQRT_ABS_ERR ) {
             return;
         }
-        float parScale = dot( vec, reference ) / lenRef;
-        vec[0] -= reference[0] * parScale;
-        vec[1] -= reference[1] * parScale;
-        vec[2] -= reference[2] * parScale;
+        float parScale = dot( a, ref ) / lenRef;
+        a[0] -= ref[0] * parScale;
+        a[1] -= ref[1] * parScale;
+        a[2] -= ref[2] * parScale;
     }
 
     /**
-     * Performs smallest possible modification to <code>vec</code> to make it
-     * parallel to some <code>reference</code> vector.
+     * Performs smallest possible modification to vector <code>a</code> to make it
+     * parallel to vector <code>ref</code>.
      * 
-     * @param vec           Vector to modify.
-     * @param reference     Reference vector.
+     * @param a    Vector to modify.
+     * @param ref  Reference vector.
      */
-    public static void makeParallelTo( float[] vec, float[] reference ) {
-        float lenRef = reference[0] * reference[0] + reference[1] * reference[1] + reference[2] * reference[2];
+    public static void makeParallelTo( float[] a, float[] ref ) {
+        float lenRef = ref[0] * ref[0] + ref[1] * ref[1] + ref[2] * ref[2];
         if( lenRef < FSQRT_ABS_ERR ) {
             return;
         }
-        float parScale = dot(vec, reference) / lenRef / lenRef;
-        vec[0] = reference[0] * parScale;
-        vec[1] = reference[1] * parScale;
-        vec[2] = reference[2] * parScale;
+        float parScale = dot( a, ref ) / ( lenRef * lenRef );
+        a[0] = ref[0] * parScale;
+        a[1] = ref[1] * parScale;
+        a[2] = ref[2] * parScale;
     }
     
     /**
@@ -363,7 +375,7 @@ public final class Vec3 {
             break;
         }
         
-        normalize( out, 1f );
+        normalize( out );
     }
         
     /**
@@ -377,7 +389,7 @@ public final class Vec3 {
         float cx = (p[1] - n1[1]) * (p[2] - n2[2]) - (p[1] - n2[1]) * (p[2] - n1[2]);
         float cy = (p[2] - n1[2]) * (p[0] - n2[0]) - (p[2] - n2[2]) * (p[0] - n1[0]);
         float cz = (p[0] - n1[0]) * (p[1] - n2[1]) - (p[0] - n2[0]) * (p[1] - n1[1]);
-        return length( cx, cy, cz ) / dist( n1, n2 );
+        return (float)Math.sqrt( cx * cx + cy * cy + cz * cz ) / dist( n1, n2 );
     }
     
     /**
@@ -432,11 +444,11 @@ public final class Vec3 {
      *         1 if point intersection ( line crosses plane )
      *         2 if line intersection ( line lies on plane )
      */
-    public static int intersectLineWithPlane( float[] line0, 
-                                              float[] line1, 
-                                              float[] planePoint, 
-                                              float[] planeNorm, 
-                                              float[] optOut ) 
+    public static int intersectLinePlane( float[] line0, 
+                                          float[] line1, 
+                                          float[] planePoint, 
+                                          float[] planeNorm, 
+                                          float[] optOut ) 
     {
         float dx = line1[0] - line0[0];
         float dy = line1[1] - line0[1];
@@ -447,19 +459,17 @@ public final class Vec3 {
                     (planePoint[2] - line0[2]) * planeNorm[2];
         
         float den = dx * planeNorm[0] + dy * planeNorm[1] + dz * planeNorm[2];
-        
-        if( Math.abs( den ) < FSQRT_ABS_ERR  ) {
-            return Math.abs(num) < FSQRT_ABS_ERR ? 2 : 0;
+     
+        if( den < FSQRT_ABS_ERR && -den < FSQRT_ABS_ERR ) {
+            return num < FSQRT_ABS_ERR && -num < FSQRT_ABS_ERR ? 2 : 0;
         }
-        
-        if( optOut == null ) {
-            return 1;
+            
+        if( optOut != null ) {
+            float d = num / den;
+            optOut[0] = d * dx + line0[0];
+            optOut[1] = d * dy + line0[1];
+            optOut[2] = d * dz + line0[2];
         }
-        
-        float d = num / den;
-        optOut[0] = d * dx + line0[0];
-        optOut[1] = d * dy + line0[1];
-        optOut[2] = d * dz + line0[2];
         
         return 1;
     }
@@ -476,12 +486,12 @@ public final class Vec3 {
      * @param optOutB  On return, holds point on line b nearest to line a (optional)
      * @return true if lines are not parallel and intersection was found.  False if lines are parallel.
      */
-    public static boolean lineLineIntersection( float[] a0, 
-                                                float[] a1, 
-                                                float[] b0, 
-                                                float[] b1, 
-                                                float[] optOutA, 
-                                                float[] optOutB )
+    public static boolean intersectLineLine( float[] a0, 
+                                             float[] a1, 
+                                             float[] b0, 
+                                             float[] b1, 
+                                             float[] optOutA, 
+                                             float[] optOutB )
     {
         float da0b0b1b0 = (a0[0] - b0[0]) * (b1[0] - b0[0]) + (a0[1] - b0[1]) * (b1[1] - b0[1]) + (a0[2] - b0[2]) * (b1[2] - b0[2]); 
         float db1b0a1a0 = (b1[0] - b0[0]) * (a1[0] - a0[0]) + (b1[1] - b0[1]) * (a1[1] - a0[1]) + (b1[2] - b0[2]) * (a1[2] - a0[2]); 
@@ -492,29 +502,30 @@ public final class Vec3 {
         float num = da0b0b1b0 * db1b0a1a0 - da0b0a1a0 * db1b0b1b0;
         float den = da1a0a1a0 * db1b0b1b0 - db1b0a1a0 * db1b0a1a0;
         
-        if( Math.abs( den ) < FSQRT_ABS_ERR ) {
+        if( den < FSQRT_ABS_ERR && -den < FSQRT_ABS_ERR ) {
             return false;
         }
+        
         float mua = num / den;
         if( optOutA != null ) {
-            Vec3.add( a0, 1.0f - mua, a1, mua, optOutA );
+            Vec3.multAdd( 1.0f - mua, a0, mua, a1, optOutA );
         }
         if( optOutB != null ) {
             float mub = ( da0b0b1b0 + mua * db1b0a1a0 ) / db1b0b1b0;
-            Vec3.add( b0, 1.0f - mub, b1, mub, optOutB );
+            Vec3.multAdd( 1.0f - mub, b0, mub, b1, optOutB );
         }
         
         return true;
     }
     
     
-    
-    public static boolean isValid( float[] vec ) {
-        return !Float.isNaN( vec[0] ) &&
-               !Float.isNaN( vec[1] ) &&
-               !Float.isNaN( vec[2] );
+    public static boolean isNaN( float[] vec ) {
+        return Float.isNaN( vec[0] ) ||
+               Float.isNaN( vec[1] ) ||
+               Float.isNaN( vec[2] );
+        
     }
-
+    
     
     public static String format( float[] vec ) {
         return String.format( "[ % 7.4f, % 7.4f, % 7.4f ]", vec[0], vec[1], vec[2] );
@@ -522,34 +533,19 @@ public final class Vec3 {
     
     
     
-    
     private Vec3() {}
 
 
     
-    public static void main( String[] args ) {
-        float[] f = { 1f, 1f, 1f };
-        float[] out = new float[3];
-        chooseOrtho( f[0], f[1], f[2], 0, out );
-        System.out.println( format( out ) );
-        System.out.println( dot( f, out ) );
-        chooseOrtho( f[0], f[1], f[2], 2, out );
-        System.out.println( format( out ) );
-        System.out.println( dot( f, out ) );
-    }
-    
-    
-    @Deprecated
+    /**
+     * @deprecated Use Arr.lerp( float[], int, float[], int, int, float, float[], int 
+     */
     public static void lerp( float[] a, int offA, float[] b, int offB, int len, float p, float[] out, int offOut ) {
-        float q = 1.0f - p;
-        
-        for(int i = 0; i < len; i++) {
-            out[i + offOut] = q * a[i + offA] + p * b[i + offB];
-        }
+        Arr.lerp( a, offA, b, offB, len, p, out, offOut ); 
     }
-
     
     /**
+     * @deprecated Use makeOrthoTo( float[], flaot[] )
      * Performs smallest possible modification to <code>vec</code> to make it
      * orthogonal to some <code>reference</code> vector.
      * 
@@ -566,6 +562,119 @@ public final class Vec3 {
         vec[0] -= reference[0] * parScale;
         vec[1] -= reference[1] * parScale;
         vec[2] -= reference[2] * parScale;
+    }
+    
+    /**
+     * @deprecated Use multAdd( float, float[], float, float[], float[] )
+     */
+    public static void add( float[] a, float scaleA, float[] b, float scaleB, float[] out ) {
+        out[0] = a[0] * scaleA + b[0] * scaleB;
+        out[1] = a[1] * scaleA + b[1] * scaleB;
+        out[2] = a[2] * scaleA + b[2] * scaleB;
+    }
+    
+    /**
+     * @deprecated Use addTo( float[], float[] )
+     */
+    public static void addInto( float[] vec, float[] out ) {
+        out[0] += vec[0];
+        out[1] += vec[1];
+        out[2] += vec[2];
+    }
+
+    /**
+     * @deprecated Use isNaN( float[] )
+     */
+    public static boolean isValid( float[] vec ) {
+        return !Float.isNaN( vec[0] ) &&
+               !Float.isNaN( vec[1] ) &&
+               !Float.isNaN( vec[2] );
+    }
+    
+    /**
+     * @deprecated Use intersectLinePlane
+     */
+    public static int intersectLineWithPlane( float[] line0, 
+                                              float[] line1, 
+                                              float[] planePoint, 
+                                              float[] planeNorm, 
+                                              float[] optOut ) 
+    {
+        return intersectLinePlane( line0, line1, planePoint, planeNorm, optOut );
+    }
+    
+    /**
+     * @deprecated Use intersectLineLine()
+     */
+    public static boolean lineLineIntersection( float[] a0, 
+                                                float[] a1, 
+                                                float[] b0, 
+                                                float[] b1, 
+                                                float[] optOutA, 
+                                                float[] optOutB )
+    {
+        return intersectLineLine( a0, a1, b0, b1, optOutA, optOutB );
+    }
+
+    /**
+     * @deprecated 
+     */
+    public static float length( float dx, float dy, float dz ) {
+        return (float)Math.sqrt( dx * dx + dy * dy + dz * dz );
+    }
+    
+    /**
+     * @deprecate Use len( float[] )
+     */
+    public static float length( float[] vec ) {
+        return (float)Math.sqrt( vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2] );
+    }
+    
+    /**
+     * @deprecated Use arr.len( float[], int, int )
+     */
+    public static float length( float[] vec, int off ) {
+        return (float)Math.sqrt( vec[  off] * vec[  off] + 
+                                 vec[1+off] * vec[1+off] + 
+                                 vec[2+off] * vec[2+off] );
+    }
+    
+    /**
+     * @deprecated Use mult( float, float[] )
+     */
+    public static void scale( float[] a, float scale ) {
+        a[0] *= scale;
+        a[1] *= scale;
+        a[2] *= scale;
+    }
+    
+    /**
+     * @deprecated Use mult( float, float[], float[] )
+     */
+    public static void scale( float[] vec, float scale, float[] out ) {
+        out[0] = vec[0] * scale;
+        out[1] = vec[1] * scale;
+        out[2] = vec[2] * scale;
+    }
+    
+    /**
+     * @deprecated Use Arr.normalize
+     */
+    public static void normalize( float[] arr, int off, float normalLength ) {
+        float d = normalLength / Arr.len( arr, off, 3 );
+        arr[  off] *= d;
+        arr[1+off] *= d;
+        arr[2+off] *= d;
+    }
+    
+    /**
+     * @deprecated Use normalize( float[], float, float[] )
+     */
+    public static void normalize( float[] vec, float normLength ) {
+        float d = normLength / len(vec);        
+        vec[0] *= d;
+        vec[1] *= d;
+        vec[2] *= d;
     }
     
 }
