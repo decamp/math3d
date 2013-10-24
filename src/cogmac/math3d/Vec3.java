@@ -545,13 +545,7 @@ public final class Vec3 {
     }
     
     /**
-     * @deprecated Use makeOrthoTo( float[], flaot[] )
-     * Performs smallest possible modification to <code>vec</code> to make it
-     * orthogonal to some <code>reference</code> vector.
-     * 
-     * @param vec           Vector to modify.
-     * @param reference     Reference vector.
-     * @deprecated Use makeOrthoTo(), which has a shorter name.
+     * @deprecated Use makeParallelTo( float[], flaot[] )
      */
     public static void makePerpendicularTo( float[] vec, float[] reference ) {
         float lenRef = reference[0] * reference[0] + reference[1] * reference[1] + reference[2] * reference[2];
