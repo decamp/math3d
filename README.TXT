@@ -1,5 +1,5 @@
-THE <NAME> LIBRARY:
-Description
+THE MATH3D LIBRARY:
+Basic math for 3D graphics.
 
 
 BUILDING:
