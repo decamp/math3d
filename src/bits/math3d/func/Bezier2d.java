@@ -1,30 +1,29 @@
-package bits.math3d.geom;
+package bits.math3d.func;
 
+import java.awt.geom.Path2D;
 import static bits.math3d.Tol.approxEqual;
 import static bits.math3d.Tol.approxZero;
-import bits.math3d.func.Function13;
 
 
 /**
  * @author decamp
- * @deprecated Use bits.math3d.func.Bezier2d
  */
-@Deprecated public class Bezier3d implements Function13 {
+public class Bezier2d {
 
 
-    public static Bezier3d newInstance( double[] pointsRef, int pointCount ) {
+    public static Bezier2d newInstance( double[] pointsRef, int pointCount ) {
         if( pointCount < 2 ) {
             throw new IllegalArgumentException( "Bezier curves require at least two points." );
         }
-        return new Bezier3d( pointsRef, pointCount );
+        return new Bezier2d( pointsRef, pointCount );
     }
 
 
-    public static Bezier3d newInstance( double... coords ) {
-        if( coords.length < 6 ) {
+    public static Bezier2d newInstance( double... coords ) {
+        if( coords.length < 4 ) {
             throw new IllegalArgumentException( "Bezier curves require at least two points." );
         }
-        return new Bezier3d( coords, coords.length / 3 );
+        return new Bezier2d( coords, coords.length / 2 );
     }
 
 
@@ -34,32 +33,30 @@ import bits.math3d.func.Function13;
     private final double[] mWork;
 
 
-    private Bezier3d( double[] arr, int pointCount ) {
+    private Bezier2d( double[] arr, int pointCount ) {
         mC = arr;
         mCount = pointCount;
-        mWork = new double[pointCount * 3];
+        mWork = new double[pointCount * 2];
     }
 
 
 
-    public void apply( double t, double[] out3x1 ) {
+    public void apply( double t, double[] out2x1 ) {
         double s = 1.0 - t;
         double[] w = mWork;
         double[] arr = mC;
 
         for( int i = 0; i < mCount - 1; i++ ) {
-            for( int j = 0; j < (mCount - i - 1) * 3; j += 3 ) {
-                w[j] = arr[j] * s + arr[j + 3] * t;
-                w[j + 1] = arr[j + 1] * s + arr[j + 4] * t;
-                w[j + 2] = arr[j + 2] * s + arr[j + 5] * t;
+            for( int j = 0; j < (mCount - i - 1) * 2; j += 2 ) {
+                w[j] = arr[j] * s + arr[j + 2] * t;
+                w[j + 1] = arr[j + 1] * s + arr[j + 3] * t;
             }
 
             arr = w;
         }
 
-        out3x1[0] = w[0];
-        out3x1[1] = w[1];
-        out3x1[2] = w[2];
+        out2x1[0] = w[0];
+        out2x1[1] = w[1];
     }
 
 
@@ -68,10 +65,9 @@ import bits.math3d.func.Function13;
     }
 
 
-    public void point( int idx, double[] out3x1 ) {
-        out3x1[0] = mC[idx * 3];
-        out3x1[1] = mC[idx * 3 + 1];
-        out3x1[2] = mC[idx * 3 + 2];
+    public void point( int idx, double[] out2x1 ) {
+        out2x1[0] = mC[idx * 2];
+        out2x1[1] = mC[idx * 2 + 1];
     }
 
 
@@ -80,7 +76,7 @@ import bits.math3d.func.Function13;
     }
 
 
-    public Bezier3d subdivide( double t0, double t1 ) {
+    public Bezier2d subdivide( double t0, double t1 ) {
         boolean swap = false;
 
         if( t1 < t0 ) {
@@ -90,11 +86,11 @@ import bits.math3d.func.Function13;
             t1 = tt;
         }
 
-        Bezier3d ret;
+        Bezier2d ret;
 
         if( approxEqual( t1, 1.0 ) ) {
             if( approxZero( t0 ) ) {
-                ret = new Bezier3d( mC.clone(), mCount );
+                ret = new Bezier2d( mC.clone(), mCount );
             } else {
                 ret = subdivideGreater( t0 );
             }
@@ -117,22 +113,54 @@ import bits.math3d.func.Function13;
         }
 
         if( swap ) {
-            for( int i = 0; i < ( mCount / 2 ) * 3; i += 3 ) {
-                int j = mCount * 3 - 3 - i;
-                double px = ret.mC[i    ];
+            for( int i = 0; i < mCount; i += 2 ) {
+                int j = mCount * 2 - 2 - i;
+                double px = ret.mC[i];
                 double py = ret.mC[i + 1];
-                double pz = ret.mC[i + 2];
-
-                ret.mC[i    ] = ret.mC[j    ];
+                ret.mC[i] = ret.mC[j];
                 ret.mC[i + 1] = ret.mC[j + 1];
-                ret.mC[i + 2] = ret.mC[j + 2];
-                ret.mC[j    ] = px;
+                ret.mC[j] = px;
                 ret.mC[j + 1] = py;
-                ret.mC[j + 2] = pz;
             }
         }
 
         return ret;
+    }
+
+
+    public Path2D toShape() {
+        Path2D path = new Path2D.Double();
+        appendTo( path, true );
+        return path;
+    }
+
+
+    public void appendTo( Path2D path, boolean moveToStart ) {
+        if( moveToStart ) {
+            path.moveTo( mC[0], mC[1] );
+        }
+
+        switch( mCount ) {
+        case 2:
+            path.lineTo( mC[2], mC[3] );
+            break;
+
+        case 3:
+            path.quadTo( mC[2], mC[3], mC[4], mC[5] );
+            break;
+
+        case 4:
+            path.curveTo( mC[2], mC[3], mC[4], mC[5], mC[6], mC[7] );
+            break;
+
+        default:
+            int breaks = mCount - 3;
+
+            for( int i = 0; i < breaks; i++ ) {
+                subdivide( (double)i / breaks, (double)(i + 1) / breaks ).appendTo( path, false );
+            }
+            break;
+        }
     }
 
 
@@ -175,9 +203,10 @@ import bits.math3d.func.Function13;
     public double solveTFromX( double x, double nearestT ) {
         switch( mCount ) {
         case 2:
-            return solveLineT( mC[0], mC[3], x, nearestT );
+            return solveLineT( mC[0], mC[2], x, nearestT );
+
         case 3:
-            return solveQuadT( mC[0], mC[3], mC[6], x, nearestT );
+            return solveQuadT( mC[0], mC[2], mC[4], x, nearestT );
         }
 
         throw new UnsupportedOperationException( "This bezier is not solvable." );
@@ -214,50 +243,10 @@ import bits.math3d.func.Function13;
     public double solveTFromY( double y, double nearestT ) {
         switch( mCount ) {
         case 2:
-            return solveLineT( mC[1], mC[4], y, nearestT );
+            return solveLineT( mC[1], mC[3], y, nearestT );
 
         case 3:
-            return solveQuadT( mC[1], mC[4], mC[7], y, nearestT );
-        }
-
-        throw new UnsupportedOperationException( "This bezier is not solvable." );
-    }
-
-    /**
-     * Finds parameter <tt>t</tt> for a specified value of z. Equivalent to
-     * calling solveTFromZ(z, 0.5);
-     * 
-     * @param z
-     *            Desired <tt>z</tt> coordinate.
-     * @return <tt>t</tt> value where the z-coordinate of this Bezier reaches
-     *         <tt>z</tt>. Possibly NaN.
-     * @throws UnsupportedOperationException
-     *             if <code>isSolvable() == false</code>.
-     */
-    public double solveTFromZ( double z ) {
-        return solveTFromX( z, 0.5 );
-    }
-
-    /**
-     * Finds parameter <tt>t</tt> for a specified value of z.
-     * 
-     * @param z
-     *            Desired <tt>z</tt> coordinate.
-     * @param nearestT
-     *            In case there are multiple valid values of T, the one closest
-     *            to <tt>nearestT</tt> will be returned.
-     * @return <tt>t</tt> value where the x-coordinate of this Bezier reaches
-     *         <tt>z</tt>.
-     * @throws UnsupportedOperationException
-     *             if <code>isSolvable() == false</code>.
-     */
-    public double solveTFromZ( double z, double nearestT ) {
-        switch( mCount ) {
-        case 2:
-            return solveLineT( mC[2], mC[5], z, nearestT );
-
-        case 3:
-            return solveQuadT( mC[2], mC[5], mC[8], z, nearestT );
+            return solveQuadT( mC[1], mC[3], mC[5], y, nearestT );
         }
 
         throw new UnsupportedOperationException( "This bezier is not solvable." );
@@ -265,57 +254,51 @@ import bits.math3d.func.Function13;
 
 
 
-    private Bezier3d subdivideLess( double t ) {
+    private Bezier2d subdivideLess( double t ) {
         final double s = 1.0 - t;
         double[] work = mWork;
-        double[] cp = new double[mCount * 3];
+        double[] cp = new double[mCount * 2];
         double[] temp = mC;
 
         cp[0] = temp[0];
         cp[1] = temp[1];
-        cp[2] = temp[2];
 
         for( int i = 0; i < mCount - 1; i++ ) {
-            for( int j = 0; j < (mCount - i - 1) * 3; j += 3 ) {
-                work[j] = temp[j] * s + temp[j + 3] * t;
-                work[j + 1] = temp[j + 1] * s + temp[j + 4] * t;
-                work[j + 2] = temp[j + 2] * s + temp[j + 5] * t;
+            for( int j = 0; j < (mCount - i - 1) * 2; j += 2 ) {
+                work[j] = temp[j] * s + temp[j + 2] * t;
+                work[j + 1] = temp[j + 1] * s + temp[j + 3] * t;
             }
 
-            cp[i * 2 + 3] = work[0];
-            cp[i * 2 + 4] = work[1];
-            cp[i * 2 + 5] = work[2];
+            cp[i * 2 + 2] = work[0];
+            cp[i * 2 + 3] = work[1];
             temp = work;
         }
 
-        return new Bezier3d( cp, mCount );
+        return new Bezier2d( cp, mCount );
     }
 
 
-    private Bezier3d subdivideGreater( double t ) {
+    private Bezier2d subdivideGreater( double t ) {
         final double s = 1.0 - t;
         double[] work = mWork;
-        double[] cp = new double[mCount * 3];
+        double[] cp = new double[mCount * 2];
         double[] temp = mC;
 
-        cp[mCount * 3 - 3] = temp[mCount * 3 - 3];
-        cp[mCount * 3 - 2] = temp[mCount * 3 - 2];
-        cp[mCount * 3 - 1] = temp[mCount * 3 - 1];
+        cp[mCount * 2 - 2] = temp[mCount * 2 - 2];
+        cp[mCount * 2 - 1] = temp[mCount * 2 - 1];
 
         for( int i = 0; i < mCount - 1; i++ ) {
-            for( int j = 0; j < (mCount - i - 1) * 3; j += 3 ) {
-                work[j] = temp[j] * s + temp[j + 3] * t;
-                work[j + 1] = temp[j + 1] * s + temp[j + 4] * t;
-                work[j + 2] = temp[j + 2] * s + temp[j + 5] * t;
+            for( int j = 0; j < (mCount - i - 1) * 2; j += 2 ) {
+                work[j] = temp[j] * s + temp[j + 2] * t;
+                work[j + 1] = temp[j + 1] * s + temp[j + 3] * t;
             }
 
-            cp[(mCount - i) * 3 - 6] = work[(mCount - i) * 3 - 6];
-            cp[(mCount - i) * 3 - 5] = work[(mCount - i) * 3 - 5];
-            cp[(mCount - i) * 3 - 4] = work[(mCount - i) * 3 - 4];
+            cp[(mCount - i) * 2 - 4] = work[(mCount - i) * 2 - 4];
+            cp[(mCount - i) * 2 - 3] = work[(mCount - i) * 2 - 3];
             temp = work;
         }
 
-        return new Bezier3d( cp, mCount );
+        return new Bezier2d( cp, mCount );
 
     }
 
@@ -323,25 +306,25 @@ import bits.math3d.func.Function13;
     private static double solveLineT( double p0, double p1, double x, double nearestT ) {
         double div = p1 - p0;
         if( !approxZero( div ) ) {
-            return ( x - p0 ) / div;
+            return (x - p0) / div;
         }
-        
         if( approxEqual( p0, x ) ) {
             return nearestT;
         }
-
         return Double.NaN;
     }
 
 
     private static double solveQuadT( double p0, double p1, double p2, double x, double nearestT ) {
         double a = p0 - 2.0 * p1 + p2;
+        
         if( approxZero( a ) ) {
             return solveLineT( p0, p2, x, nearestT );
         }
 
         double b = 2.0 * p1 - 2.0 * p0;
         double c = p0 - x;
+
         double v = b * b - 4.0 * a * c;
         if( v < 0 ) {
             return Double.NaN;
@@ -351,9 +334,8 @@ import bits.math3d.func.Function13;
 
         double t0 = (-b - v) / (2.0 * a);
         double t1 = (-b + v) / (2.0 * a);
-        
-        return ( Math.abs( t0 - nearestT ) <= Math.abs( t1 - nearestT ) ) ? t0 : t1;
-    }
 
+        return (Math.abs( t0 - nearestT ) <= Math.abs( t1 - nearestT )) ? t0 : t1;
+    }
 
 }
