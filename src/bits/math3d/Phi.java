@@ -19,13 +19,35 @@ package bits.math3d;
 public class Phi {
 
     /**
+     * Normal distribution function with 0 mean ond unit standard dev.
+     * Same as a gaussian function. Ofter designated with Greek lower case phi.
+     * 
+     * @param x  Value.
+     * @return (1/sqrt(2pi)) * e^(-1/2*x^2)  
+     */
+    public static double n( double x ) {
+        return INV_SQRT2PI * Math.exp( -0.5 * x * x );
+    }
+    
+    /**
      * Standard normal cumulative distribution function. (probit function).
      * 
      * @param x
      * @param Integral of the standard normal distridbution from -inf to x.
      */
-    public static double normcdf( double x ) {
+    public static double ncdf( double x ) {
         return 0.5 * ( 1.0 + erf( x / SQRT_2 ) );
+    }
+
+    /**
+     * Inverse of the standard normal cumulative distribution function with refinement.
+     * 
+     * @param y
+     * @return x such that normalCdf( x ) == y. 
+     */
+    public static double ncdfInv( double y ) {
+        double z = ncdfInvFast( y );
+        return refineNcdfInv( z, y );
     }
     
     /**
@@ -34,7 +56,7 @@ public class Phi {
      * @param y
      * @return x such that normalCdf( x ) == y. 
      */
-    public static double invNormcdf( double y ) {
+    public static double ncdfInvFast( double y ) {
         if( y >= P_LOW ) {
             if( y <= P_HIGH ) {
                 // Rational approximation for central region:
@@ -64,19 +86,6 @@ public class Phi {
             // y == 0 
             return Double.NEGATIVE_INFINITY;
         }
-    }
-    
-    /**
-     * Inverse of the standard normal cumulative distribution function with refinement.
-     * 
-     * @param y
-     * @return x such that normalCdf( x ) == y. 
-     */
-    public static double invNormcdfPrecise( double y ) {
-        double z = invNormcdf( y );
-        z = refineInvNormcdf( z, y );
-        z = refineInvNormcdf( z, y );
-        return refineInvNormcdf( z, y );
     }
     
     /**
@@ -111,27 +120,27 @@ public class Phi {
     }
     
     /**
-     * Inverse of the error function.
-     * 
-     * @param y  
-     * @return x such that erf( x ) == y.
-     */
-    public static double invErf( double y ) {
-        double d = invNormcdf( 0.5 * ( y + 1.0 ) );
-        return d / SQRT_2;
-    }
-    
-    /**
      * Inverse of the error function with refinement.
      * 
      * @param y  
      * @return x such that erf( x ) == y.
      */
-    public static double invErfPrecise( double y ) {
-        double d = invNormcdfPrecise( 0.5 * ( y + 1.0 ) );
+    public static double erfInvPrecise( double y ) {
+        double d = ncdfInv( 0.5 * ( y + 1.0 ) );
         return d / SQRT_2;
     }
-
+    
+    /**
+     * Inverse of the error function.
+     * 
+     * @param y  
+     * @return x such that erf( x ) == y.
+     */
+    public static double erfInvFast( double y ) {
+        double d = ncdfInvFast( 0.5 * ( y + 1.0 ) );
+        return d / SQRT_2;
+    }
+    
     
         
     /* ********************************************
@@ -143,10 +152,12 @@ public class Phi {
      *  jacklam@math.uio.no
      * ****************************************** */
     
-    private static final double SQRT_2    = Math.sqrt( 2.0 );
-    private static final double P_LOW     = 0.02425;
-    private static final double P_HIGH    = 1.0 - P_LOW;
-    private static final double SQRT_PI   = Math.sqrt( Math.PI ); 
+    private static final double SQRT_2      = Math.sqrt( 2.0 );
+    private static final double SQRT_PI     = Math.sqrt( Math.PI );
+    private static final double INV_SQRT2PI = 1.0 / Math.sqrt( Math.PI * 2.0 );
+    private static final double P_LOW       = 0.02425;
+    private static final double P_HIGH      = 1.0 - P_LOW;
+     
     private static final double THRESHOLD = 0.46875;
     
     // Coefficients in rational approximations.
@@ -379,7 +390,7 @@ public class Phi {
      *  Peter J. Acklam
      *  jacklam@math.uio.no
      *************************************************** */
-    private static double refineInvNormcdf( double x, double d ) {
+    private static double refineNcdfInv( double x, double d ) {
         if( d > 0 && d < 1) {
             double e = 0.5D * erfc( -x / SQRT_2 ) - d;
             double u = e * Math.sqrt( 2.0 * Math.PI ) * Math.exp( (x * x) / 2.0 );
