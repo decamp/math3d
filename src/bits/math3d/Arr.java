@@ -1,5 +1,7 @@
 package bits.math3d;
 
+import java.util.Random;
+
 /**
  * @author decamp
  */
@@ -580,7 +582,6 @@ public final class Arr {
         range( arr, 0, arr.length, out2x1 );
     }
 
-    
 
     public static void range( double[] arr, double[] out2x1 ) {
         range( arr, 0, arr.length, out2x1 );
@@ -673,7 +674,6 @@ public final class Arr {
         }
     }
 
-    
 
     public static void clamp( float[] arr, int off, int len, float min, float max ) {
         for( int i = off; i < off + len; i++ ) {
@@ -801,12 +801,27 @@ public final class Arr {
             arr[i] = ( Math.exp( base ) * s );
         }
     }
+        
+    
+    public static void shuffle( Object[] arr, Random rand ) {
+        shuffle( arr, 0, arr.length, rand );
+    }
+    
+    
+    public static void shuffle( Object[] arr, int off, int len, Random rand ) {
+        for( int i = 0; i < len-1; i++ ) {
+            int j = rand.nextInt( len - i );
+            Object temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
     
     
     
     private Arr() {}
 
-    
+
     
     /**
      * @deprecated Use transform range
