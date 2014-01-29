@@ -14,36 +14,66 @@ import bits.math3d.*;
 public class Actor extends SpatialObject {
     
     /**
+     * Linear velocity as 3-vector.
+     */
+    public final double[] mVel = {0,0,0};
+    
+    /**
+     * Angular velocity as 3-vector.
+     */
+    public final double[] mAngVel = {0,0,0};
+
+    /**
      * Velocity at which the object is moving within
      * its own coordinate system.
      */
     public double[] mMoveVel = {0,0,0};
     
-    private MoveMode mMode       = MoveMode.FLY;
-    private boolean mRollLock    = false;
+    private double mTime       = 0.0;
+    private MoveMode mMode     = MoveMode.FLY;
+    private boolean mRollLock  = false;
     
-    private final double[][] mWorkVecs = new double[3][3];
     
     /**
-     * @deprecated
+     * Changes time without updating position/rotation.
+     *  
+     * @param time
      */
-    @Override
+    public void resetTime( double time ) {
+        mTime = time;
+    }
+    
+    /**
+     * Changes time, updating position and rotation according to translation and rotation speeds.
+     * 
+     * @param time
+     */
     public void updateTime( double time ) {
-        double prevTime = mTime;
-        if( prevTime == time )
+        if( time == mTime ) {
             return;
+        }
         
-        double delta = time - prevTime;
-        super.updateTime( time );
+        double delta = time - mTime;
+        
+        translate( delta * mVel[0], delta * mVel[1], delta * mVel[2] );
+        rotate( delta * mAngVel[0], 1.0, 0.0, 0.0 ); 
+        rotate( delta * mAngVel[1], 0.0, 1.0, 0.0 );
+        rotate( delta * mAngVel[2], 0.0, 0.0, 1.0 );
         
         double mx = mMoveVel[0] * delta;
         double my = mMoveVel[1] * delta;
         double mz = mMoveVel[2] * delta;
-        
         move( mx, my, mz );
+        
+        mTime = time;
     }
-    
-    
+
+    /**
+     * @return current time for this object
+     */
+    public double time() {
+        return mTime;
+    }
     
     /**
      * Moves the actor.  Unlike translate(), which moves the
@@ -58,8 +88,9 @@ public class Actor extends SpatialObject {
      * @param mz
      */
     public void move( double mx, double my, double mz ) {
-        if( mx == 0.0 && my == 0.0 && mz == 0.0 )
+        if( mx == 0.0 && my == 0.0 && mz == 0.0 ) {
             return;
+        }
         
         if( mMode == MoveMode.FLY ) {
             moveFlying( mx, my, mz );
@@ -87,11 +118,10 @@ public class Actor extends SpatialObject {
         mRollLock = rollLock;
     }
     
-    
     public void removeRoll() {
-        double[] x   = mWorkVecs[0];
-        double[] y   = mWorkVecs[1];
-        double[] z   = mWorkVecs[2];
+        double[] x = mRot;
+        double[] y = mWork[0];
+        double[] z = mWork[1];
         
         // Compute x-axis
         Matrices.multMatVec( mRot, FORWARD, x );
@@ -107,18 +137,30 @@ public class Actor extends SpatialObject {
         }
         
         Vectors.scale( y, 1.0 / len );
-        
         // Compute z-axis
         Vectors.cross( x, y, z );
-        Matrices.axesToTransform( x, y, z, mRot );
+        
+        x[ 3] = 0;
+        x[ 4] = y[0];
+        x[ 5] = y[1];
+        x[ 6] = y[2];
+        x[ 7] = 0;
+        x[ 8] = z[0];
+        x[ 9] = z[1];
+        x[10] = z[2];
+        x[11] = 0;
+        x[12] = 0;
+        x[13] = 0;
+        x[14] = 0;
+        x[15] = 1;
     }
     
     /**
      * For flying mode, motion of the actor not restricted.
      */
     private void moveFlying( double dx, double dy, double dz ) {
-        double[] w0 = mWorkVecs[0];
-        double[] w1 = mWorkVecs[1];
+        double[] w0 = mWork[0];
+        double[] w1 = mWork[1];
         w0[0] = dx;
         w0[1] = dy;
         w0[2] = dz;
@@ -134,8 +176,8 @@ public class Actor extends SpatialObject {
      * towards translation in the global z-axis.
      */
     private void moveWalking( double dx, double dy, double dz ) {
-        double[] w0 = mWorkVecs[0];
-        double[] w1 = mWorkVecs[1];
+        double[] w0 = mWork[0];
+        double[] w1 = mWork[1];
         w0[0] = dx;
         w0[1] = dy;
         w0[2] = 0.0;

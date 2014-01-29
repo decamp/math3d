@@ -28,18 +28,6 @@ public class SpatialObject implements DepthSortable {
     public final double[] mScale = {1,1,1};
     
     /**
-     * Linear velocity as 3-vector.
-     * @deprecated
-     */
-    public final double[] mVel = {0,0,0};
-    
-    /**
-     * Angular velocity as 3-vector.
-     * @deprecated
-     */
-    public final double[] mAngVel = {0,0,0};
-    
-    /**
      * 3-vector that may be used to hold postion in 
      * normalized device coordinates for sorting.
      */
@@ -48,47 +36,8 @@ public class SpatialObject implements DepthSortable {
     
     protected final double[][] mWork = new double[2][16];
     int mRotationCount = 0;
-    double mTime = 0.0;
     
-    
-    
-    /**
-     * Changes time without updating position/rotation. 
-     * @param time
-     * @deprecated
-     */
-    public void resetTime( double time ) {
-        mTime = time;
-    }
-    
-    /**
-     * Changes time, updating position and rotation according to translation and rotation speeds.
-     * @param time
-     * @deprecated
-     */
-    public void updateTime( double time ) {
-        if( time == mTime )
-            return;
-        
-        double delta = time - mTime;
-        
-        translate( delta * mVel[0], delta * mVel[1], delta * mVel[2] );
-        rotate( delta * mAngVel[0], 1.0, 0.0, 0.0 ); 
-        rotate( delta * mAngVel[1], 0.0, 1.0, 0.0 );
-        rotate( delta * mAngVel[2], 0.0, 0.0, 1.0 );
-        
-        mTime = time;
-    }
 
-    /**
-     * @return current time for this object
-     * @deprecated
-     */
-    public double time() {
-        return mTime;
-    }
-                
-    
     
     /**
      * Translates object by specified amount.
@@ -112,7 +61,7 @@ public class SpatialObject implements DepthSortable {
      * @param rz z-component of axis
      */
     public void rotate( double rads, double rx, double ry, double rz ) {
-        if( Math.abs( rads ) < Tol.ABS_ERR ) {
+        if( Tol.approxZero( rads ) ) {
             return;
         }
         Matrices.computeRotationMatrix( rads, rx, ry, rz, mWork[0] );
