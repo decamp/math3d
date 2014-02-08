@@ -358,6 +358,16 @@ public final class Arr {
     }
     
     
+    public static int sum( int... arr ) {
+        return sum( arr, 0, arr.length );
+    }
+    
+    
+    public static long sum( long... arr ) {
+        return sum( arr, 0, arr.length );
+    }
+    
+    
     public static float sum( float... arr ) {
         return sum( arr, 0, arr.length );
     }
@@ -368,13 +378,29 @@ public final class Arr {
     }
     
     
-    public static float sum( float[] arr, int off, int len ) {
-        float ret = 0.0f;
-
+    public static int sum( int[] arr, int off, int len ) {
+        int ret = 0;
         for( int i = off; i < off + len; i++ ) {
             ret += arr[i];
         }
-        
+        return ret;
+    }
+    
+
+    public static long sum( long[] arr, int off, int len ) {
+        long ret = 0;
+        for( int i = off; i < off + len; i++ ) {
+            ret += arr[i];
+        }
+        return ret;
+    }
+    
+    
+    public static float sum( float[] arr, int off, int len ) {
+        float ret = 0.0f;
+        for( int i = off; i < off + len; i++ ) {
+            ret += arr[i];
+        }
         return ret;
     }
 
@@ -465,6 +491,16 @@ public final class Arr {
         return sum / len;
     }
     
+    
+    public static float min( int... arr ) {
+        return min( arr, 0, arr.length );
+    }
+
+    
+    public static double min( long... arr ) {
+        return min( arr, 0, arr.length );
+    }
+    
 
     public static float min( float... arr ) {
         return min( arr, 0, arr.length );
@@ -473,6 +509,36 @@ public final class Arr {
     
     public static double min( double... arr ) {
         return min( arr, 0, arr.length );
+    }
+
+    
+    public static int min( int[] arr, int off, int len ) {
+        if( len <= 0.0 ) {
+            return Integer.MAX_VALUE;
+        }
+        
+        int ret = arr[off];
+        for( int i = off + 1; i < off + len; i++ ) {
+            if( arr[i] < ret ) {
+                ret = arr[i];
+            }
+        }
+        return ret;
+    }
+
+    
+    public static long min( long[] arr, int off, int len ) {
+        if( len <= 0.0 ) {
+            return Long.MAX_VALUE;
+        }
+
+        long ret = arr[off];
+        for( int i = off + 1; i < off + len; i++ ) {
+            if( arr[i] < ret ) {
+                ret = arr[i];
+            }
+        }
+        return ret;
     }
 
 
@@ -509,6 +575,16 @@ public final class Arr {
         return ret;
     }
 
+
+    public static int max( int... arr ) {
+        return max( arr, 0, arr.length );
+    }
+
+    
+    public static long max( long... arr ) {
+        return max( arr, 0, arr.length );
+    }
+    
     
     public static float max( float... arr ) {
         return max( arr, 0, arr.length );
@@ -519,6 +595,36 @@ public final class Arr {
         return max( arr, 0, arr.length );
     }
 
+
+    public static int max( int[] arr, int off, int len ) {
+        if( len <= 0.0 ) {
+            return Integer.MIN_VALUE;
+        }
+
+        int ret = arr[off];
+        for( int i = off + 1; i < off + len; i++ ) {
+            if( arr[i] > ret ) {
+                ret = arr[i];
+            }
+        }
+        return ret;
+    }
+
+
+    public static long max( long[] arr, int off, int len ) {
+        if( len <= 0.0 ) {
+            return Long.MIN_VALUE;
+        }
+
+        long ret = arr[off];
+        for( int i = off + 1; i < off + len; i++ ) {
+            if( arr[i] > ret ) {
+                ret = arr[i];
+            }
+        }
+        return ret;
+    }
+
     
     public static float max( float[] arr, int off, int len ) {
         if( len <= 0.0 ) {
@@ -526,13 +632,11 @@ public final class Arr {
         }
 
         float ret = arr[off];
-
         for( int i = off + 1; i < off + len; i++ ) {
             if( arr[i] > ret ) {
                 ret = arr[i];
             }
         }
-
         return ret;
     }
 
@@ -543,14 +647,22 @@ public final class Arr {
         }
 
         double ret = arr[off];
-
         for( int i = off + 1; i < off + len; i++ ) {
             if( arr[i] > ret ) {
                 ret = arr[i];
             }
         }
-
         return ret;
+    }
+
+    
+    public static int[] range( int... arr ) {
+        return range( arr, 0, arr.length );
+    }
+
+    
+    public static long[] range( long... arr ) {
+        return range( arr, 0, arr.length );
     }
 
     
@@ -564,6 +676,20 @@ public final class Arr {
     }
 
 
+    public static int[] range( int[] arr, int off, int len ) {
+        int[] ret = new int[2];
+        range( arr, off, len, ret );
+        return ret;
+    }
+
+    
+    public static long[] range( long[] arr, int off, int len ) {
+        long[] ret = new long[2];
+        range( arr, off, len, ret );
+        return ret;
+    }
+    
+    
     public static float[] range( float[] arr, int off, int len ) {
         float[] ret = new float[2];
         range( arr, off, len, ret );
@@ -577,6 +703,16 @@ public final class Arr {
         return ret;
     }
 
+    
+    public static void range( int[] arr, int[] out2x1 ) {
+        range( arr, 0, arr.length, out2x1 );
+    }
+
+
+    public static void range( long[] arr, long[] out2x1 ) {
+        range( arr, 0, arr.length, out2x1 );
+    }
+    
 
     public static void range( float[] arr, float[] out2x1 ) {
         range( arr, 0, arr.length, out2x1 );
@@ -587,6 +723,54 @@ public final class Arr {
         range( arr, 0, arr.length, out2x1 );
     }
 
+
+    public static void range( int[] arr, int off, int len, int[] out2x1 ) {
+        if( len <= 0 ) {
+            out2x1[0] = Integer.MAX_VALUE;
+            out2x1[1] = Integer.MIN_VALUE;
+            return;
+        }
+
+        int min = arr[off];
+        int max = min;
+
+        for( int i = off + 1; i < off + len; i++ ) {
+            if( arr[i] < min ) {
+                min = arr[i]; 
+            }
+            if( arr[i] > max ) {
+                max = arr[i];
+            }
+        }
+
+        out2x1[0] = min;
+        out2x1[1] = max;
+    }
+    
+
+    public static void range( long[] arr, int off, int len, long[] out2x1 ) {
+        if( len <= 0 ) {
+            out2x1[0] = Long.MAX_VALUE;
+            out2x1[1] = Long.MIN_VALUE;
+            return;
+        }
+
+        long min = arr[off];
+        long max = min;
+
+        for( int i = off + 1; i < off + len; i++ ) {
+            if( arr[i] < min ) {
+                min = arr[i]; 
+            }
+            if( arr[i] > max ) {
+                max = arr[i];
+            }
+        }
+
+        out2x1[0] = min;
+        out2x1[1] = max;
+    }
+    
 
     public static void range( float[] arr, int off, int len, float[] out2x1 ) {
         if( len <= 0 ) {
