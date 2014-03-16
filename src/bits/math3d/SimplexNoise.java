@@ -4,14 +4,12 @@ package bits.math3d;
  * Simplex Noise in 2D, 3D and 4D. Based on the example code of this paper:
  * http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
  *
- * @author Stefan Gustavson, Linkping University, Sweden (stegu at itn dot liu
- *         dot se)
+ * @author Stefan Gustavson, Linkping University, Sweden (stegu at itn dot liu dot se)
  *
  *         Slight optimizations & restructuring by
  * @author Karsten Schmidt (info at toxi dot co dot uk)
  *
  */
-
 public class SimplexNoise {
 
     private static final double SQRT3 = Math.sqrt(3.0);

@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 public class TestEase {
     
     public static void main( String[] args ) {
-        double decay = 5.0;
-        double cycle = 2.0;
+        //double decay = 5.0;
+        //double cycle = 2.0;
         
         Function11[] funcs = {
                 Ease.LINEAR,

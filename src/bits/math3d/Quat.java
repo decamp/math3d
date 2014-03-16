@@ -2,7 +2,7 @@ package bits.math3d;
 
 
 /**
- * Methods for futzing with quaternions.
+ * Methods for quaternions.
  * 
  * @author decamp
  */

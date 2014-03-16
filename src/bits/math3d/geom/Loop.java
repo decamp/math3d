@@ -1,7 +1,7 @@
 package bits.math3d.geom;
 
 /**
- * @author decamp
+ * @author Philip DeCamp
  */
 public class Loop {
     public double[][] mVerts = null;

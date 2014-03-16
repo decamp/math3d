@@ -8,8 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 public class TestQuats {
     
-    @Test
-    public void testRandMatrixConversions() {
+    @Test public void testRandMatrixConversions() {
         Random rand = new Random( 6 );
         
         double[] rotIn  = new double[16];
@@ -35,8 +34,7 @@ public class TestQuats {
     }
     
     
-    @Test
-    public void testOrthoMatrixConversions() {
+    @Test public void testOrthoMatrixConversions() {
         double[] rotIn  = new double[16];
         double[] q      = new double[4];
         double[] rotOut = new double[16];
@@ -62,8 +60,7 @@ public class TestQuats {
     }
     
 
-    @Test
-    public void testMultSpeed() {
+    @Test public void testMultSpeed() {
         double[] a  = new double[4];
         double[] b  = new double[4];
         double[] c  = new double[4];

@@ -7,8 +7,7 @@ import static org.junit.Assert.*;
 
 public class TestMatrices {
     
-    @Test
-    public void testInverse() {
+    @Test public void testInverse() {
         double[] a = new double[16];
         double[] b = new double[16];
         double[] c = new double[16];
@@ -41,8 +40,7 @@ public class TestMatrices {
     }
 
     
-    @Test
-    public void testInverseSpeed() {
+    @Test public void testInverseSpeed() {
         double[] a = new double[16];
         double[] c = new double[16];
         Random rand = new Random( 100 );
@@ -76,10 +74,8 @@ public class TestMatrices {
         System.out.println( "Time1: " + ( t1 / 1000000000.0 ) );
     }
     
-
-    @Test
-    @Ignore
-    public void testSlerp() {
+    
+    @Ignore @Test public void testSlerp() {
         double[] a = new double[16];
         double[] b = new double[16];
         double[] c = new double[16];

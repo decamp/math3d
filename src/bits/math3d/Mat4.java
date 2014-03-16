@@ -361,7 +361,6 @@ public final class Mat4 {
      */
     public static void normalizeRotationMatrix( float[] mat ) {
         float d;
-        float err;
         
         //Kill translation, scalings.
         mat[ 3] = 0;

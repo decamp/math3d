@@ -168,7 +168,6 @@ public final class Mat3 {
      */
     public static void normalizeRotationMatrix( float[] mat ) {
         float d;
-        float err;
         
         //Normalize length of X-axis.
         d = (float)Math.sqrt( mat[0] * mat[0] + mat[1] * mat[1] + mat[2] * mat[2] );

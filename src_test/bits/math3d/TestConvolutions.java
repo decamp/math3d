@@ -8,11 +8,9 @@ import javax.imageio.ImageIO;
 
 import bits.math3d.Convolutions;
 
-
-
+@SuppressWarnings( "unused" )
 public class TestConvolutions {
-    
-    
+   
     public static void main( String[] args ) throws Exception {
         testConvolve();
     }
@@ -41,16 +39,13 @@ public class TestConvolutions {
     }
     
     
-    
     private static BufferedImage testImage() throws Exception {
         return ImageIO.read( new File( "resources_test/ansel0.jpg" ) );
     }
-
     
     
     private static BufferedImage testImageTiny() throws Exception {
         return ImageIO.read( new File( "resources_test/ansel0_tiny.png" ) );
     }
-       
     
 }

@@ -650,6 +650,7 @@ public final class Matrices {
      * @deprecated invert( mat, out ) is faster and easier to use. 
      */
     @Deprecated
+    @SuppressWarnings( "unused" )
     public static void invertMat(double[] a, double[] w, double[] out) {
         invert( a, out );
     }

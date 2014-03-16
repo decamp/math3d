@@ -89,14 +89,14 @@ public class Bezier2d {
         Bezier2d ret;
 
         if( approxEqual( t1, 1.0 ) ) {
-            if( approxZero( t0 ) ) {
+            if( approxZero( t0, 1.0 ) ) {
                 ret = new Bezier2d( mC.clone(), mCount );
             } else {
                 ret = subdivideGreater( t0 );
             }
 
-        } else if( approxZero( t1 ) ) {
-            if( approxZero( t0 ) ) {
+        } else if( approxZero( t1, 1.0 ) ) {
+            if( approxZero( t0, 1.0 ) ) {
                 ret = subdivideLess( t1 );
             } else {
                 ret = subdivideGreater( t0 );
@@ -104,7 +104,7 @@ public class Bezier2d {
             }
 
         } else {
-            if( approxZero( t0 ) ) {
+            if( approxZero( t0, 1.0 ) ) {
                 ret = subdivideLess( t1 );
             } else {
                 ret = subdivideLess( t1 );
@@ -305,7 +305,7 @@ public class Bezier2d {
 
     private static double solveLineT( double p0, double p1, double x, double nearestT ) {
         double div = p1 - p0;
-        if( !approxZero( div ) ) {
+        if( !approxZero( div, x - p0 ) ) {
             return (x - p0) / div;
         }
         if( approxEqual( p0, x ) ) {
@@ -318,7 +318,7 @@ public class Bezier2d {
     private static double solveQuadT( double p0, double p1, double p2, double x, double nearestT ) {
         double a = p0 - 2.0 * p1 + p2;
         
-        if( approxZero( a ) ) {
+        if( approxZero( a, 1.0 ) ) {
             return solveLineT( p0, p2, x, nearestT );
         }
 

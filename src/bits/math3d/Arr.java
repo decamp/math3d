@@ -995,9 +995,9 @@ public final class Arr {
     public static void shuffle( Object[] arr, int off, int len, Random rand ) {
         for( int i = 0; i < len-1; i++ ) {
             int j = rand.nextInt( len - i );
-            Object temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+            Object temp = arr[i+off];
+            arr[i+off]  = arr[j+off];
+            arr[j+off]  = temp;
         }
     }
     

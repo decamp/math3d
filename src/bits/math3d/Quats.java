@@ -2,12 +2,11 @@ package bits.math3d;
 
 
 /**
- * Methods for futzing with quaternions.
+ * Basic quaternion functions.
  * 
  * @author decamp
  */
 public final class Quats {
-    
     
     public static void mult( double[] a, double[] b, double[] out ) {
         // These local copies had no effect in performance tests, but whatevs. 

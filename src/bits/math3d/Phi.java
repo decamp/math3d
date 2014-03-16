@@ -14,7 +14,8 @@ package bits.math3d;
  * The algorithm implemented in this class can be found here:
  * 
  * http://home.online.no/~pjacklam/notes/invnorm/
- * 
+ *
+ * (this file modified by Philip DeCamp)
  */
 public class Phi {
 
