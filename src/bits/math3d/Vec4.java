@@ -6,10 +6,13 @@ import static bits.math3d.Tol.*;
 
 /** 
  * Functions for length-3 vectors.
+ *
+ * Using deprecated as a TODO warning that this method
+ * needs to remove array aliasing issues.
  * 
  * @author Philip DeCamp  
  */
-public final class Vec4 {
+@Deprecated public final class Vec4 {
     
     public static void add( float[] a, float[] b, float[] out ) {
         out[0] = a[0] + b[0];

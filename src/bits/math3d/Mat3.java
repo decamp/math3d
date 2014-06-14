@@ -1,6 +1,6 @@
 package bits.math3d;
 
-import static bits.math3d.Tol.*;
+import static bits.math3d.Tol.FSQRT_ABS_ERR;
 
 import java.util.Random;
 
@@ -13,50 +13,73 @@ import java.util.Random;
  * 
  * @author Philip DeCamp  
  */
-@Deprecated public final class Mat3 {
+public final class Mat3 {
     
         
     public static void mult( float[] a, float[] b, float[] out ) {
-        out[0] = a[0]*b[0] + a[3]*b[1] + a[6]*b[2];
-        out[1] = a[1]*b[0] + a[4]*b[1] + a[7]*b[2];
-        out[2] = a[2]*b[0] + a[5]*b[1] + a[8]*b[2];
-        
-        out[3] = a[0]*b[3] + a[3]*b[4] + a[6]*b[5];
-        out[4] = a[1]*b[3] + a[4]*b[4] + a[7]*b[5];
-        out[5] = a[2]*b[3] + a[5]*b[4] + a[8]*b[5];
-        
-        out[6] = a[0]*b[6] + a[3]*b[7] + a[6]*b[8];
-        out[7] = a[1]*b[6] + a[4]*b[7] + a[7]*b[8];
-        out[8] = a[2]*b[6] + a[5]*b[7] + a[8]*b[8];
+        float a0 = a[0];
+        float a1 = a[1];
+        float a2 = a[2];
+        float a3 = a[3];
+        float a4 = a[4];
+        float a5 = a[5];
+        float a6 = a[6];
+        float a7 = a[7];
+        float a8 = a[8];
+        float b0 = b[0];
+        float b1 = b[1];
+        float b2 = b[2];
+        out[0] = a0*b0 + a3*b1 + a6*b2;
+        out[1] = a1*b0 + a4*b1 + a7*b2;
+        out[2] = a2*b0 + a5*b1 + a8*b2;
+        b0 = b[3];
+        b1 = b[4];
+        b2 = b[5];
+        out[3] = a0*b0 + a3*b1 + a6*b2;
+        out[4] = a1*b0 + a4*b1 + a7*b2;
+        out[5] = a2*b0 + a5*b1 + a8*b2;
+        b0 = b[6];
+        b1 = b[7];
+        b2 = b[8];
+        out[6] = a0*b0 + a3*b1 + a6*b2;
+        out[7] = a1*b0 + a4*b1 + a7*b2;
+        out[8] = a2*b0 + a5*b1 + a8*b2;
     }
     
     
     public static void multVec3( float[] a, float[] b, float[] out ) {
-        out[0] = a[0]*b[0] + a[3]*b[1] + a[6]*b[2];
-        out[1] = a[1]*b[0] + a[4]*b[1] + a[7]*b[2];
-        out[2] = a[2]*b[0] + a[5]*b[1] + a[8]*b[2];
+        float t0 = a[0]*b[0] + a[3]*b[1] + a[6]*b[2];
+        float t1 = a[1]*b[0] + a[4]*b[1] + a[7]*b[2];
+        float t2 = a[2]*b[0] + a[5]*b[1] + a[8]*b[2];
+        out[0] = t0;
+        out[1] = t1;
+        out[2] = t2;
     }
 
     
     public static void multVec3( float[] a, int offA, float[] b, int offB, float[] out, int offOut ) {
-        out[0+offOut] = a[0+offA]*b[0+offB] + a[3+offA]*b[1+offB] + a[6+offA]*b[2+offB];
-        out[1+offOut] = a[1+offA]*b[0+offB] + a[4+offA]*b[1+offB] + a[7+offA]*b[2+offB];
-        out[2+offOut] = a[2+offA]*b[0+offB] + a[5+offA]*b[1+offB] + a[8+offA]*b[2+offB];
+        float t0 = a[0+offA]*b[0+offB] + a[3+offA]*b[1+offB] + a[6+offA]*b[2+offB];
+        float t1 = a[1+offA]*b[0+offB] + a[4+offA]*b[1+offB] + a[7+offA]*b[2+offB];
+        float t2 = a[2+offA]*b[0+offB] + a[5+offA]*b[1+offB] + a[8+offA]*b[2+offB];
+        out[0+offOut] = t0;
+        out[1+offOut] = t1;
+        out[2+offOut] = t2;
     }
 
-    
+
     public static void multVec4( float[] a, float[] b, float[] out ) {
+        float b3 = b[3];
         multVec3( a, b, out );
-        out[3] = b[3];
+        out[3] = b3;
     }
     
     
     public static void multVec4( float[] a, int offA, float[] b, int offB, float[] out, int offOut ) {
+        float b3 = b[offB+3];
         multVec3( a, offA, b, offB, out, offOut );
-        out[offOut+3] = b[offB+3];
+        out[offOut+3] = b3;
     }
-    
-    
+
     /**
      * @param mat    Input matrix
      * @param out    Array to hold inverted matrix on return.
@@ -76,7 +99,7 @@ import java.util.Random;
         // Compute determinant
         float invDet  = mat[0+0*3] * c00 + mat[0+1*3] * c01 + mat[0+2*3] * c02;
         // Check if invertible
-        boolean valid = invDet > SQRT_ABS_ERR || -invDet > SQRT_ABS_ERR;
+        boolean valid = invDet > FSQRT_ABS_ERR || -invDet > FSQRT_ABS_ERR;
         // Invert determinant
         invDet = 1f / invDet;
         
@@ -92,21 +115,30 @@ import java.util.Random;
         
         return valid;
     }
-    
-    
-    public static void trans( float[] a, float[] out ) {
-        out[0] = a[0];
-        out[1] = a[3];
-        out[2] = a[6];
-        out[3] = a[1];
-        out[4] = a[4];
-        out[5] = a[7];
-        out[6] = a[2];
-        out[7] = a[5];
-        out[8] = a[8];
+
+
+    public static void transpose( float[] a, float[] out ) {
+        float a0 = a[0];
+        float a1 = a[1];
+        float a2 = a[2];
+        float a3 = a[3];
+        float a4 = a[4];
+        float a5 = a[5];
+        float a6 = a[6];
+        float a7 = a[7];
+        float a8 = a[8];
+        out[0] = a0;
+        out[1] = a3;
+        out[2] = a6;
+        out[3] = a1;
+        out[4] = a4;
+        out[5] = a7;
+        out[6] = a2;
+        out[7] = a5;
+        out[8] = a8;
     }
-    
-    
+
+
     public static float det( float[] mat ) {
         return mat[0+0*3] * ( mat[1+1*3] * mat[2+2*3] - mat[2+1*3] * mat[1+2*3] ) +
                mat[0+1*3] * ( mat[2+0*3] * mat[1+2*3] - mat[1+0*3] * mat[2+2*3] ) +
@@ -125,9 +157,9 @@ import java.util.Random;
         out[7] = 0f;
         out[8] = 1f;
     }
-    
-    
-    public static void scale( float sx, float sy, float sz, float[] out ) {
+
+
+    public static void scaling( float sx, float sy, float sz, float[] out ) {
         out[0] = sx;
         out[1] = 0f;
         out[2] = 0f;
@@ -138,11 +170,12 @@ import java.util.Random;
         out[7] = 0f;
         out[8] = sz;
     }
-    
-    
+
+
     public static void rotation( float radians, float x, float y, float z, float[] out ) {
-        float c = (float)Math.cos( radians );
-        float s = (float)Math.sin( radians );
+        double cc = Math.cos( radians );
+        float c = (float)cc;
+        float s = (float)Math.sqrt( 1.0 - cc * cc );
         
         float sum = 1f / (float)Math.sqrt( x*x + y*y + z*z );
         x *= sum;
@@ -258,22 +291,20 @@ import java.util.Random;
         return sb.toString();
     }
 
-    
-    public static boolean isValid( float[] mat ) {
+
+    public static boolean isNaN( float[] mat ) {
         for( int i = 0; i < 16; i++ ) {
-            if( Float.isNaN( mat[i] ) ) {
-                return false;
+            if( mat[i] != mat[i] ) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
-    
-    
-    
-    
+
+
     private Mat3() {}
 
-    
+
     
     public static void main( String[] args ) {
         float[] a = new float[9];
@@ -294,10 +325,29 @@ import java.util.Random;
         System.out.println( format( a ) );
         System.out.println( format( b ) );
         System.out.println( format( c ) );
-        
-        
     }
-    
-   
-    
+
+
+    @Deprecated public static void trans( float[] a, float[] out ) {
+        out[0] = a[0];
+        out[1] = a[3];
+        out[2] = a[6];
+        out[3] = a[1];
+        out[4] = a[4];
+        out[5] = a[7];
+        out[6] = a[2];
+        out[7] = a[5];
+        out[8] = a[8];
+    }
+
+
+    @Deprecated public static boolean isValid( float[] mat ) {
+        return !isNaN( mat );
+    }
+
+
+    @Deprecated public static void scale( float sx, float sy, float sz, float[] out ) {
+        scaling( sx, sy, sz, out );
+    }
+
 }

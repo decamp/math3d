@@ -228,7 +228,7 @@ public final class Vec3 {
         float cosAng = cosAng( vec, coneAxis );
         float ang    = (float)Math.acos( cosAng );
 
-        if( Double.isNaN( ang ) ) {
+        if( ang != ang ) {
             ang = cosAng > 0.0f ? 0.0f : (float)Math.PI;
         }
         if( ang <= coneRads ) {
@@ -520,10 +520,9 @@ public final class Vec3 {
 
 
     public static boolean isNaN( float[] vec ) {
-        return Float.isNaN( vec[0] ) ||
-               Float.isNaN( vec[1] ) ||
-               Float.isNaN( vec[2] );
-
+        return vec[0] != vec[0] ||
+               vec[1] != vec[1] ||
+               vec[2] != vec[2];
     }
 
 
@@ -749,7 +748,7 @@ public final class Vec3 {
         double cosAng = cosAng( vec, coneAxis );
         double ang    = Math.acos( cosAng );
 
-        if( Double.isNaN( ang ) ) {
+        if( ang != ang ) {
             ang = cosAng > 0.0 ? 0.0 : Math.PI;
         }
         if( ang <= coneRads ) {
@@ -1037,9 +1036,9 @@ public final class Vec3 {
 
 
     public static boolean isNaN( double[] vec ) {
-        return Double.isNaN( vec[0] ) ||
-               Double.isNaN( vec[1] ) ||
-               Double.isNaN( vec[2] );
+        return vec[0] != vec[0] ||
+               vec[1] != vec[1] ||
+               vec[2] != vec[2];
 
     }
 
@@ -1186,9 +1185,7 @@ public final class Vec3 {
      * @deprecated Use isNaN( float[] )
      */
     @Deprecated public static boolean isValid( float[] vec ) {
-        return !Float.isNaN( vec[0] ) &&
-               !Float.isNaN( vec[1] ) &&
-               !Float.isNaN( vec[2] );
+        return !isNaN( vec );
     }
 
 }

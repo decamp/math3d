@@ -817,11 +817,11 @@ public final class Mat4 {
 
     public static boolean isNaN( float[] mat ) {
         for( int i = 0; i < 16; i++ ) {
-            if( Float.isNaN( mat[i] ) ) {
-                return false;
+            if( mat[i] != mat[i] ) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
 
@@ -1632,11 +1632,11 @@ public final class Mat4 {
 
     public static boolean isNaN( double[] mat ) {
         for( int i = 0; i < 16; i++ ) {
-            if( Double.isNaN( mat[i] ) ) {
-                return false;
+            if( mat[i] != mat[i] ) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
 
@@ -1656,7 +1656,7 @@ public final class Mat4 {
 
 
     @Deprecated public static boolean isValid( float[] mat ) {
-        return isNaN( mat );
+        return !isNaN( mat );
     }
 
 }
