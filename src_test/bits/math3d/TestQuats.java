@@ -2,12 +2,13 @@ package bits.math3d;
 
 import java.util.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 
 public class TestQuats {
-    
+
     @Test public void testRandMatrixConversions() {
         Random rand = new Random( 6 );
         
@@ -92,35 +93,94 @@ public class TestQuats {
         System.out.println( "Time0: " + ( t0 / 1000000000.0 ) );
         System.out.println( "Time1: " + ( t1 / 1000000000.0 ) );
     }
-    
 
-    
+    /**
+     * Make sure quaternion sampling is actually uniform.
+     */
+    @Test public void testSamplingUniformity() {
+        float[] startVec = { 1, 0, 0 };
+        float[] outVec   = new float[3];
+        float[] quat     = new float[4];
+        float[][] testVecs = { {  1,  0,  0 },
+                               { -1,  0,  0 },
+                               {  0,  1,  0 },
+                               {  0, -1,  0 },
+                               {  0,  0,  1 },
+                               {  0,  0, -1 } };
+        float[] testAngs = new float[testVecs.length];
+
+        int trials = 100000;
+        Random rand = new Random( 20 );
+
+        for( int i = 0; i < trials; i++ ) {
+            Quat.sampleUniform( rand, quat );
+            Quat.multVec3( quat, startVec, outVec );
+
+            for( int j = 0; j < testVecs.length; j++ ) {
+                testAngs[j] += Vec3.ang( outVec, testVecs[j] );
+            }
+        }
+
+        for( int j = 0; j < testVecs.length; j++ ) {
+            double err = Math.abs( testAngs[j] / trials - (float)( 0.5 * Math.PI ) );
+            assertTrue( "Quaternion sampling not uniform.",  err < 0.01 * Math.PI );
+
+            System.out.println( Vec3.format( testVecs[j] ) + " : " + err );
+        }
+    }
+
+    /**
+     * I understand you can uniformly sample a sphere with gaussians samples!
+     * Yes. It is true.
+     */
+    @Ignore @Test public void testSphericalSamplingWithGaussians() {
+        float[] outVec   = new float[3];
+        float[][] testVecs = { {  1,  0,  0 },
+                               { -1,  0,  0 },
+                               {  0,  1,  0 },
+                               {  0, -1,  0 },
+                               {  0,  0,  1 },
+                               {  0,  0, -1 } };
+        float[] testAngs = new float[testVecs.length];
+
+        int trials = 100000;
+        Random rand = new Random( 20 );
+
+        for( int i = 0; i < trials; i++ ) {
+            double r;
+            r = rand.nextDouble();
+            double x = Phi.ncdfInv( r );
+            r = rand.nextDouble();
+            double y = Phi.ncdfInv( r );
+            r = rand.nextDouble();
+            double z = Phi.ncdfInv( r );
+            r = 1.0 / Math.sqrt( x * x + y * y + z * z );
+            outVec[0] = (float)( r * x );
+            outVec[1] = (float)( r * y );
+            outVec[2] = (float)( r * z );
+
+            for( int j = 0; j < testVecs.length; j++ ) {
+                testAngs[j] += Vec3.ang( outVec, testVecs[j] );
+            }
+        }
+
+        for( int j = 0; j < testVecs.length; j++ ) {
+            double err = Math.abs( testAngs[j] / trials ) - 0.5 * Math.PI;
+            assertTrue( "Gaussian sampling not uniform.",  err < 0.01 * Math.PI );
+            //System.out.println( Vec3.format( testVecs[j] ) + " : " + err );
+        }
+
+
+    }
+
+
+
     private static void uniformRandQuat( Random rand, double[] out ) {
         // Draw three uniform samples.
         double u0 = rand.nextDouble();
         double u1 = rand.nextDouble();
         double u2 = rand.nextDouble();
-        // Sort smallest to largest.
-        if( u0 > u1 ) {
-            double t = u0;
-            u0 = u1;
-            u1 = t;
-        }
-        if( u1 > u2 ) {
-            double t = u1;
-            u1 = u2;
-            u2 = t;
-        }
-        if( u0 > u1 ) {
-            double t = u0;
-            u0 = u1;
-            u1 = t;
-        }
-        
-        out[0] = u0;
-        out[1] = u1 - u0;
-        out[2] = u2 - u1;
-        out[3] = 1.0 - u2;
+        Quats.uniformNoiseToQuat( u0, u1, u2, out );
     }
     
     

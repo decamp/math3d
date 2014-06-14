@@ -7,11 +7,13 @@ import java.util.Random;
 
 
 /** 
- * These are all homographic coordinates, yo.  Matrices are 4x4.  Vectors are 3x1.
+ * These are all homographic coordinates.
+ *
+ * Needs to be updated to avoid array aliasing, like Vec3 and Mat4 have been.
  * 
  * @author Philip DeCamp  
  */
-public final class Mat3 {
+@Deprecated public final class Mat3 {
     
         
     public static void mult( float[] a, float[] b, float[] out ) {

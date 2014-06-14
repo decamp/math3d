@@ -23,8 +23,8 @@ public class Phi {
      * Normal distribution function with 0 mean ond unit standard dev.
      * Same as a gaussian function. Ofter designated with Greek lower case phi.
      * 
-     * @param x  Value.
-     * @return (1/sqrt(2pi)) * e^(-1/2*x^2)  
+     * @param x Difference from mean.
+     * @return {@code (1/sqrt(2pi)) * e^(-1/2*x^2) }
      */
     public static double n( double x ) {
         return INV_SQRT2PI * Math.exp( -0.5 * x * x );
@@ -33,8 +33,8 @@ public class Phi {
     /**
      * Standard normal cumulative distribution function. (probit function).
      * 
-     * @param x
-     * @param Integral of the standard normal distridbution from -inf to x.
+     * @param x Any value
+     * @return Integral of the standard normal distridbution from -inf to x.
      */
     public static double ncdf( double x ) {
         return 0.5 * ( 1.0 + erf( x / SQRT_2 ) );
@@ -43,7 +43,7 @@ public class Phi {
     /**
      * Inverse of the standard normal cumulative distribution function with refinement.
      * 
-     * @param y
+     * @param y Value between 0 and 1.
      * @return x such that normalCdf( x ) == y. 
      */
     public static double ncdfInv( double y ) {
@@ -54,7 +54,7 @@ public class Phi {
     /**
      * Inverse of the standard normal cumulative distribution function, without refinement.
      * 
-     * @param y
+     * @param y Value between 0 and 1.
      * @return x such that normalCdf( x ) == y. 
      */
     public static double ncdfInvFast( double y ) {
@@ -92,7 +92,7 @@ public class Phi {
     /**
      * Error function. 
      * 
-     * @param x
+     * @param x Any value.
      * @return the integral of the Gaussian distribution function from 0 to x.
      */
     public static double erf( double x ) { 
@@ -102,7 +102,7 @@ public class Phi {
     /**
      * Complementary error function.
      * 
-     * @param x
+     * @param x Any value.
      * @return the integral of the Gaussian distribution function from x to inf, or 1.0 - erf( x ).
      * 
      */
@@ -123,7 +123,7 @@ public class Phi {
     /**
      * Inverse of the error function with refinement.
      * 
-     * @param y  
+     * @param y
      * @return x such that erf( x ) == y.
      */
     public static double erfInvPrecise( double y ) {

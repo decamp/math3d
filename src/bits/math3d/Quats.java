@@ -157,13 +157,13 @@ public final class Quats {
                  ( 2.0 * ( q2 * q3 + q0 * q1 ) )           * vec[1] +
                  ( q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 ) * vec[2];
     }
-    
+
     /**
-     * Computes spherical interpolation between two quaternions. 
-     * @param qa
-     * @param qb
-     * @param t
-     * @param out
+     * Computes spherical interpolation between two quaternions.
+     * @param qa  Quaternior
+     * @param qb  Quaternion
+     * @param t   Blend factor
+     * @param out Length-4 array that holds quaternion output on return.
      */
     public static void slerp( double[] qa, double[] qb, double t, double[] out ) {
         // Calculate angle between them.
@@ -202,26 +202,39 @@ public final class Quats {
 
     
     public static void uniformNoiseToQuat( double rand0, double rand1, double rand2, double[] out ) {
+        double sign0 = 1f;
+        double sign1 = 1f;
+        double sign2 = 1f;
+
+        // Sort three numbers.
+        // Use the sort order to generate 3 random booleans for sign values.
         if( rand0 > rand1 ) {
+            sign0 = -1;
+            sign1 = -1;
             double swap = rand0;
             rand0 = rand1;
             rand1 = swap;
         }
         if( rand1 > rand2 ) {
+            sign1 = -sign1;
+            sign2 = -sign2;
             double swap = rand1;
             rand1 = rand2;
             rand2 = swap;
+
+            if( rand0 > rand1 ) {
+                sign0 = -sign0;
+                sign1 = -sign1;
+                swap  = rand0;
+                rand0 = rand1;
+                rand1 = swap;
+            }
         }
-        if( rand0 > rand1 ) {
-            double swap = rand0;
-            rand0 = rand1;
-            rand1 = swap;
-        }
-        
-        out[0] = rand0;
-        out[1] = rand1 - rand0;
-        out[2] = rand2 - rand1;
-        out[3] = 1.0 - rand2;
+
+        out[0] = sign0 * (rand0        );
+        out[1] = sign1 * (rand1 - rand0);
+        out[2] = sign2 * (rand2 - rand1);
+        out[3] = 1.0f - rand2;
         normalize( out );
     }
         

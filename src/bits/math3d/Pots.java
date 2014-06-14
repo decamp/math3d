@@ -9,9 +9,7 @@ package bits.math3d;
 public class Pots {
 
     /**
-     * @param val
-     * @return the smallest power-of-two value that is greatest than
-     *         <code>val</code>.
+     * @return the smallest power-of-two that is greater than <tt>val</tt>.
      */
     public static int higherPot( int val ) {
         if( val <= 0 ) {
@@ -26,9 +24,7 @@ public class Pots {
     }
 
     /**
-     * @param val
-     * @return the smallest power-of-two value that is equal-to-or-greater than
-     *         <code>val</code>.
+     * @return the smallest power-of-two that is greater-than-or-equal-to <tt>val</tt>.
      */
     public static int ceilPot( int val ) {
         if( val <= 0 ) {
@@ -38,9 +34,7 @@ public class Pots {
     }
 
     /**
-     * @param val
-     * @return the greatest power-of-two value that is less than
-     *         <code>val</code>.
+     * @return the largest power-of-two that is less than <tt>val</tt>.
      */
     public static int lowerPot( int val ) {
         if( val <= 1 ) {
@@ -50,9 +44,7 @@ public class Pots {
     }
 
     /**
-     * @param val
-     * @return the greatest power-of-two that is equal-to-or-less-than
-     *         <code>val</code>.
+     * @return the largest power-of-two that is less-than-or-equal-to <tt>val</tt>.
      */
     public static int floorPot( int val ) {
         if( val <= 1 ) {
@@ -63,9 +55,7 @@ public class Pots {
 
 
     /**
-     * @param val
-     * @return the smallest power-of-two value that is greatest than
-     *         <code>val</code>.
+     * @return the smallest power-of-two that is greater than <tt>val</tt>.
      */
     public static long higherPot( long val ) {
         if( val <= 0 ) {
@@ -81,9 +71,7 @@ public class Pots {
     }
 
     /**
-     * @param val
-     * @return the smallest power-of-two value that is equal-to-or-greater than
-     *         <code>val</code>.
+     * @return the smallest power-of-two that is greater-than-or-equal-to <tt>val</tt>.
      */
     public static long ceilPot( long val ) {
         if( val <= 0 ) {
@@ -93,9 +81,7 @@ public class Pots {
     }
 
     /**
-     * @param val
-     * @return the greatest power-of-two value that is less than
-     *         <code>val</code>.
+     * @return the largest power-of-two that is less than <tt>val</tt>.
      */
     public static long lowerPot( long val ) {
         if( val <= 1 ) {
@@ -105,15 +91,66 @@ public class Pots {
     }
 
     /**
-     * @param val
-     * @return the greatest power-of-two that is equal-to-or-less-than
-     *         <code>val</code>.
+     * @return the largest power-of-two that is less-than-or-equal-to <tt>val</tt>.
      */
     public static long floorPot( long val ) {
         if( val <= 1 ) {
             return 1;
         }
         return higherPot( val ) >> 1;
+    }
+
+
+    /**
+     * Floor binary log.
+     *
+     * @return val > 0: the integer less-than-or-equal-to log_2( val ) <br>
+     *         otherwise : 0
+     */
+    public static int floorLog2( int val ) {
+        if( val <= 0 ) {
+            return 0;
+        }
+        return 31 - Integer.numberOfLeadingZeros( val );
+    }
+
+    /**
+     * Ceiling binary log.
+     *
+     * @return val > 0: the integer less-than-or-equal-to log_2( val ) <br>
+     *         otherwise : 0
+     */
+    public static int ceilLog2( int val ) {
+        if( val <= 0 ) {
+            return 0;
+        }
+        return 32 - Integer.numberOfLeadingZeros( val - 1 );
+    }
+
+    /**
+     * Floor binary log.
+     *
+     * @return val > 0: the integer less-than-or-equal-to log_2( val ) <br>
+     *         otherwise : 0
+     */
+    public static long floorLog2( long val ) {
+        if( val <= 0 ) {
+            return 0;
+        }
+        return 63 - Long.numberOfLeadingZeros( val );
+    }
+
+    /**
+     * Ceiling binary log.
+     *
+     * @return val > 0: the integer less-than-or-equal-to log_2( val ) <br>
+     *         otherwise : 0
+     */
+    public static long ceilLog2( long val ) {
+        if( val < 0 ) {
+            return 0;
+        }
+        return 64 - Long.numberOfLeadingZeros( val - 1 );
     }
 
 }

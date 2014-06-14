@@ -1,14 +1,20 @@
 package bits.math3d;
 
 
+import java.util.Random;
+
+
 /**
  * Methods for quaternions.
  * 
  * @author decamp
  */
 public final class Quat {
-    
-    
+
+    /**
+     * Multiply two quaternions.
+     * @param out Length-4 array to hold output on return. May be the same array as one of the inputs.
+     */
     public static void mult( float[] a, float[] b, float[] out ) {
         // These local copies had no effect in performance tests, but whatevs. 
         final float a0 = a[0];
@@ -24,30 +30,42 @@ public final class Quat {
         out[2] = a0 * b2 - a1 * b3 + a2 * b0 + a3 * b1;
         out[3] = a0 * b3 + a1 * b2 - a2 * b1 + a3 * b0;
     }
-    
-    
-    public static void mult( float[] a, float[] b ) {
-        final float a0 = a[0];                        
-        final float a1 = a[1];                        
-        final float a2 = a[2];                        
-        final float a3 = a[3];                        
-        final float b0 = b[0];                        
-        final float b1 = b[1];                        
-        final float b2 = b[2];                        
-        final float b3 = b[3];                        
-        a[0] = a0 * b0 - a1 * b1 - a2 * b2 - a3 * b3;
-        a[1] = a0 * b1 + a1 * b0 + a2 * b3 - a3 * b2;
-        a[2] = a0 * b2 - a1 * b3 + a2 * b0 + a3 * b1;
-        a[3] = a0 * b3 + a1 * b2 - a2 * b1 + a3 * b0;
+
+
+    public static void multVec3( float[] quat, float[] vec, float[] out ) {
+        final float q0 = quat[0];
+        final float q1 = quat[1];
+        final float q2 = quat[2];
+        final float q3 = quat[3];
+
+        out[0] = ( q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3 ) * vec[0] +
+                 ( 2  * ( q1 * q2 - q0 * q3 ) )            * vec[1] +
+                 ( 2  * ( q1 * q3 + q0 * q2 ) )            * vec[2];
+
+        out[1] = ( 2 * ( q1 * q2 + q0 * q3 ) )             * vec[0] +
+                 ( q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3 ) * vec[1] +
+                 ( 2 * ( q2 * q3 - q0 * q1 ) )             * vec[2];
+
+        out[2] = ( 2 * ( q1 * q3 - q0 * q2 ) )             * vec[0] +
+                 ( 2 * ( q2 * q3 + q0 * q1 ) )             * vec[1] +
+                 ( q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 ) * vec[2];
     }
 
-    
+    /**
+     * Normalize quaternion to a valid unit-length.
+     */
     public static void normalize( float[] q ) {
         Vec4.normalize( q );
     }
-    
-    
-    
+
+    /**
+     * Converts axis-rotation to quaternion representation.
+     * @param rads Radians of rotation
+     * @param x    X-coord of rotation axis
+     * @param y    Y-coord of rotation axis
+     * @param z    Z-coord of rotation axis
+     * @param out  Length-4 array that holds rotation on return.
+     */
     public static void rotation( float rads, float x, float y, float z, float[] out ) {
         float cos = (float)Math.cos( rads * 0.5 );
         float len = (float)Math.sqrt( x * x + y * y + z * z );
@@ -57,9 +75,15 @@ public final class Quat {
         out[2] = sin * y;
         out[3] = sin * z;
     }
-    
-    
-    public static void matToQuat( float[] mat, float[] out ) {
+
+    /**
+     * Converts a rotation matrix to an equivalent quaternion.
+     * Non-rotation matrices will produce undefined results.
+     *
+     * @param mat Length-16 array holding rotation matrix.
+     * @param out Length-4 array that holds equivalent quaternion on return.
+     */
+    public static void mat4ToQuat( float[] mat, float[] out ) {
         final float r00 = mat[ 0];
         final float r11 = mat[ 5];
         final float r22 = mat[10];
@@ -102,9 +126,14 @@ public final class Quat {
         out[2] = q2 * r;
         out[3] = q3 * r;
     }
-    
-    
-    public static void quatToMat( float[] quat, float[] out ) {
+
+    /**
+     * Converts quaternion to dim4 rotation matrix.
+    *
+     * @param quat Length-4 array holding quaternion.
+     * @param out  Length-16 array that holds equivalent matrix on return.
+     */
+    public static void quatToMat4( float[] quat, float[] out ) {
         final float q0 = quat[0];
         final float q1 = quat[1];
         final float q2 = quat[2];
@@ -130,33 +159,13 @@ public final class Quat {
         out[14] = 0;
         out[15] = 1;
     }
-    
-    
-    public static void multVec( float[] quat, float[] vec, float[] out ) {
-        final float q0 = quat[0];
-        final float q1 = quat[1];
-        final float q2 = quat[2];
-        final float q3 = quat[3];
-        
-        out[0] = ( q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3 ) * vec[0] +
-                 ( 2  * ( q1 * q2 - q0 * q3 ) )            * vec[1] +
-                 ( 2  * ( q1 * q3 + q0 * q2 ) )            * vec[2];
-        
-        out[1] = ( 2 * ( q1 * q2 + q0 * q3 ) )             * vec[0] +
-                 ( q0 * q0 - q1 * q1 + q2 * q2 - q3 * q3 ) * vec[1] +
-                 ( 2 * ( q2 * q3 - q0 * q1 ) )             * vec[2];
-        
-        out[2] = ( 2 * ( q1 * q3 - q0 * q2 ) )             * vec[0] +
-                 ( 2 * ( q2 * q3 + q0 * q1 ) )             * vec[1] +
-                 ( q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 ) * vec[2];
-    }
-    
+
     /**
      * Computes spherical interpolation between two quaternions. 
-     * @param qa
-     * @param qb
-     * @param t
-     * @param out
+     * @param qa  Quaternior
+     * @param qb  Quaternion
+     * @param t   Blend factor
+     * @param out Length-4 array that holds quaternion output on return.
      */
     public static void slerp( float[] qa, float[] qb, float t, float[] out ) {
         // Calculate angle between them.
@@ -193,27 +202,68 @@ public final class Quat {
         out[3] = ( qa[3] * ratioA + qb[3] * ratioB );
     }
 
-    
+    /**
+     * Converts three random numbers from [0,1] into a quaternion
+     * in such a way that if the samples are independent and
+     * uniformly distributed, then the resulting quaternions will
+     * uniformly represent the domain of quaternion rotations.
+     * <p>
+     * One implication of this function is that it can be used
+     * to uniformly sample a 2-sphere.
+     *
+     * @param out   Holds output quaternion on return.
+     */
+    public static void sampleUniform( Random rand, float[] out ) {
+        uniformNoiseToQuat( rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), out );
+    }
+
+    /**
+     * Converts three random numbers from [0,1] into a quaternion
+     * in such a way that if the samples are independent and
+     * uniformly distributed, then the resulting quaternions will
+     * uniformly represent the domain of quaternion rotations.
+     * <p>
+     * One implication of this function is that it can be used
+     * to uniformly sample a 2-sphere.
+     *
+     * @param rand0 Arbitrary value in [0,1]
+     * @param rand1 Arbitrary value in [0,1]
+     * @param rand2 Arbitrary value in [0,1]
+     * @param out   Holds quaternion on return.
+     */
     public static void uniformNoiseToQuat( float rand0, float rand1, float rand2, float[] out ) {
+        float sign0 = 1f;
+        float sign1 = 1f;
+        float sign2 = 1f;
+
+        // Sort three numbers.
+        // Use the sort order to generate 3 random booleans for sign values.
         if( rand0 > rand1 ) {
+            sign0 = -1;
+            sign1 = -1;
             float swap = rand0;
             rand0 = rand1;
             rand1 = swap;
         }
         if( rand1 > rand2 ) {
+            sign1 = -sign1;
+            sign2 = -sign2;
             float swap = rand1;
             rand1 = rand2;
             rand2 = swap;
+
+            if( rand0 > rand1 ) {
+                sign0 = -sign0;
+                sign1 = -sign1;
+                swap  = rand0;
+                rand0 = rand1;
+                rand1 = swap;
+            }
         }
-        if( rand0 > rand1 ) {
-            float swap = rand0;
-            rand0 = rand1;
-            rand1 = swap;
-        }
-        
-        out[0] = rand0;
-        out[1] = rand1 - rand0;
-        out[2] = rand2 - rand1;
+
+        out[0] = sign0 * (rand0        );
+        out[1] = sign1 * (rand1 - rand0);
+        out[2] = sign2 * (rand2 - rand1);
         out[3] = 1.0f - rand2;
         normalize( out );
     }
@@ -226,5 +276,28 @@ public final class Quat {
     
     
     private Quat() {}
+
+
+
+    public static void main( String[] args ) throws Exception {
+
+
+
+    }
+
+
+    @Deprecated public static void matToQuat( float[] mat, float[] out ) {
+        mat4ToQuat( mat, out );
+    }
+
+
+    @Deprecated public static void quatToMat( float[] quat, float[] out ) {
+        quatToMat4( quat, out );
+    }
+
+
+    @Deprecated public static void multVec( float[] quat, float[] vec, float[] out ) {
+        multVec3( quat, vec, out );
+    }
 
 }

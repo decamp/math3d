@@ -6,18 +6,17 @@ package bits.math3d;
 public class Angles {
 
     /**
-     * @param angle - Angle in radians.
+     * @param angle Angle in radians.
      * @return equivalent angle between -PI inclusive to PI exclusive.
      */
     public static double normalize( double angle ) {
         angle %= Math.PI * 2.0;
-        
         return angle <= -Math.PI ? angle + Math.PI * 2.0 :
                angle >   Math.PI ? angle - Math.PI * 2.0 : angle;
     }
     
     
-    private static double asincos( double sinAng, double cosAng ) {
+    public static double asincos( double sinAng, double cosAng ) {
         if( cosAng >= 1.0 ) {
             return cosAng < 1.0 + Tol.SQRT_ABS_ERR ? 0.0 : Double.NaN;
         } else if( cosAng <= -1.0 ) {

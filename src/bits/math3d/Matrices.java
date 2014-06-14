@@ -12,65 +12,96 @@ import static bits.math3d.Tol.*;
 public final class Matrices {
     
         
-    public static void multMatMat(double[] a, double[] b, double[] out) {
-        out[ 0] = a[ 0]*b[ 0] + a[ 4]*b[ 1] + a[ 8]*b[ 2] + a[12]*b[ 3];
-        out[ 1] = a[ 1]*b[ 0] + a[ 5]*b[ 1] + a[ 9]*b[ 2] + a[13]*b[ 3];
-        out[ 2] = a[ 2]*b[ 0] + a[ 6]*b[ 1] + a[10]*b[ 2] + a[14]*b[ 3];
-        out[ 3] = a[ 3]*b[ 0] + a[ 7]*b[ 1] + a[11]*b[ 2] + a[15]*b[ 3];
-        
-        out[ 4] = a[ 0]*b[ 4] + a[ 4]*b[ 5] + a[ 8]*b[ 6] + a[12]*b[ 7];
-        out[ 5] = a[ 1]*b[ 4] + a[ 5]*b[ 5] + a[ 9]*b[ 6] + a[13]*b[ 7];
-        out[ 6] = a[ 2]*b[ 4] + a[ 6]*b[ 5] + a[10]*b[ 6] + a[14]*b[ 7];
-        out[ 7] = a[ 3]*b[ 4] + a[ 7]*b[ 5] + a[11]*b[ 6] + a[15]*b[ 7];
-        
-        out[ 8] = a[ 0]*b[ 8] + a[ 4]*b[ 9] + a[ 8]*b[10] + a[12]*b[11];
-        out[ 9] = a[ 1]*b[ 8] + a[ 5]*b[ 9] + a[ 9]*b[10] + a[13]*b[11];
-        out[10] = a[ 2]*b[ 8] + a[ 6]*b[ 9] + a[10]*b[10] + a[14]*b[11];
-        out[11] = a[ 3]*b[ 8] + a[ 7]*b[ 9] + a[11]*b[10] + a[15]*b[11];
-        
-        out[12] = a[ 0]*b[12] + a[ 4]*b[13] + a[ 8]*b[14] + a[12]*b[15];
-        out[13] = a[ 1]*b[12] + a[ 5]*b[13] + a[ 9]*b[14] + a[13]*b[15];
-        out[14] = a[ 2]*b[12] + a[ 6]*b[13] + a[10]*b[14] + a[14]*b[15];
-        out[15] = a[ 3]*b[12] + a[ 7]*b[13] + a[11]*b[14] + a[15]*b[15];
+    public static void multMatMat( double[] a, double[] b, double[] out ) {
+        double a00 = a[ 0];
+        double a01 = a[ 1];
+        double a02 = a[ 2];
+        double a03 = a[ 3];
+        double a04 = a[ 4];
+        double a05 = a[ 5];
+        double a06 = a[ 6];
+        double a07 = a[ 7];
+        double a08 = a[ 8];
+        double a09 = a[ 9];
+        double a10 = a[10];
+        double a11 = a[11];
+        double a12 = a[12];
+        double a13 = a[13];
+        double a14 = a[14];
+        double a15 = a[15];
+        double b0 = b[0];
+        double b1 = b[1];
+        double b2 = b[2];
+        double b3 = b[3];
+        out[ 0] = a00*b0 + a04*b1 + a08*b2 + a12*b3;
+        out[ 1] = a01*b0 + a05*b1 + a09*b2 + a13*b3;
+        out[ 2] = a02*b0 + a06*b1 + a10*b2 + a14*b3;
+        out[ 3] = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        b0 = b[4];
+        b1 = b[5];
+        b2 = b[6];
+        b3 = b[7];
+        out[ 4] = a00*b0 + a04*b1 + a08*b2 + a12*b3;
+        out[ 5] = a01*b0 + a05*b1 + a09*b2 + a13*b3;
+        out[ 6] = a02*b0 + a06*b1 + a10*b2 + a14*b3;
+        out[ 7] = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        b0 = b[8];
+        b1 = b[9];
+        b2 = b[10];
+        b3 = b[11];
+        out[ 8] = a00*b0 + a04*b1 + a08*b2 + a12*b3;
+        out[ 9] = a01*b0 + a05*b1 + a09*b2 + a13*b3;
+        out[10] = a02*b0 + a06*b1 + a10*b2 + a14*b3;
+        out[11] = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        b0 = b[12];
+        b1 = b[13];
+        b2 = b[14];
+        b3 = b[15];
+        out[12] = a00*b0 + a04*b1 + a08*b2 + a12*b3;
+        out[13] = a01*b0 + a05*b1 + a09*b2 + a13*b3;
+        out[14] = a02*b0 + a06*b1 + a10*b2 + a14*b3;
+        out[15] = a03*b0 + a07*b1 + a11*b2 + a15*b3;
     }
     
     
-    public static void multMatVec(double[] a, double[] b, double[] out) {
-        out[0]   = a[ 0]*b[0] + a[ 4]*b[1] + a[ 8]*b[2] + a[12];
-        out[1]   = a[ 1]*b[0] + a[ 5]*b[1] + a[ 9]*b[2] + a[13];
-        out[2]   = a[ 2]*b[0] + a[ 6]*b[1] + a[10]*b[2] + a[14];
-        double w = a[ 3]*b[0] + a[ 7]*b[1] + a[11]*b[2] + a[15];
-        
-        if(w != 1.0) {
-            out[0] /= w;
-            out[1] /= w;
-            out[2] /= w;
-        }
+    public static void multMatVec( double[] a, double[] b, double[] out ) {
+        double b0 = b[0];
+        double b1 = b[1];
+        double b2 = b[2];
+        double x = a[ 0]*b0 + a[ 4]*b1 + a[ 8]*b2 + a[12];
+        double y = a[ 1]*b0 + a[ 5]*b1 + a[ 9]*b2 + a[13];
+        double z = a[ 2]*b0 + a[ 6]*b1 + a[10]*b2 + a[14];
+        double w = a[ 3]*b0 + a[ 7]*b1 + a[11]*b2 + a[15];
+        w = 1.0 / w;
+        out[0] = x * w;
+        out[1] = y * w;
+        out[2] = z * w;
     }
     
     
-    public static void multMatVec(double[] a, int offA, double[] b, int offB, double[] out, int offOut ) {
-        out[0+offOut]   = a[ 0+offA]*b[0+offB] + a[ 4+offA]*b[1+offB] + a[ 8+offA]*b[2+offB] + a[12+offA];
-        out[1+offOut]   = a[ 1+offA]*b[0+offB] + a[ 5+offA]*b[1+offB] + a[ 9+offA]*b[2+offB] + a[13+offA];
-        out[2+offOut]   = a[ 2+offA]*b[0+offB] + a[ 6+offA]*b[1+offB] + a[10+offA]*b[2+offB] + a[14+offA];
-        double w        = a[ 3+offA]*b[0+offB] + a[ 7+offA]*b[1+offB] + a[11+offA]*b[2+offB] + a[15+offA];
-        
-        if(w != 1.0) {
-            out[0+offOut] /= w;
-            out[1+offOut] /= w;
-            out[2+offOut] /= w;
-        }
+    public static void multMatVec( double[] a, int offA, double[] b, int offB, double[] out, int offOut ) {
+        double x = a[ 0+offA]*b[0+offB] + a[ 4+offA]*b[1+offB] + a[ 8+offA]*b[2+offB] + a[12+offA];
+        double y = a[ 1+offA]*b[0+offB] + a[ 5+offA]*b[1+offB] + a[ 9+offA]*b[2+offB] + a[13+offA];
+        double z = a[ 2+offA]*b[0+offB] + a[ 6+offA]*b[1+offB] + a[10+offA]*b[2+offB] + a[14+offA];
+        double w = a[ 3+offA]*b[0+offB] + a[ 7+offA]*b[1+offB] + a[11+offA]*b[2+offB] + a[15+offA];
+        w = 1.0 / w;
+        out[0+offOut] = x * w;
+        out[1+offOut] = y * w;
+        out[2+offOut] = z * w;
     }
     
     
     public static void multVec4( double[] a, double[] b, double[] out ) {
-        out[0] = a[ 0]*b[0] + a[ 4]*b[1] + a[ 8]*b[2] + a[12]*b[3];
-        out[1] = a[ 1]*b[0] + a[ 5]*b[1] + a[ 9]*b[2] + a[13]*b[3];
-        out[2] = a[ 2]*b[0] + a[ 6]*b[1] + a[10]*b[2] + a[14]*b[3];
-        out[3] = a[ 3]*b[0] + a[ 7]*b[1] + a[11]*b[2] + a[15]*b[3];
+        double t0 = a[ 0]*b[0] + a[ 4]*b[1] + a[ 8]*b[2] + a[12]*b[3];
+        double t1 = a[ 1]*b[0] + a[ 5]*b[1] + a[ 9]*b[2] + a[13]*b[3];
+        double t2 = a[ 2]*b[0] + a[ 6]*b[1] + a[10]*b[2] + a[14]*b[3];
+        double t3 = a[ 3]*b[0] + a[ 7]*b[1] + a[11]*b[2] + a[15]*b[3];
+        out[0] = t0;
+        out[1] = t1;
+        out[2] = t2;
+        out[3] = t3;
     }
-    
-    
+
     /**
      * @param mat    Input matrix
      * @param out    Array to hold inverted matrix on return.
@@ -91,32 +122,49 @@ public final class Matrices {
         double c1 = mat[2+0*4] * mat[3+2*4] - mat[3+0*4] * mat[2+2*4];
         double c0 = mat[2+0*4] * mat[3+1*4] - mat[3+0*4] * mat[2+1*4];
 
-        // Should check for 0 determinant.
+        // Compute determinant
         double invdet = s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0;
-        boolean ret   = invdet > SQRT_ABS_ERR || -invdet > SQRT_ABS_ERR;
-        invdet = 1.0 / invdet;
-        
-        out[0+0*4] = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
-        out[0+1*4] = (-mat[0+1*4] * c5 + mat[0+2*4] * c4 - mat[0+3*4] * c3) * invdet;
-        out[0+2*4] = ( mat[3+1*4] * s5 - mat[3+2*4] * s4 + mat[3+3*4] * s3) * invdet;
-        out[0+3*4] = (-mat[2+1*4] * s5 + mat[2+2*4] * s4 - mat[2+3*4] * s3) * invdet;
+        // Check if invertible.
+        boolean ret  = invdet > FSQRT_ABS_ERR || -invdet > FSQRT_ABS_ERR;
+        // Invert determinant
+        invdet = 1.0f / invdet;
 
-        out[1+0*4] = (-mat[1+0*4] * c5 + mat[1+2*4] * c2 - mat[1+3*4] * c1) * invdet;
-        out[1+1*4] = ( mat[0+0*4] * c5 - mat[0+2*4] * c2 + mat[0+3*4] * c1) * invdet;
-        out[1+2*4] = (-mat[3+0*4] * s5 + mat[3+2*4] * s2 - mat[3+3*4] * s1) * invdet;
-        out[1+3*4] = ( mat[2+0*4] * s5 - mat[2+2*4] * s2 + mat[2+3*4] * s1) * invdet;
+        double t00 = ( mat[1+1*4] * c5 - mat[1+2*4] * c4 + mat[1+3*4] * c3) * invdet;
+        double t01 = (-mat[1+0*4] * c5 + mat[1+2*4] * c2 - mat[1+3*4] * c1) * invdet;
+        double t02 = ( mat[1+0*4] * c4 - mat[1+1*4] * c2 + mat[1+3*4] * c0) * invdet;
+        double t03 = (-mat[1+0*4] * c3 + mat[1+1*4] * c1 - mat[1+2*4] * c0) * invdet;
+        double t04 = (-mat[0+1*4] * c5 + mat[0+2*4] * c4 - mat[0+3*4] * c3) * invdet;
+        double t05 = ( mat[0+0*4] * c5 - mat[0+2*4] * c2 + mat[0+3*4] * c1) * invdet;
+        double t06 = (-mat[0+0*4] * c4 + mat[0+1*4] * c2 - mat[0+3*4] * c0) * invdet;
+        double t07 = ( mat[0+0*4] * c3 - mat[0+1*4] * c1 + mat[0+2*4] * c0) * invdet;
+        double t08 = ( mat[3+1*4] * s5 - mat[3+2*4] * s4 + mat[3+3*4] * s3) * invdet;
+        double t09 = (-mat[3+0*4] * s5 + mat[3+2*4] * s2 - mat[3+3*4] * s1) * invdet;
+        double t10 = ( mat[3+0*4] * s4 - mat[3+1*4] * s2 + mat[3+3*4] * s0) * invdet;
+        double t11 = (-mat[3+0*4] * s3 + mat[3+1*4] * s1 - mat[3+2*4] * s0) * invdet;
+        double t12 = (-mat[2+1*4] * s5 + mat[2+2*4] * s4 - mat[2+3*4] * s3) * invdet;
+        double t13 = ( mat[2+0*4] * s5 - mat[2+2*4] * s2 + mat[2+3*4] * s1) * invdet;
+        double t14 = (-mat[2+0*4] * s4 + mat[2+1*4] * s2 - mat[2+3*4] * s0) * invdet;
+        double t15 = ( mat[2+0*4] * s3 - mat[2+1*4] * s1 + mat[2+2*4] * s0) * invdet;
 
-        out[2+0*4] = ( mat[1+0*4] * c4 - mat[1+1*4] * c2 + mat[1+3*4] * c0) * invdet;
-        out[2+1*4] = (-mat[0+0*4] * c4 + mat[0+1*4] * c2 - mat[0+3*4] * c0) * invdet;
-        out[2+2*4] = ( mat[3+0*4] * s4 - mat[3+1*4] * s2 + mat[3+3*4] * s0) * invdet;
-        out[2+3*4] = (-mat[2+0*4] * s4 + mat[2+1*4] * s2 - mat[2+3*4] * s0) * invdet;
+        out[ 0] = t00;
+        out[ 1] = t01;
+        out[ 2] = t02;
+        out[ 3] = t03;
+        out[ 4] = t04;
+        out[ 5] = t05;
+        out[ 6] = t06;
+        out[ 7] = t07;
+        out[ 8] = t08;
+        out[ 9] = t09;
+        out[10] = t10;
+        out[11] = t11;
+        out[12] = t12;
+        out[13] = t13;
+        out[14] = t14;
+        out[15] = t15;
 
-        out[3+0*4] = (-mat[1+0*4] * c3 + mat[1+1*4] * c1 - mat[1+2*4] * c0) * invdet;
-        out[3+1*4] = ( mat[0+0*4] * c3 - mat[0+1*4] * c1 + mat[0+2*4] * c0) * invdet;
-        out[3+2*4] = (-mat[3+0*4] * s3 + mat[3+1*4] * s1 - mat[3+2*4] * s0) * invdet;
-        out[3+3*4] = ( mat[2+0*4] * s3 - mat[2+1*4] * s1 + mat[2+2*4] * s0) * invdet;
-            
         return ret;
+
     }
 
     
@@ -559,10 +607,9 @@ public final class Matrices {
         if( Double.isNaN( ang ) ) {
             ang = cosAng > 0 ? 0 : Math.PI;
         }
-        
+
         if( Tol.approxZero( ang, Math.PI ) ) {
             setToIdentity( outMat );
-            return;
         } else if( ang < Math.PI * ( 1.0 - Tol.REL_ERR ) ) {
             Vectors.cross( src, dst, outMat );
             Matrices.computeRotationMatrix( ang, outMat[0], outMat[1], outMat[2], outMat ); 

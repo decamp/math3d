@@ -30,7 +30,7 @@ public class LongRect implements Cloneable, Serializable {
      * @param minY   The top edge of the rectangle.
      * @param spanX  The width of the rectangle.
      * @param spanY  The height of the rectangle.
-     * @returns a new Rect object with the specified edges and dimensions.
+     * @return a new Rect object with the specified edges and dimensions.
      */
     public static LongRect fromBounds(long minX, long minY, long spanX, long spanY) {
         return new LongRect(minX, minY, minX + spanX, minY + spanY);
@@ -43,7 +43,7 @@ public class LongRect implements Cloneable, Serializable {
      * @param minY   The top edge of the rectangle.
      * @param maxX   The right edge of the rectangle.
      * @param maxY   The bottom edge of the rectangle.
-     * @returns a new Rect object with the specified edges.
+     * @return a new Rect object with the specified edges.
      */
     public static LongRect fromEdges(long minX, long minY, long maxX, long maxY) {
         return new LongRect(minX, minY, maxX, maxY);
@@ -56,7 +56,7 @@ public class LongRect implements Cloneable, Serializable {
      * @param centerY
      * @param spanX
      * @param spanY
-     * @returns a new Rect
+     * @return a new Rect
      */
     public static LongRect fromCenter(long centerX, long centerY, long spanX, long spanY) {
         centerX -= spanX / 2;
@@ -94,42 +94,42 @@ public class LongRect implements Cloneable, Serializable {
     /****** POSITION ******/
 
     /**
-     * @returns left edge of this rectangle.
+     * @return left edge of this rectangle.
      */
     public long minX() {
         return mMinX;
     }
 
     /**
-     * @returns the top edge of this rectangle.
+     * @return the top edge of this rectangle.
      */
     public long minY() {
         return mMinY;
     }
 
     /**
-     * @returns the right edge of this rectangle.
+     * @return the right edge of this rectangle.
      */
     public long maxX() {
         return mMaxX;
     }
 
     /**
-     * @returns the bottom edge of this rectangle.
+     * @return the bottom edge of this rectangle.
      */
     public long maxY() {
         return mMaxY;
     }
 
     /**
-     * @returns the center polong between the left and right edges.
+     * @return the center polong between the left and right edges.
      */
     public long centerX() {
         return (mMinX + mMaxX) / 2;
     }
 
     /**
-     * @returns the center polong between the bottom and top edges.
+     * @return the center polong between the bottom and top edges.
      */
     public long centerY() {
         return (mMinY + mMaxY) / 2;
@@ -139,21 +139,21 @@ public class LongRect implements Cloneable, Serializable {
     /****** SIZE ******/
 
     /**
-     * @returns the width of this rectangle. May be negative.
+     * @return the width of this rectangle. May be negative.
      */
     public long spanX() {
         return mMaxX - mMinX;
     }
 
     /**
-     * @returns the height of this rectangle. May be negative.
+     * @return the height of this rectangle. May be negative.
      */
     public long spanY() {
         return mMaxY - mMinY;
     }
 
     /**
-     * @returns the absolute area of this rectangle.
+     * @return the absolute area of this rectangle.
      */
     public long area() {
         return Math.abs((mMaxX - mMinX) * (mMaxY - mMinY));
@@ -170,7 +170,7 @@ public class LongRect implements Cloneable, Serializable {
      * 
      * @param rect
      *            - Rect in which to fit <code>this</code> rectangle.
-     * @returns a new Rect.
+     * @return a new Rect.
      */
     public LongRect clamp(LongRect rect) {
         long left, right, top, bottom;
@@ -225,7 +225,7 @@ public class LongRect implements Cloneable, Serializable {
     }
 
     /**
-     * @returns the intersection between <code>this</code> Rect and the
+     * @return the intersection between <code>this</code> Rect and the
      *          Parameter Rect. If the two Rects do not overlap, a Rect with 0
      *          size is returned.
      */
@@ -240,7 +240,7 @@ public class LongRect implements Cloneable, Serializable {
      * rectangles share borders, but does not affect the aspect ratio.
      * 
      * @param rect  Rectangle into which to fit this Rect.
-     * @returns new Rect object that fits inside bounds.
+     * @return new Rect object that fits inside bounds.
      */
     public LongRect fit(LongRect rect) {
         if(spanX() * rect.spanY() > rect.spanX() * spanY()) {
@@ -262,7 +262,7 @@ public class LongRect implements Cloneable, Serializable {
      * 
      * @param scaleX  Amount to scale width.
      * @param scaleY  Amount to scale height.
-     * @returns new Rect with scaled width and height.
+     * @return new Rect with scaled width and height.
      */
     public LongRect inflate(double scaleX, double scaleY) {
         return LongRect.fromCenter( centerX(), 
@@ -272,7 +272,7 @@ public class LongRect implements Cloneable, Serializable {
     }
 
     /**
-     * @returns the union between <code>this</code> Rect and the parameter Rect.
+     * @return the union between <code>this</code> Rect and the parameter Rect.
      *          The union may contain area not covered by either input Rect.
      */
     public LongRect union(LongRect r) {
@@ -285,7 +285,7 @@ public class LongRect implements Cloneable, Serializable {
      * size. The rectangle will remain in the same place, with only the sides
      * swapped.
      * 
-     * @returns a new Rect.
+     * @return a new Rect.
      */
     public LongRect normalize() {
         if (mMinX < mMaxX) {
@@ -310,7 +310,7 @@ public class LongRect implements Cloneable, Serializable {
      *            - Amount to multiply the width and left edge.
      * @param multY
      *            - Amount to multiply the height and top edge.
-     * @returns new Rect object.
+     * @return new Rect object.
      */
     public LongRect scale(long multX, long multY) {
         return new LongRect(mMinX * multX, mMinY * multY, mMaxX * multX, mMaxY
@@ -324,7 +324,7 @@ public class LongRect implements Cloneable, Serializable {
      *            - Amount to move the rectangle horizantally.
      * @param dy
      *            - Amount to move the rectangle vertically.
-     * @returns a new rectangle.
+     * @return a new rectangle.
      */
     public LongRect translate(long dx, long dy) {
         return new LongRect(mMinX + dx, mMinY + dy, mMaxX + dx, mMaxY + dy);
@@ -333,7 +333,7 @@ public class LongRect implements Cloneable, Serializable {
     /**
      * Centers the rect on the given point.
      * 
-     * @returns new Rect centered on the given point.
+     * @return new Rect centered on the given point.
      */
     public LongRect setCenter(long x, long y) {
         x -= (mMaxX - mMinX) / 2;
@@ -346,7 +346,7 @@ public class LongRect implements Cloneable, Serializable {
     /****** TESTS ******/
 
     /**
-     * @returns true iff both dimensions are non-negative.
+     * @return true iff both dimensions are non-negative.
      */
     public boolean isValid() {
         return mMaxX >= mMinX && mMaxY >= mMinY;
@@ -357,7 +357,7 @@ public class LongRect implements Cloneable, Serializable {
      * 
      * @param x  The x coordinate of a point.
      * @param y  The y coordinate of a point.
-     * @returns true iff the polong lies within the rectangle.
+     * @return true iff the polong lies within the rectangle.
      */
     public boolean intersects(long x, long y) {
         return x >= mMinX && x < mMaxX && y >= mMinY && y < mMaxY;
@@ -368,7 +368,7 @@ public class LongRect implements Cloneable, Serializable {
      * 
      * @param rect
      *            - A rect to check for overlap.
-     * @returns true if rectangles have any intersection.
+     * @return true if rectangles have any intersection.
      */
     public boolean intersects(LongRect rect) {
         return !(mMinX < rect.mMinX && mMaxX < rect.mMinX
@@ -396,7 +396,7 @@ public class LongRect implements Cloneable, Serializable {
     /****** CONVERSIONS ******/
 
     /**
-     * @returns equivalent Rect object.
+     * @return equivalent Rect object.
      */
     public Rect toRect() {
         return Rect.fromEdges(mMinX, mMinY, mMaxX, mMaxY);
@@ -405,7 +405,7 @@ public class LongRect implements Cloneable, Serializable {
     /**
      * @param scaleX  Amount to scale horizontal dimensions.
      * @param scaleY  Amount to scale vertical dimensions.
-     * @returns equivalent Rect object after scaling.
+     * @return equivalent Rect object after scaling.
      */
     public Rect scaleToFRect(double scaleX, double scaleY) {
         return Rect.fromEdges(mMinX * scaleX, mMinY * scaleY, mMaxX * scaleX, mMaxY * scaleY);
