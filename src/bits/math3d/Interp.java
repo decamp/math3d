@@ -33,7 +33,7 @@ public final class Interp {
         return s * s * s * begin +
                3.0 * s * s * t * control0 +
                3.0 * s * t * t * control1 +
-               s * t * t * end;
+               t * t * t * end;
     }
 
 
