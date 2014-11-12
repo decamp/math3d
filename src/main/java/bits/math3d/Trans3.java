@@ -8,7 +8,7 @@ package bits.math3d;
 
 
 /**
- * Trans3 (3D Transform) represents a rotation and translation, in that order.
+ * Trans3 (3D Transform) represents a getRotatation and getTranslation, in that order.
  */
 public class Trans3 {
 

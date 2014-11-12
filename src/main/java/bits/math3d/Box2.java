@@ -7,16 +7,19 @@
 package bits.math3d;
 
 /**
- * Methods for manipulating 2-dimensional axis-aligned-bounding-boxes.
- * All boxes are stored in a length-4 array as [ x0, y0, x1, y1 ].
+ * 2D Axis-Aligned Bounding-Box
  *
  * @author decamp
  */
 public final class Box2 {
 
+    /** Minimum X coord**/
     public float x0;
+    /** Minimum Y coord**/
     public float y0;
+    /** Maximum X coord**/
     public float x1;
+    /** Maximum Y coord**/
     public float y1;
 
     public Box2() {}

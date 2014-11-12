@@ -87,10 +87,10 @@ public class TestMatrices {
         double[] a = new double[16];
         double[] b = new double[16];
         
-        Mat.rotation4( rx, 1, 0, 0, a );
-        Mat.rotation4( ry, 0, 1, 0, out );
+        Mat.getRotate4( rx, 1, 0, 0, a );
+        Mat.getRotate4( ry, 0, 1, 0, out );
         Mat.mult4( out, a, b );
-        Mat.rotation4( rz, 0, 0, 1, a );
+        Mat.getRotate4( rz, 0, 0, 1, a );
         Mat.mult4( a, b, out );
     }
 

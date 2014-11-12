@@ -360,9 +360,7 @@ public final class Vec {
 
 
     public static boolean isNaN( Vec2 vec ) {
-        return Float.isNaN( vec.x ) ||
-               Float.isNaN( vec.y );
-
+        return vec.x != vec.x || vec.y != vec.y;
     }
 
 
@@ -1176,6 +1174,19 @@ public final class Vec {
         out.y = q * a.y + p * b.y;
         out.z = q * a.z + p * b.z;
         out.w = q * a.w + p * b.w;
+    }
+
+
+    public static boolean isNaN( Vec4 vec ) {
+        return vec.x != vec.x ||
+               vec.y != vec.y ||
+               vec.z != vec.z ||
+               vec.w != vec.w;
+    }
+
+
+    public static String format( Vec4 vec ) {
+        return String.format( FORMAT4, vec.x, vec.y, vec.z, vec.w );
     }
 
 

@@ -37,7 +37,7 @@ public class TestMat2 {
 
             start = System.nanoTime();
             for( int j = 0; j < iters; j++ ) {
-                Mat.rotation( 20, 1, 2, 3, a );
+                Mat.getRotation( 20, 1, 2, 3, a );
                 Mat.mult( b, a, c );
             }
             dur0 += ( System.nanoTime() - start ) / 1000000000.0;

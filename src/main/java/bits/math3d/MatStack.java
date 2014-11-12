@@ -21,7 +21,6 @@ public class MatStack {
         mStack = new Mat4[4];
         for( int i = 0; i < mStack.length; i++ ) {
             mStack[i] = new Mat4();
-            Mat.identity( mStack[i] );
         }
         identity();
     }
@@ -107,7 +106,27 @@ public class MatStack {
         Mat.preScale( sx, sy, sz, mMat, mMat );
     }
 
-    
+
+    public void multOrtho( float left, float right, float bottom, float top, float near, float far ) {
+        Mat.multOrtho( mMat, left, right, bottom, top, near, far, mMat );
+    }
+
+
+    public void setOrtho( float left, float right, float bottom, float top, float near, float far ) {
+        Mat.getOrtho( left, right, bottom, top, near, far, mMat );
+    }
+
+
+    public void multFrustum( float left, float right, float bottom, float top, float near, float far ) {
+        Mat.multFrustum( mMat, left, right, bottom, top, near, far, mMat );
+    }
+
+
+    public void setFrustum( float left, float right, float bottom, float top, float near, float far ) {
+        Mat.getFrustum( left, right, bottom, top, near, far, mMat );
+    }
+
+
     public int size() {
         return mPos;
     }

@@ -411,7 +411,7 @@ import java.io.Serializable;
     /**
      * @param scaleX  Amount to scale horizontal dimensions.
      * @param scaleY  Amount to scale vertical dimensions.
-     * @return equivalent Rect object after scaling.
+     * @return equivalent Rect object after getScale.
      */
     public Rect scaleToFRect(double scaleX, double scaleY) {
         return Rect.fromEdges(mMinX * scaleX, mMinY * scaleY, mMaxX * scaleX, mMaxY * scaleY);

@@ -68,12 +68,12 @@ public final class Quat {
     }
 
     /**
-     * Converts axis-rotation to quaternion representation.
-     * @param rads Radians of rotation
-     * @param x    X-coord of rotation axis
-     * @param y    Y-coord of rotation axis
-     * @param z    Z-coord of rotation axis
-     * @param out  Length-4 array that holds rotation on return.
+     * Converts axis-getRotatation to quaternion representation.
+     * @param rads Radians of getRotatation
+     * @param x    X-coord of getRotatation axis
+     * @param y    Y-coord of getRotatation axis
+     * @param z    Z-coord of getRotatation axis
+     * @param out  Length-4 array that holds getRotatation on return.
      */
     public static void rotation( float rads, float x, float y, float z, Vec4 out ) {
         float cos = (float)Math.cos( rads * 0.5 );
@@ -86,10 +86,10 @@ public final class Quat {
     }
 
     /**
-     * Converts a rotation matrix to an equivalent quaternion.
-     * Non-rotation matrices will produce undefined results.
+     * Converts a getRotatation matrix to an equivalent quaternion.
+     * Non-getRotatation matrices will produce undefined results.
      *
-     * @param mat Length-16 array holding rotation matrix.
+     * @param mat Length-16 array holding getRotatation matrix.
      * @param out Length-4 array that holds equivalent quaternion on return.
      */
     public static void matToQuat( Mat3 mat, Vec4 out ) {
@@ -133,7 +133,7 @@ public final class Quat {
     }
 
     /**
-     * Converts quaternion to dim4 rotation matrix.
+     * Converts quaternion to dim4 getRotatation matrix.
     *
      * @param quat Length-4 array holding quaternion.
      * @param out  Length-16 array that holds equivalent matrix on return.
@@ -323,12 +323,12 @@ public final class Quat {
     }
 
     /**
-     * Converts axis-rotation to quaternion representation.
-     * @param rads Radians of rotation
-     * @param x    X-coord of rotation axis
-     * @param y    Y-coord of rotation axis
-     * @param z    Z-coord of rotation axis
-     * @param out  Length-4 array that holds rotation on return.
+     * Converts axis-getRotatation to quaternion representation.
+     * @param rads Radians of getRotatation
+     * @param x    X-coord of getRotatation axis
+     * @param y    Y-coord of getRotatation axis
+     * @param z    Z-coord of getRotatation axis
+     * @param out  Length-4 array that holds getRotatation on return.
      */
     public static void rotation( double rads, double x, double y, double z, double[] out ) {
         double cos = Math.cos( rads * 0.5 );
@@ -341,10 +341,10 @@ public final class Quat {
     }
 
     /**
-     * Converts a rotation matrix to an equivalent quaternion.
-     * Non-rotation matrices will produce undefined results.
+     * Converts a getRotatation matrix to an equivalent quaternion.
+     * Non-getRotatation matrices will produce undefined results.
      *
-     * @param mat Length-16 array holding rotation matrix.
+     * @param mat Length-16 array holding getRotatation matrix.
      * @param out Length-4 array that holds equivalent quaternion on return.
      */
     public static void mat4ToQuat( double[] mat, double[] out ) {
@@ -392,7 +392,7 @@ public final class Quat {
     }
 
     /**
-     * Converts quaternion to dim4 rotation matrix.
+     * Converts quaternion to dim4 getRotatation matrix.
      *
      * @param quat Length-4 array holding quaternion.
      * @param out  Length-16 array that holds equivalent matrix on return.

@@ -281,7 +281,7 @@ public final class Mat {
     }
 
 
-    public static void scaling( float sx, float sy, float sz, Mat3 out ) {
+    public static void getScale( float sx, float sy, float sz, Mat3 out ) {
         out.m00 = sx;
         out.m10 = 0f;
         out.m20 = 0f;
@@ -294,7 +294,33 @@ public final class Mat {
     }
 
 
-    public static void rotation( float radians, float x, float y, float z, Mat3 out ) {
+    public static void scale( Mat3 mat, float sx, float sy, float sz, Mat3 out ) {
+        out.m00 = sx * mat.m00;
+        out.m10 = sx * mat.m10;
+        out.m20 = sx * mat.m20;
+        out.m01 = sy * mat.m01;
+        out.m11 = sy * mat.m11;
+        out.m21 = sy * mat.m21;
+        out.m02 = sz * mat.m02;
+        out.m12 = sz * mat.m12;
+        out.m22 = sz * mat.m22;
+    }
+
+
+    public static void preScale( float sx, float sy, float sz, Mat3 mat, Mat3 out ) {
+        out.m00 = sx * mat.m00;
+        out.m10 = sy * mat.m10;
+        out.m20 = sz * mat.m20;
+        out.m01 = sx * mat.m01;
+        out.m11 = sy * mat.m11;
+        out.m21 = sz * mat.m21;
+        out.m02 = sx * mat.m02;
+        out.m12 = sy * mat.m12;
+        out.m22 = sz * mat.m22;
+    }
+
+
+    public static void getRotatation( float radians, float x, float y, float z, Mat3 out ) {
         float c = (float)Math.cos( radians );
         float s = (float)Math.sin( radians );
 
@@ -317,7 +343,102 @@ public final class Mat {
     }
 
     /**
-     * Removes any translation/scaling3/skew or other non-rotation3
+     * Multiplies an arbitrary matrix with a getRotate4 matrix.
+     *
+     * @param mat     Input matrix.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
+     * @param out     Length-16 array to hold output on return.
+     */
+    public static void rotate( Mat3 mat, float radians, float x, float y, float z, Mat4 out ) {
+        final float c = (float)Math.cos( radians );
+        final float s = (float)Math.sin( radians );
+        final float invSum = 1f / (float)Math.sqrt( x*x + y*y + z*z );
+        x *= invSum;
+        y *= invSum;
+        z *= invSum;
+
+        final float a00 = x*x*(1-c)+c;
+        final float a01 = x*y*(1-c)+z*s;
+        final float a02 = x*z*(1-c)-y*s;
+        final float a04 = x*y*(1-c)-z*s;
+        final float a05 = y*y*(1-c)+c;
+        final float a06 = y*z*(1-c)+x*s;
+        final float a08 = x*z*(1-c)+y*s;
+        final float a09 = y*z*(1-c)-x*s;
+        final float a10 = z*z*(1-c)+c;
+
+        float b0 = mat.m00;
+        float b1 = mat.m01;
+        float b2 = mat.m02;
+        out.m00 = a00*b0 + a01*b1 + a02*b2;
+        out.m01 = a04*b0 + a05*b1 + a06*b2;
+        out.m02 = a08*b0 + a09*b1 + a10*b2;
+        b0 = mat.m10;
+        b1 = mat.m11;
+        b2 = mat.m12;
+        out.m10 = a00*b0 + a01*b1 + a02*b2;
+        out.m11 = a04*b0 + a05*b1 + a06*b2;
+        out.m12 = a08*b0 + a09*b1 + a10*b2;
+        b0 = mat.m20;
+        b1 = mat.m21;
+        b2 = mat.m22;
+        out.m20 = a00*b0 + a01*b1 + a02*b2;
+        out.m21 = a04*b0 + a05*b1 + a06*b2;
+        out.m22 = a08*b0 + a09*b1 + a10*b2;
+    }
+
+    /**
+     * Multiplies a getRotate4 matrix with an arbitrary matrix.
+     *
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
+     * @param mat     Input matrix.
+     * @param out     Length-16 array to hold output on return.
+     */
+    public static void preRotate( float radians, float x, float y, float z, Mat3 mat, Mat3 out ) {
+        float c = (float)Math.cos( radians );
+        float s = (float)Math.sin( radians );
+        float sum = 1f / (float)Math.sqrt( x*x + y*y + z*z );
+        x *= sum;
+        y *= sum;
+        z *= sum;
+
+        float a00 = x*x*(1-c)+c;
+        float a01 = x*y*(1-c)+z*s;
+        float a02 = x*z*(1-c)-y*s;
+        float a04 = x*y*(1-c)-z*s;
+        float a05 = y*y*(1-c)+c;
+        float a06 = y*z*(1-c)+x*s;
+        float a08 = x*z*(1-c)+y*s;
+        float a09 = y*z*(1-c)-x*s;
+        float a10 = z*z*(1-c)+c;
+        float b0 = mat.m00;
+        float b1 = mat.m10;
+        float b2 = mat.m20;
+        out.m00 = a00*b0 + a04*b1 + a08*b2;
+        out.m10 = a01*b0 + a05*b1 + a09*b2;
+        out.m20 = a02*b0 + a06*b1 + a10*b2;
+        b0 = mat.m01;
+        b1 = mat.m11;
+        b2 = mat.m21;
+        out.m01 = a00*b0 + a04*b1 + a08*b2;
+        out.m11 = a01*b0 + a05*b1 + a09*b2;
+        out.m21 = a02*b0 + a06*b1 + a10*b2;
+        b0 = mat.m02;
+        b1 = mat.m12;
+        b2 = mat.m22;
+        out.m02 = a00*b0 + a04*b1 + a08*b2;
+        out.m12 = a01*b0 + a05*b1 + a09*b2;
+        out.m22 = a02*b0 + a06*b1 + a10*b2;
+    }
+
+    /**
+     * Removes any getTranslation/scaling3/skew or other non-rotation3
      * transformations from a matrix.
      *
      * @param mat 3x3 homography matrix to turn into strict rotation3 matrix.
@@ -448,7 +569,6 @@ public final class Mat {
         out.m21 = mat.m21;
         out.m22 = mat.m22;
     }
-
 
 
     public static void put( Mat4 mat, ByteBuffer bb ) {
@@ -805,15 +925,15 @@ public final class Mat {
     }
 
     /**
-     * Computes a rotation4 matrix.
+     * Computes a getRotate4 matrix.
      *
-     * @param radians Degree of rotation4.
-     * @param x       X-Coord of rotation4 axis.
-     * @param y       Y-Coord of rotation4 axis.
-     * @param z       Z-Coord of rotation4 axis.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
      * @param out     Length-16 array to hold output on return.
      */
-    public static void rotation( float radians, float x, float y, float z, Mat4 out ) {
+    public static void getRotation( float radians, float x, float y, float z, Mat4 out ) {
         float c = (float)Math.cos( radians );
         float s = (float)Math.sin( radians );
         float sum = 1f / (float)Math.sqrt( x*x + y*y + z*z );
@@ -843,13 +963,13 @@ public final class Mat {
     }
 
     /**
-     * Multiplies an arbitrary matrix with a rotation4 matrix.
+     * Multiplies an arbitrary matrix with a getRotate4 matrix.
      *
      * @param mat     Input matrix.
-     * @param radians Degree of rotation4.
-     * @param x       X-Coord of rotation4 axis.
-     * @param y       Y-Coord of rotation4 axis.
-     * @param z       Z-Coord of rotation4 axis.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
      * @param out     Length-16 array to hold output on return.
      */
     public static void rotate( Mat4 mat, float radians, float x, float y, float z, Mat4 out ) {
@@ -905,12 +1025,12 @@ public final class Mat {
     }
 
     /**
-     * Multiplies a rotation4 matrix with an arbitrary matrix.
+     * Multiplies a getRotate4 matrix with an arbitrary matrix.
      *
-     * @param radians Degree of rotation4.
-     * @param x       X-Coord of rotation4 axis.
-     * @param y       Y-Coord of rotation4 axis.
-     * @param z       Z-Coord of rotation4 axis.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
      * @param mat     Input matrix.
      * @param out     Length-16 array to hold output on return.
      */
@@ -966,7 +1086,7 @@ public final class Mat {
     }
 
 
-    public static void scaling( float sx, float sy, float sz, Mat4 out ) {
+    public static void getScale( float sx, float sy, float sz, Mat4 out ) {
         out.m00 = sx;
         out.m10 = 0.0f;
         out.m20 = 0.0f;
@@ -1026,7 +1146,7 @@ public final class Mat {
     }
 
 
-    public static void translation( float tx, float ty, float tz, Mat4 out ) {
+    public static void getTranslation( float tx, float ty, float tz, Mat4 out ) {
         out.m00 = 1.0f;
         out.m10 = 0.0f;
         out.m20 = 0.0f;
@@ -1118,7 +1238,38 @@ public final class Mat {
     }
 
 
-    public static void frustum( float left, float right, float bottom, float top, float near, float far, Mat4 out ) {
+    public static void multFrustum( Mat4 mat, float left, float right, float bottom, float top, float near, float far, Mat4 out ) {
+        float a, b, c;
+
+        a = 2.0f * near / (right - left);
+        out.m00 = a * mat.m00;
+        out.m10 = a * mat.m10;
+        out.m20 = a * mat.m20;
+        out.m30 = a * mat.m30;
+
+        a = 2 * near / (top - bottom);
+        out.m01 = a * mat.m01;
+        out.m11 = a * mat.m11;
+        out.m21 = a * mat.m21;
+        out.m31 = a * mat.m31;
+
+        a = (right + left) / (right - left);
+        b = (top + bottom) / (top - bottom);
+        c = -(far + near) / (far - near);
+        out.m02 = a * mat.m00 + b * mat.m01 + c * mat.m02 - mat.m03;
+        out.m12 = a * mat.m10 + b * mat.m11 + c * mat.m12 - mat.m13;
+        out.m22 = a * mat.m20 + b * mat.m21 + c * mat.m22 - mat.m23;
+        out.m32 = a * mat.m30 + b * mat.m31 + c * mat.m32 - mat.m33;
+
+        a = -(2 * far * near) / (far - near);
+        out.m03 = a * mat.m03;
+        out.m13 = a * mat.m13;
+        out.m23 = a * mat.m23;
+        out.m33 = a * mat.m33;
+    }
+
+
+    public static void getFrustum( float left, float right, float bottom, float top, float near, float far, Mat4 out ) {
         out.m00 = 2.0f * near / (right - left);
         out.m10 = 0;
         out.m20 = 0;
@@ -1141,7 +1292,39 @@ public final class Mat {
     }
 
 
-    public static void ortho( float left, float right, float bottom, float top, float near, float far, Mat4 out ) {
+    public static void multOrtho( Mat4 mat, float left, float right, float bottom, float top, float near, float far, Mat4 out ) {
+        float a, b, c;
+
+        a = 2f / ( right - left );
+        out.m00 = a * mat.m00;
+        out.m10 = a * mat.m10;
+        out.m20 = a * mat.m20;
+        out.m30 = a * mat.m30;
+
+        a = 2f / ( top - bottom );
+        out.m01 = a * mat.m01;
+        out.m11 = a * mat.m11;
+        out.m21 = a * mat.m21;
+        out.m31 = a * mat.m31;
+
+        a = -2.0f / (far - near);
+        out.m02 = a * mat.m02;
+        out.m12 = a * mat.m12;
+        out.m22 = a * mat.m22;
+        out.m32 = a * mat.m32;
+
+        a = -(right + left) / (right - left);
+        b = -(top + bottom) / (top - bottom);
+        c = -(far + near) / (far - near);
+
+        out.m03 = a * mat.m00 + b * mat.m01 + c * mat.m02 + mat.m03;
+        out.m13 = a * mat.m10 + b * mat.m11 + c * mat.m12 + mat.m13;
+        out.m23 = a * mat.m20 + b * mat.m21 + c * mat.m22 + mat.m23;
+        out.m33 = a * mat.m30 + b * mat.m31 + c * mat.m32 + mat.m33;
+    }
+
+
+    public static void getOrtho( float left, float right, float bottom, float top, float near, float far, Mat4 out ) {
         out.m00 = 2.0f / (right - left);
         out.m10 = 0;
         out.m20 = 0;
@@ -1231,15 +1414,15 @@ public final class Mat {
     }
 
     /**
-     * Removes any translation4/scaling4/skew or other non-rotation4
+     * Removes any getTranslate4/getScale4/skew or other non-getRotate4
      * transformations from a matrix.
      *
-     * @param mat 4x4 homography matrix to turn into strict rotation4 matrix.
+     * @param mat 4x4 homography matrix to turn into strict getRotate4 matrix.
      */
     public static void normalizeRotationMatrix( Mat4 mat ) {
         float d;
 
-        //Kill translation4, scalings.
+        //Kill getTranslate4, scalings.
         mat.m30 = 0;
         mat.m31 = 0;
         mat.m32 = 0;
@@ -1316,12 +1499,12 @@ public final class Mat {
     }
 
     /**
-     * This method will adjust a rotation4 matrix so that one of the basis vectors will
+     * This method will adjust a getRotate4 matrix so that one of the basis vectors will
      * be parallel to an axis.
      *
-     * @param mat   Input rotation4 matrix.
+     * @param mat   Input getRotate4 matrix.
      * @param basis Basis vector to align to axis. <code>0 == x-basis, 1 == y-basis, 2 == z-basis</code>.
-     * @param out   Holds modified rotation4 matrix on output.
+     * @param out   Holds modified getRotate4 matrix on output.
      */
     public static void alignBasisVectorToAxis( Mat4 mat, int basis, Mat4 out ) {
         Vec3 x;
@@ -1413,7 +1596,7 @@ public final class Mat {
             Vec.chooseOrtho( coneAxis.x, coneAxis.y, coneAxis.z, rotAxis );
         }
 
-        Mat.rotation( ang - coneRads * (1.0f - FREL_ERR), rotAxis.x, rotAxis.y, rotAxis.z, rot );
+        Mat.getRotation( ang - coneRads * (1.0f - FREL_ERR), rotAxis.x, rotAxis.y, rotAxis.z, rot );
         if( outVec != null ) {
             Mat.mult( rot, vec, outVec );
         }
@@ -1682,15 +1865,15 @@ public final class Mat {
     }
 
     /**
-     * Computes a rotation4 matrix.
+     * Computes a getRotate4 matrix.
      *
-     * @param radians Degree of rotation4.
-     * @param x       X-Coord of rotation4 axis.
-     * @param y       Y-Coord of rotation4 axis.
-     * @param z       Z-Coord of rotation4 axis.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
      * @param out     Length-16 array to hold output on return.
      */
-    public static void rotation4( double radians, double x, double y, double z, double[] out ) {
+    public static void getRotate4( double radians, double x, double y, double z, double[] out ) {
         double c     = Math.cos( radians );
         double s     = Math.sin( radians );
         double scale = 1 / Math.sqrt( x*x + y*y + z*z );
@@ -1720,13 +1903,13 @@ public final class Mat {
     }
 
     /**
-     * Multiplies an arbitrary matrix with a rotation4 matrix.
+     * Multiplies an arbitrary matrix with a getRotate4 matrix.
      *
      * @param mat     Input matrix.
-     * @param radians Degree of rotation4.
-     * @param x       X-Coord of rotation4 axis.
-     * @param y       Y-Coord of rotation4 axis.
-     * @param z       Z-Coord of rotation4 axis.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
      * @param out     Length-16 array to hold output on return.
      */
     public static void rotate4( double[] mat, double radians, double x, double y, double z, double[] out ) {
@@ -1782,12 +1965,12 @@ public final class Mat {
     }
 
     /**
-     * Multiplies a rotation4 matrix with an arbitrary matrix.
+     * Multiplies a getRotate4 matrix with an arbitrary matrix.
      *
-     * @param radians Degree of rotation4.
-     * @param x       X-Coord of rotation4 axis.
-     * @param y       Y-Coord of rotation4 axis.
-     * @param z       Z-Coord of rotation4 axis.
+     * @param radians Degree of getRotate4.
+     * @param x       X-Coord of getRotate4 axis.
+     * @param y       Y-Coord of getRotate4 axis.
+     * @param z       Z-Coord of getRotate4 axis.
      * @param mat     Input matrix.
      * @param out     Length-16 array to hold output on return.
      */
@@ -1843,7 +2026,7 @@ public final class Mat {
     }
 
 
-    public static void scaling4( double sx, double sy, double sz, double[] out ) {
+    public static void getScale4( double sx, double sy, double sz, double[] out ) {
         out[ 0] = sx;
         out[ 1] = 0.0;
         out[ 2] = 0.0;
@@ -1903,7 +2086,7 @@ public final class Mat {
     }
 
 
-    public static void translation4( double tx, double ty, double tz, double[] out ) {
+    public static void getTranslate4( double tx, double ty, double tz, double[] out ) {
         out[ 0] = 1.0;
         out[ 1] = 0.0;
         out[ 2] = 0.0;
@@ -1995,13 +2178,13 @@ public final class Mat {
     }
 
 
-    public static void frustum4( double left,
-                                 double right,
-                                 double bottom,
-                                 double top,
-                                 double near,
-                                 double far,
-                                 double[] out ) {
+    public static void getFrustum4( double left,
+                                    double right,
+                                    double bottom,
+                                    double top,
+                                    double near,
+                                    double far,
+                                    double[] out ) {
         out[ 0] = 2.0 * near / (right - left);
         out[ 1] = 0;
         out[ 2] = 0;
@@ -2024,13 +2207,13 @@ public final class Mat {
     }
 
 
-    public static void ortho4( double left,
-                               double right,
-                               double bottom,
-                               double top,
-                               double near,
-                               double far,
-                               double[] out ) {
+    public static void getOrtho4( double left,
+                                  double right,
+                                  double bottom,
+                                  double top,
+                                  double near,
+                                  double far,
+                                  double[] out ) {
         out[ 0] = 2.0 / (right - left);
         out[ 1] = 0;
         out[ 2] = 0;
@@ -2053,7 +2236,7 @@ public final class Mat {
     }
 
 
-    public static void lookAt4( double[] eyeVec, double[] centerVec, double[] upVec, double[] outMat ) {
+    public static void getLookAt4( double[] eyeVec, double[] centerVec, double[] upVec, double[] outMat ) {
         double fx  = centerVec[0] - eyeVec[0];
         double fy  = centerVec[1] - eyeVec[1];
         double fz  = centerVec[2] - eyeVec[2];
@@ -2097,7 +2280,7 @@ public final class Mat {
     }
 
 
-    public static void viewport4( double x, double y, double w, double h, double[] out ) {
+    public static void getViewport4( double x, double y, double w, double h, double[] out ) {
         out[ 0] = w * 0.5;
         out[ 1] = 0;
         out[ 2] = 0;
@@ -2120,15 +2303,15 @@ public final class Mat {
     }
 
     /**
-     * Removes any translation4/scaling4/skew or other non-rotation4
+     * Removes any getTranslate4/getScale4/skew or other non-getRotate4
      * transformations from a matrix.
      *
-     * @param mat 4x4 homography matrix to turn into strict rotation4 matrix.
+     * @param mat 4x4 homography matrix to turn into strict getRotate4 matrix.
      */
     public static void normalizeRotationMatrix4( double[] mat ) {
         double d;
 
-        //Kill translation4, scalings.
+        //Kill getTranslate4, scalings.
         mat[ 3] = 0;
         mat[ 7] = 0;
         mat[11] = 0;
@@ -2210,12 +2393,12 @@ public final class Mat {
     }
 
     /**
-     * This method will adjust a rotation4 matrix so that one of the basis vectors will
+     * This method will adjust a getRotate4 matrix so that one of the basis vectors will
      * be parallel to an axis.
      *
-     * @param mat   Input rotation4 matrix.
+     * @param mat   Input getRotate4 matrix.
      * @param basis Basis vector to align to axis. <code>0 == x-basis, 1 == y-basis, 2 == z-basis</code>.
-     * @param out   Holds modified rotation4 matrix on output.
+     * @param out   Holds modified getRotate4 matrix on output.
      */
     public static void alignBasisVectorToAxis4( double[] mat, int basis, double[] out ) {
         out[12] = mat[basis*4  ];
@@ -2292,7 +2475,7 @@ public final class Mat {
             Vec.chooseOrtho3( coneAxis[0], coneAxis[1], coneAxis[2], rotAxis );
         }
 
-        Mat.rotation4( ang - coneRads * (1.0 - REL_ERR), rotAxis[0], rotAxis[1], rotAxis[2], rot );
+        Mat.getRotate4( ang - coneRads * (1.0 - REL_ERR), rotAxis[0], rotAxis[1], rotAxis[2], rot );
         if( outVec != null ) {
             Mat.mult4Vec3( rot, vec, outVec );
         }
