@@ -4,7 +4,7 @@
   ~ http://opensource.org/licenses/BSD-2-Clause
   -->
 
-<project name="math" default="jar" basedir=".">
+<project name="math3d" default="jar" basedir=".">
   <description>
     BITS Math3D Library
   </description>

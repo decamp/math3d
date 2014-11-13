@@ -442,6 +442,13 @@ public final class Vec {
     }
 
 
+    public static void addTo( float dx, float dy, float dz, Vec3 out ) {
+        out.x += dx;
+        out.y += dy;
+        out.z += dz;
+    }
+
+
     public static void subtract( Vec3 a, Vec3 b, Vec3 out ) {
         out.x = a.x - b.x;
         out.y = a.y - b.y;

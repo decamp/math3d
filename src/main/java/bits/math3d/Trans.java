@@ -39,7 +39,7 @@ public final class Trans {
     }
 
 
-    public void invert( Trans3 tr, Trans3 out ) {
+    public static void invert( Trans3 tr, Trans3 out ) {
         Mat.transpose( tr.mRot, out.mRot );
         Vec.mult( -1f, out.mPos );
         Mat.mult( out.mRot, out.mPos, out.mPos );

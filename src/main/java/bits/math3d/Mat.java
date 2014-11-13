@@ -352,7 +352,7 @@ public final class Mat {
      * @param z       Z-Coord of getRotate4 axis.
      * @param out     Length-16 array to hold output on return.
      */
-    public static void rotate( Mat3 mat, float radians, float x, float y, float z, Mat4 out ) {
+    public static void rotate( Mat3 mat, float radians, float x, float y, float z, Mat3 out ) {
         final float c = (float)Math.cos( radians );
         final float s = (float)Math.sin( radians );
         final float invSum = 1f / (float)Math.sqrt( x*x + y*y + z*z );
@@ -487,14 +487,20 @@ public final class Mat {
     }
 
 
-    public static void axesToTransform( Vec3 x, Vec3 y, Mat3 out ) {
-        Vec3 z = new Vec3();
-        Vec.cross( x, y, z );
-        axesToTransform( x, y, z, out );
+    public static void basisVecsToRotation( Vec3 x, Vec3 y, Mat3 out ) {
+        out.m00 = x.x;
+        out.m10 = x.y;
+        out.m20 = x.z;
+        out.m01 = y.x;
+        out.m11 = y.y;
+        out.m21 = y.z;
+        out.m02 = x.y * y.z - y.y * x.z;
+        out.m12 = x.z * y.x - y.z * x.x;
+        out.m22 = x.x * y.y - y.x * x.y;
     }
 
 
-    public static void axesToTransform( Vec3 x, Vec3 y, Vec3 z, Mat3 out ) {
+    public static void basisVecsToRotation( Vec3 x, Vec3 y, Vec3 z, Mat3 out ) {
         out.m00 = x.x;
         out.m10 = x.y;
         out.m20 = x.z;
@@ -504,6 +510,25 @@ public final class Mat {
         out.m02 = z.x;
         out.m12 = z.y;
         out.m22 = z.z;
+    }
+
+    /**
+     * Computes spherical interpolation on two rotation matrices.
+     *
+     * @see bits.math3d.Quat#slerp
+     *
+     * @param rotA  Rotation matrix
+     * @param rotB  Rotation matrix
+     * @param t     Interpolation parameter. 0 = {@code rotA}, 1 = {@code rotB}, 0.5 = halfway between.
+     * @param workA Workspace
+     * @param workB Workspace
+     * @param out   Holds interpolated rotation on output.
+     */
+    public static void slerp( Mat3 rotA, Mat3 rotB, float t, Vec4 workA, Vec4 workB, Mat3 out ) {
+        Quat.matToQuat( rotA, workA );
+        Quat.matToQuat( rotB, workB );
+        Quat.slerp( workA, workB, t, workA );
+        Quat.quatToMat( workA, out );
     }
 
 
@@ -1343,6 +1368,52 @@ public final class Mat {
         out.m03 = -(right + left) / (right - left);
         out.m13 = -(top + bottom) / (top - bottom);
         out.m23 = -(far + near) / (far - near);
+        out.m33 = 1;
+    }
+
+
+    public static void getViewport( float x, float y, float w, float h, Mat4 out ) {
+        out.m00 = 0.5f * w;
+        out.m10 = 0;
+        out.m20 = 0;
+        out.m30 = 0;
+
+        out.m01 = 0;
+        out.m11 = 0.5f * h;
+        out.m21 = 0;
+        out.m31 = 0;
+
+        out.m02 = 0;
+        out.m12 = 0;
+        out.m22 = 1;
+        out.m32 = 0;
+
+        out.m03 = 0.5f * w + x;
+        out.m13 = 0.5f * h + y;
+        out.m23 = 0;
+        out.m33 = 1;
+    }
+
+
+    public static void getViewportDepth( float x, float y, float w, float h, float near, float far, Mat4 out ) {
+        out.m00 = 0.5f * w;
+        out.m10 = 0;
+        out.m20 = 0;
+        out.m30 = 0;
+        out.m01 = 0;
+
+        out.m11 = 0.5f * h;
+        out.m21 = 0;
+        out.m31 = 0;
+
+        out.m02 = 0;
+        out.m12 = 0;
+        out.m22 = 0.5f * ( far - near );
+        out.m32 = 0;
+
+        out.m03 = 0.5f * w + x;
+        out.m13 = 0.5f * h + y;
+        out.m23 = 0.5f * ( far + near );
         out.m33 = 1;
     }
 
@@ -2300,6 +2371,29 @@ public final class Mat {
         out[13] = h * 0.5 + y;
         out[14] = 0;
         out[15] = 1;
+    }
+
+
+    public static void getViewportDepth( double x, double y, double w, double h, double near, double far, double[] out ) {
+        out[ 0] = w * 0.5;
+        out[ 1] = 0.0;
+        out[ 2] = 0.0;
+        out[ 3] = 0.0;
+
+        out[ 4] = 0.0;
+        out[ 5] = h * 0.5;
+        out[ 6] = 0.0;
+        out[ 7] = 0.0;
+
+        out[ 8] = 0.0;
+        out[ 9] = 0.0;
+        out[10] = ( far - near ) * 0.5;
+        out[11] = 0.0;
+
+        out[12] = w * 0.5 + x;
+        out[13] = h * 0.5 + y;
+        out[14] = ( far + near ) * 0.5;
+        out[15] = 1.0;
     }
 
     /**

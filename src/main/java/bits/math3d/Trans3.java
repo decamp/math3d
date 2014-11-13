@@ -15,7 +15,9 @@ public class Trans3 {
     public final Vec3 mPos = new Vec3();
     public final Mat3 mRot = new Mat3();
 
-    public Trans3() {}
+    public Trans3() {
+        Mat.identity( mRot );
+    }
 
 
     public Trans3( Trans3 copy ) {
