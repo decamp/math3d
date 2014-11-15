@@ -43,6 +43,28 @@ public class Vec3 {
 
 
 
+    public float el( int d ) {
+        switch( d ) {
+        case 0: return x;
+        case 1: return y;
+        case 2: return z;
+        default:
+            throw new NoSuchElementException();
+        }
+    }
+
+
+    public void el( int d, float v ) {
+        switch( d ) {
+        case 0: x = v; return;
+        case 1: y = v; return;
+        case 2: z = v; return;
+        default:
+            throw new NoSuchElementException();
+        }
+    }
+
+
     @Override
     public boolean equals( Object obj ) {
         if( !( obj instanceof Vec3 ) ) {

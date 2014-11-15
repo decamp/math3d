@@ -6,6 +6,9 @@
 
 package bits.math3d;
 
+import java.util.NoSuchElementException;
+
+
 /**
  * 3-dimensional vector.
  *
@@ -30,27 +33,53 @@ public class Vec4 extends Vec3 {
     }
 
 
-    public Vec4( float... xyzw ) {
-        x = xyzw[0];
-        y = xyzw[1];
-        z = xyzw[2];
-        w = xyzw[3];
-    }
-
-
-    public Vec4( double... xyzw ) {
-        x = (float)xyzw[0];
-        y = (float)xyzw[1];
-        z = (float)xyzw[2];
-        w = (float)xyzw[3];
-    }
-
-
     public Vec4( Vec4 copy ) {
         this.x = copy.x;
         this.y = copy.y;
         this.z = copy.z;
         this.w = copy.w;
+    }
+
+
+
+//    public Vec4( float... xyzw ) {
+//        x = xyzw[0];
+//        y = xyzw[1];
+//        z = xyzw[2];
+//        w = xyzw[3];
+//    }
+//
+//
+//    public Vec4( double... xyzw ) {
+//        x = (float)xyzw[0];
+//        y = (float)xyzw[1];
+//        z = (float)xyzw[2];
+//        w = (float)xyzw[3];
+//    }
+
+
+
+    public float el( int d ) {
+        switch( d ) {
+        case 0: return x;
+        case 1: return y;
+        case 2: return z;
+        case 3: return w;
+        default:
+            throw new NoSuchElementException();
+        }
+    }
+
+
+    public void el( int d, float v ) {
+        switch( d ) {
+        case 0: x = v; return;
+        case 1: y = v; return;
+        case 2: z = v; return;
+        case 3: w = v; return;
+        default:
+            throw new NoSuchElementException();
+        }
     }
 
 

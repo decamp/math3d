@@ -7,6 +7,9 @@
 package bits.math3d;
 
 
+import java.util.NoSuchElementException;
+
+
 /**
  * These are all homographic coordinates, yo.  Matrices are 4x4.  Vectors are 3x1.
  *
@@ -40,6 +43,64 @@ public class Mat3 {
         this.m02 = v01;
         this.m12 = v01;
         this.m22 = v01;
+    }
+
+
+
+
+    public float el( int row, int col ) {
+        switch( row ) {
+        case 0:
+            switch( col ) {
+            case 0: return m00;
+            case 1: return m01;
+            case 2: return m02;
+            }
+            break;
+        case 1:
+            switch( col ) {
+            case 0: return m10;
+            case 1: return m11;
+            case 2: return m12;
+            }
+            break;
+        case 2:
+            switch( col ) {
+            case 0: return m20;
+            case 1: return m21;
+            case 2: return m22;
+            }
+            break;
+        }
+        throw new NoSuchElementException();
+    }
+
+
+    public void el( int row, int col, float v ) {
+        switch( row ) {
+        case 0:
+            switch( col ) {
+            case 0: m00 = v; return;
+            case 1: m01 = v; return;
+            case 2: m02 = v; return;
+            }
+            break;
+        case 1:
+            switch( col ) {
+            case 0: m10 = v; return;
+            case 1: m11 = v; return;
+            case 2: m12 = v; return;
+            }
+            break;
+        case 2:
+            switch( col ) {
+            case 0: m20 = v; return;
+            case 1: m21 = v; return;
+            case 2: m22 = v; return;
+            }
+            break;
+        }
+        throw new NoSuchElementException();
     }
 
 

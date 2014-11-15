@@ -7,6 +7,9 @@
 package bits.math3d;
 
 
+import java.util.NoSuchElementException;
+
+
 /**
  * These are all homographic coordinates.
  *
@@ -49,6 +52,87 @@ public class Mat4 {
     public Mat4( Mat4 copy ) {
         Mat.put( copy, this );
     }
+
+
+
+
+    public float el( int row, int col ) {
+        switch( row ) {
+        case 0:
+            switch( col ) {
+            case 0: return m00;
+            case 1: return m01;
+            case 2: return m02;
+            case 3: return m03;
+            }
+            break;
+        case 1:
+            switch( col ) {
+            case 0: return m10;
+            case 1: return m11;
+            case 2: return m12;
+            case 3: return m13;
+            }
+            break;
+        case 2:
+            switch( col ) {
+            case 0: return m20;
+            case 1: return m21;
+            case 2: return m22;
+            case 3: return m23;
+            }
+            break;
+        case 3:
+            switch( col ) {
+            case 0: return m30;
+            case 1: return m31;
+            case 2: return m32;
+            case 3: return m33;
+            }
+            break;
+        }
+        throw new NoSuchElementException();
+    }
+
+
+    public void el( int row, int col, float v ) {
+        switch( row ) {
+        case 0:
+            switch( col ) {
+            case 0: m00 = v; return;
+            case 1: m01 = v; return;
+            case 2: m02 = v; return;
+            case 3: m03 = v; return;
+            }
+            break;
+        case 1:
+            switch( col ) {
+            case 0: m10 = v; return;
+            case 1: m11 = v; return;
+            case 2: m12 = v; return;
+            case 3: m13 = v; return;
+            }
+            break;
+        case 2:
+            switch( col ) {
+            case 0: m20 = v; return;
+            case 1: m21 = v; return;
+            case 2: m22 = v; return;
+            case 3: m23 = v; return;
+            }
+            break;
+        case 3:
+            switch( col ) {
+            case 0: m30 = v; return;
+            case 1: m31 = v; return;
+            case 2: m32 = v; return;
+            case 3: m33 = v; return;
+            }
+            break;
+        }
+        throw new NoSuchElementException();
+    }
+
 
 
     @Override

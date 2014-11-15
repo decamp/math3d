@@ -45,24 +45,6 @@ public final class Vec {
     }
 
 
-    public static float el( Vec2 vec, int dim ) {
-        switch( dim ) {
-        case 0: return vec.x;
-        case 1: return vec.y;
-        default: throw new NoSuchElementException();
-        }
-    }
-
-
-    public static void el( Vec2 vec, int dim, float element ) {
-        switch( dim ) {
-        case 0: vec.x = element; break;
-        case 1: vec.y = element; break;
-        default: throw new NoSuchElementException();
-        }
-    }
-
-
     public static void add( Vec2 a, Vec2 b, Vec2 out ) {
         out.x = a.x + b.x;
         out.y = a.y + b.y;
@@ -412,26 +394,6 @@ public final class Vec {
         out.x = v[0];
         out.y = v[1];
         out.z = v[2];
-    }
-
-
-    public static float el( Vec3 vec, int dim ) {
-        switch( dim ) {
-        case 0: return vec.x;
-        case 1: return vec.y;
-        case 2: return vec.z;
-        default: throw new NoSuchElementException();
-        }
-    }
-
-
-    public static void el( Vec3 vec, int dim, float element ) {
-        switch( dim ) {
-        case 0: vec.x = element; break;
-        case 1: vec.y = element; break;
-        case 2: vec.z = element; break;
-        default: throw new NoSuchElementException();
-        }
     }
 
 
@@ -983,28 +945,6 @@ public final class Vec {
         v.y = arr[1];
         v.z = arr[2];
         v.w = arr[3];
-    }
-
-
-    public static float el( Vec4 vec, int dim ) {
-        switch( dim ) {
-        case 0: return vec.x;
-        case 1: return vec.y;
-        case 2: return vec.z;
-        case 3: return vec.w;
-        default: throw new NoSuchElementException();
-        }
-    }
-
-
-    public static void el( Vec4 vec, int dim, float element ) {
-        switch( dim ) {
-        case 0: vec.x = element; break;
-        case 1: vec.y = element; break;
-        case 2: vec.z = element; break;
-        case 3: vec.w = element; break;
-        default: throw new NoSuchElementException();
-        }
     }
 
 

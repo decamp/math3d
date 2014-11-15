@@ -6,6 +6,9 @@
 
 package bits.math3d;
 
+import java.util.NoSuchElementException;
+
+
 /**
  * Functions for length-2 vectors.
  *
@@ -31,6 +34,26 @@ public class Vec2 {
         y = copy.y;
     }
 
+
+
+    public float el( int d ) {
+        switch( d ) {
+        case 0: return x;
+        case 1: return y;
+        default:
+            throw new NoSuchElementException();
+        }
+    }
+
+
+    public void el( int d, float v ) {
+        switch( d ) {
+        case 0: x = v; break;
+        case 1: y = v; break;
+        default:
+            throw new NoSuchElementException();
+        }
+    }
 
 
     @Override
