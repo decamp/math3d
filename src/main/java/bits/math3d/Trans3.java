@@ -11,7 +11,6 @@ package bits.math3d;
  * Trans3 (3D Transform) represents a getRotatation and getTranslation, in that order.
  */
 public class Trans3 {
-
     public final Vec3 mPos = new Vec3();
     public final Mat3 mRot = new Mat3();
 
@@ -28,14 +27,6 @@ public class Trans3 {
     public Trans3( Vec3 pos, Mat3 rot ) {
         Vec.put( pos, mPos );
         Mat.put( rot, mRot );
-    }
-
-
-
-    public void invert( Trans3 out ) {
-        Mat.transpose( mRot, out.mRot );
-        Vec.mult( -1f, out.mPos );
-        Mat.mult( out.mRot, out.mPos, out.mPos );
     }
 
 
@@ -57,6 +48,4 @@ public class Trans3 {
     public String toString() {
         return Trans.format( this );
     }
-
-
 }

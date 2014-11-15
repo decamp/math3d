@@ -401,6 +401,20 @@ public final class Vec {
     }
 
 
+    public static void put( Vec3 v, float[] out ) {
+        out[0] = v.x;
+        out[1] = v.y;
+        out[2] = v.z;
+    }
+
+
+    public static void put( float[] v, Vec3 out ) {
+        out.x = v[0];
+        out.y = v[1];
+        out.z = v[2];
+    }
+
+
     public static float el( Vec3 vec, int dim ) {
         switch( dim ) {
         case 0: return vec.x;
