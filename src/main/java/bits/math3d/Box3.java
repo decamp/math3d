@@ -6,6 +6,9 @@
 
 package bits.math3d;
 
+import java.util.NoSuchElementException;
+
+
 /**
  * @author Philip DeCamp
  */
@@ -40,6 +43,46 @@ public class Box3 {
         this.z1 = z1;
     }
 
+
+
+    public float min( int dim ) {
+        switch( dim ) {
+        case 0: return x0;
+        case 1: return y0;
+        case 2: return z0;
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
+    public void min( int dim, float v ) {
+        switch( dim ) {
+        case 0: x0 = v; return;
+        case 1: y0 = v; return;
+        case 2: z0 = v; return;
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
+    public float max( int dim ) {
+        switch( dim ) {
+        case 0: return x1;
+        case 1: return y1;
+        case 2: return z1;
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
+    public void max( int dim, float v ) {
+        switch( dim ) {
+        case 0: x1 = v; return;
+        case 1: y1 = v; return;
+        case 2: z1 = v; return;
+        default: throw new NoSuchElementException();
+        }
+    }
 
 
     @Override
