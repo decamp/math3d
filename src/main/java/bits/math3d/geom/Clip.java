@@ -41,7 +41,7 @@ public class Clip {
             // Iterate through vertices.
             float min = Box.min( clip, axis );
             float max = Box.max( clip, axis );
-            float v0  = Vec.el( verts[0], axis );
+            float v0  = verts[0].el( axis );
 
             int m0 = -1;
             int m1 = -1;
@@ -50,8 +50,8 @@ public class Clip {
 
             // Find plane crossings.
             for( int i = 0, j = vertCount - 1; i < vertCount; j = i++ ) {
-                float a = Vec.el( verts[i], axis );
-                float b = Vec.el( verts[j], axis );
+                float a = verts[i].el( axis );
+                float b = verts[j].el( axis );
 
                 if( (a < min) != (b < min) ) {
                     if( m0 == -1 ) {
@@ -90,8 +90,8 @@ public class Clip {
                     n0 = -1;
                     n1 = -1;
                     for( int i = 0, j = vertCount - 1; i < vertCount; j = i++ ) {
-                        float a = Vec.el( verts[i], axis );
-                        float b = Vec.el( verts[j], axis );
+                        float a = verts[i].el( axis );
+                        float b = verts[j].el( axis );
                         if( (a > max) != (b > max) ) {
                             if( n0 == -1 ) {
                                 n0 = i;
@@ -138,8 +138,8 @@ public class Clip {
         // Cache start values.
         Vec3 va = v[start];
         Vec3 vb = v[start + 1];
-        float a = Vec.el( va, axis );
-        float b = Vec.el( vb, axis );
+        float a = va.el( axis );
+        float b = vb.el( axis );
 
         // Check if va is precisely on edge.
         if( a != pos ) {
@@ -153,15 +153,15 @@ public class Clip {
             if( va.z != vb.z ) {
                 vb.z = r * vb.z + (1f - r) * va.z;
             }
-            Vec.el( vb, axis, pos ); // Avoid rounding errors.
+            vb.el( axis, pos ); // Avoid rounding errors.
             start++;
         }
 
         // Cache stop values.
         va = v[stop];
         vb = v[(stop + 1) % count];
-        a = Vec.el( va, axis );
-        b = Vec.el( vb, axis );
+        a = va.el( axis );
+        b = vb.el( axis );
 
         // Check if vb is precisely on edge.
         if( b != pos ) {
@@ -175,7 +175,7 @@ public class Clip {
             if( va.z != vb.z ) {
                 va.z = r * vb.z + (1.0f - r) * va.z;
             }
-            Vec.el( va, axis, pos ); // Avoid rounding errors.
+            va.el( axis, pos ); // Avoid rounding errors.
         } else {
             stop++;
         }
@@ -206,8 +206,8 @@ public class Clip {
         // Cache start values.
         Vec3 va = v[start  ];
         Vec3 vb = v[start+1];
-        float a = Vec.el( va, axis );
-        float b = Vec.el( vb, axis );
+        float a = va.el( axis );
+        float b = vb.el( axis );
 
         // Check if vb is precisely on edge.
         if( b != pos ) {
@@ -221,7 +221,7 @@ public class Clip {
             if( va.z != vb.z ) {
                 va.z = r * vb.z + (1.0f - r) * va.z;
             }
-            Vec.el( va, axis, pos ); // To avoid rounding errors.
+            va.el( axis, pos ); // To avoid rounding errors.
         } else {
             start++;
         }
@@ -229,8 +229,8 @@ public class Clip {
         // Cache stop values.
         va = v[stop];
         vb = v[stop + 1];
-        a = Vec.el( va, axis );
-        b = Vec.el( vb, axis );
+        a = va.el( axis );
+        b = vb.el( axis );
 
         // Check if vb is precisely on edge.
         if( b != pos ) {
@@ -244,7 +244,7 @@ public class Clip {
             if( va.z != vb.z ) {
                 vb.z = r * vb.z + (1 - r) * va.z;
             }
-            Vec.el( vb, axis, pos );
+            vb.el( axis, pos );
             stop++;
         }
 
@@ -513,7 +513,5 @@ public class Clip {
 
         return count;
     }
-
-
 
 }
