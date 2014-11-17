@@ -25,6 +25,10 @@ public class Clip {
      * @return true iff intersection is found with non zero surface area.
      * (This isn't precisely true because I haven't formalized all the boundary conditions)
      */
+    // TODO: This should be cleaned up, and could be faster.
+    // Also, it's broken for concave loops.
+    // There's no need for a removeLoop and retainLoop.
+    // It would be better to iterate through verts then clip planes, not vice versa.
     public static boolean clipPlanar( Vec3[] vertLoop, int vertOff, int vertCount, Box3 clip, PolyLine out ) {
         final int cap = vertCount + 6;
         out.ensureCapacity( cap );
@@ -39,8 +43,8 @@ public class Clip {
         // Iterate through clip planes.
         for( int axis = 0; axis < 3; axis++ ) {
             // Iterate through vertices.
-            float min = Box.min( clip, axis );
-            float max = Box.max( clip, axis );
+            float min = clip.min( axis );
+            float max = clip.max( axis );
             float v0  = verts[0].el( axis );
 
             int m0 = -1;
@@ -49,7 +53,8 @@ public class Clip {
             int n1 = -1;
 
             // Find plane crossings.
-            for( int i = 0, j = vertCount - 1; i < vertCount; j = i++ ) {
+            for( int i = 0; i < vertCount; i++ ) {
+                int j = ( i + 1 ) % vertCount;
                 float a = verts[i].el( axis );
                 float b = verts[j].el( axis );
 
@@ -433,12 +438,11 @@ public class Clip {
 
         // Check if there's a gap to fill.
         int gap = stop - start - 1;
-
-        if( gap == 0 )
+        if( gap == 0 ) {
             return count;
+        }
 
         count -= gap;
-
         for( int i = start + 1; i < count; i++ ) {
             double[] temp = v[i];
             v[i] = v[i + gap];

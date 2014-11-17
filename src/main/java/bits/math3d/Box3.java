@@ -85,6 +85,16 @@ public class Box3 {
     }
 
 
+    public float center( int dim ) {
+        switch( dim ) {
+        case 0: return 0.5f * ( x0 + x1 );
+        case 1: return 0.5f * ( y0 + y1 );
+        case 2: return 0.5f * ( z0 + z1 );
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
     @Override
     public boolean equals( Object obj ) {
         if( !(obj instanceof Box3 ) ) {
