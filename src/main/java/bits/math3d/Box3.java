@@ -95,6 +95,16 @@ public class Box3 {
     }
 
 
+    public float span( int dim ) {
+        switch( dim ) {
+        case 0: return ( x1 - x0 );
+        case 1: return ( y1 - y0 );
+        case 2: return ( z1 - z0 );
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
     @Override
     public boolean equals( Object obj ) {
         if( !(obj instanceof Box3 ) ) {

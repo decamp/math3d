@@ -81,6 +81,25 @@ public final class Box2 {
     }
 
 
+    public float center( int dim ) {
+        switch( dim ) {
+        case 0: return 0.5f * ( x0 + x1 );
+        case 1: return 0.5f * ( y0 + y1 );
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
+    public float span( int dim ) {
+        switch( dim ) {
+        case 0: return ( x1 - x0 );
+        case 1: return ( y1 - y0 );
+        default: throw new NoSuchElementException();
+        }
+    }
+
+
+
 
     @Override
     public boolean equals( Object obj ) {
