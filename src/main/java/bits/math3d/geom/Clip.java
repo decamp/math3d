@@ -94,7 +94,8 @@ public class Clip {
                 if( n1 != -1 ) {
                     n0 = -1;
                     n1 = -1;
-                    for( int i = 0, j = vertCount - 1; i < vertCount; j = i++ ) {
+                    for( int i = 0; i < vertCount; i++ ) {
+                        int j = ( i + 1 ) % vertCount;
                         float a = verts[i].el( axis );
                         float b = verts[j].el( axis );
                         if( (a > max) != (b > max) ) {
@@ -133,8 +134,8 @@ public class Clip {
     private static int removeLoopSection( Vec3[] v, int count, int start, int stop, int axis, float pos ) {
         // Make sure there is enough room between start and stop vertices if they're adjacent.
         if( start + 1 == stop ) {
-            Vec3 temp = v[v.length-1];
-            System.arraycopy( v, stop - 1, v, stop, v.length - stop );
+            Vec3 temp = v[count];
+            System.arraycopy( v, stop - 1, v, stop, count + 1 - stop );
             v[stop++] = temp;
             Vec.put( v[stop], temp );
             count++;
@@ -387,8 +388,8 @@ public class Clip {
         // Make sure there's enough room between start and stop vertices if
         // they're adjacent.
         if( start + 1 == stop ) {
-            double[] temp = v[v.length - 1];
-            System.arraycopy( v, stop - 1, v, stop, v.length - stop );
+            double[] temp = v[count];
+            System.arraycopy( v, stop - 1, v, stop, count + 1 - stop );
             v[stop++] = temp;
             temp[0] = v[stop][0];
             temp[1] = v[stop][1];

@@ -26,6 +26,14 @@ public final class Box {
 
     //== BOX2 Functions ===========================
 
+    public static void put( Box2 box, Box2 out ) {
+        out.x1 = box.x1;
+        out.y1 = box.y1;
+        out.x1 = box.x1;
+        out.y1 = box.y1;
+    }
+
+
     public static float min( Box2 box, int dim ) {
         switch( dim ) {
         case 0: return box.x0;
@@ -388,6 +396,15 @@ public final class Box {
 
 
     //== BOX3 Functions ===========================
+
+    public static void put( Box3 box, Box3 out ) {
+        out.x0 = box.x0;
+        out.y0 = box.y0;
+        out.z0 = box.z0;
+        out.x1 = box.x1;
+        out.y1 = box.y1;
+        out.z1 = box.z1;
+    }
 
 
     public static float min( Box3 box, int dim ) {
