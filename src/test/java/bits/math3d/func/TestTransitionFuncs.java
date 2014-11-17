@@ -15,8 +15,8 @@ public class TestTransitionFuncs {
         long total0 = 0;
         long total1 = 0;
         
-        Function11 cos = EaseFunc.COS;
-        Function11 ss  = EaseFunc.SMOOTH;
+        Function11 cos = EaseFuncs.COS;
+        Function11 ss  = EaseFuncs.SMOOTH;
         
         for( int i = 0; i < 1000; i++ ) {
             long t0 = System.nanoTime();

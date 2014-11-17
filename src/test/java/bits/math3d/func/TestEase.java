@@ -17,17 +17,17 @@ public class TestEase {
         //double cycle = 2.0;
         
         Function11[] funcs = {
-                EaseFunc.LINEAR,
-                EaseFunc.SMOOTH,
-                EaseFunc.SMOOTHER,
-                EaseFunc.COS,
-                EaseFunc.POW2,
-                EaseFunc.POW3,
-                EaseFunc.CIRC
+                EaseFuncs.LINEAR,
+                EaseFuncs.SMOOTH,
+                EaseFuncs.SMOOTHER,
+                EaseFuncs.COS,
+                EaseFuncs.POW2,
+                EaseFuncs.POW3,
+                EaseFuncs.CIRC
                 
-                //EaseFunc.newSpring( cycle, decay ),
-                //EaseFunc.newSpringIn( cycle, decay ),
-                //EaseFunc.newSpringOut( cycle, decay )
+                //EaseFuncs.newSpring( cycle, decay ),
+                //EaseFuncs.newSpringIn( cycle, decay ),
+                //EaseFuncs.newSpringOut( cycle, decay )
         };
         
         BufferedImage im = plot( 1024, 1024, funcs );

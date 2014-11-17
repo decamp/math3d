@@ -8,7 +8,7 @@ package bits.math3d.func;
 
 
 /**
- * EaseFunc provides many kinds of easing curves, which are used in interpolated animation,
+ * EaseFuncs provides many kinds of easing curves, which are used in interpolated animation,
  * or "tweening." 
  * <p>
  * Easing functions follow f(0) -> 0 and f(1) -> 1. This class 
@@ -25,7 +25,7 @@ package bits.math3d.func;
  *  
  * @author decamp
  */
-public final class EaseFunc {
+public final class EaseFuncs {
     
     public static final Function11 LINEAR = new Function11() {
         public double apply( double t ) {
@@ -427,6 +427,6 @@ public final class EaseFunc {
     private static final double TWO_PI = Math.PI * 2.0;
     
     
-    private EaseFunc() {}
+    private EaseFuncs() {}
     
 }

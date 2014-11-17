@@ -73,6 +73,12 @@ public final class Trans {
     }
 
 
+    public static void lerp( Trans3 a, Trans3 b, float t, Vec4 workA, Vec4 workB, Trans3 out ) {
+        Vec.lerp( a.mPos, b.mPos, t, out.mPos );
+        Mat.slerp(a.mRot, b.mRot, t, workA, workB, out.mRot );
+    }
+
+
     public static String format( Trans3 tr ) {
         return Trans3.class.getSimpleName() + Vec.format( tr.mPos ) + "\n" + Mat.format( tr.mRot );
     }
