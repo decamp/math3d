@@ -97,13 +97,13 @@ public class MatStack {
     }
 
 
-    public void scale( float sx, float sy, float sz ) {
-        Mat.scale( mMat, sx, sy, sz, mMat );
+    public void scale( float sx, float sy, float sz, float sw ) {
+        Mat.scale( mMat, sx, sy, sz, sw, mMat );
     }
 
 
-    public void preScale( float sx, float sy, float sz ) {
-        Mat.preScale( sx, sy, sz, mMat, mMat );
+    public void preScale( float sx, float sy, float sz, float sw ) {
+        Mat.preScale( sx, sy, sz, sw, mMat, mMat );
     }
 
 

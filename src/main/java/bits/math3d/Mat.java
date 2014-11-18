@@ -1111,7 +1111,7 @@ public final class Mat {
     }
 
 
-    public static void getScale( float sx, float sy, float sz, Mat4 out ) {
+    public static void getScale( float sx, float sy, float sz, float sw, Mat4 out ) {
         out.m00 = sx;
         out.m10 = 0.0f;
         out.m20 = 0.0f;
@@ -1127,11 +1127,11 @@ public final class Mat {
         out.m03 = 0.0f;
         out.m13 = 0.0f;
         out.m23 = 0.0f;
-        out.m33 = 1.0f;
+        out.m33 = sw;
     }
 
 
-    public static void scale( Mat4 mat, float sx, float sy, float sz, Mat4 out ) {
+    public static void scale( Mat4 mat, float sx, float sy, float sz, float sw, Mat4 out ) {
         out.m00 = sx * mat.m00;
         out.m10 = sx * mat.m10;
         out.m20 = sx * mat.m20;
@@ -1144,30 +1144,30 @@ public final class Mat {
         out.m12 = sz * mat.m12;
         out.m22 = sz * mat.m22;
         out.m32 = sz * mat.m32;
-        out.m03 =      mat.m03;
-        out.m13 =      mat.m13;
-        out.m23 =      mat.m23;
-        out.m33 =      mat.m33;
+        out.m03 = sw * mat.m03;
+        out.m13 = sw * mat.m13;
+        out.m23 = sw * mat.m23;
+        out.m33 = sw * mat.m33;
     }
 
 
-    public static void preScale( float sx, float sy, float sz, Mat4 mat, Mat4 out ) {
+    public static void preScale( float sx, float sy, float sz, float sw, Mat4 mat, Mat4 out ) {
         out.m00 = sx * mat.m00;
         out.m10 = sy * mat.m10;
         out.m20 = sz * mat.m20;
-        out.m30 =      mat.m30;
+        out.m30 = sw * mat.m30;
         out.m01 = sx * mat.m01;
         out.m11 = sy * mat.m11;
         out.m21 = sz * mat.m21;
-        out.m31 =      mat.m31;
+        out.m31 = sw * mat.m31;
         out.m02 = sx * mat.m02;
         out.m12 = sy * mat.m12;
         out.m22 = sz * mat.m22;
-        out.m32 =      mat.m32;
+        out.m32 = sw * mat.m32;
         out.m03 = sx * mat.m03;
         out.m13 = sy * mat.m13;
         out.m23 = sz * mat.m23;
-        out.m33 =      mat.m33;
+        out.m33 = sw * mat.m33;
     }
 
 
