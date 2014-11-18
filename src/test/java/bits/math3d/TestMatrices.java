@@ -30,13 +30,10 @@ public class TestMatrices {
             if( !Mat.invert4( a, b ) ) {
                 continue;
             }
-            
+
             Mat.mult4( a, b, c );
             for( int j = 0; j < 16; j++ ) {
-                boolean eq = Tol.approxEqual( c[j], 
-                                              eye[j],
-                                              0.000001,
-                                              0.000001 );
+                boolean eq = Tol.approxEqual( c[j], eye[j], 0.000001, 0.000001 );
                 assertTrue( eq ); 
             }
         }
@@ -82,6 +79,25 @@ public class TestMatrices {
     }
 
 
+    @Test
+    public void testTranspose3() {
+        Random rand = new Random( 3 );
+        Mat3 mat = randRotation( rand );
+        Mat3 trans = new Mat3();
+        Mat3 inv   = new Mat3();
+
+        Mat.transpose( mat, trans );
+        Mat.invert( mat, inv );
+
+        Tests.assertNear( trans, inv );
+
+        Mat.transpose( trans, trans );
+        Tests.assertNear( trans, mat );
+
+        Mat.invert( inv, inv );
+        Tests.assertNear( inv, mat );
+    }
+
 
     static void rotXyz( double rx, double ry, double rz, double[] out ) {
         double[] a = new double[16];
@@ -93,5 +109,15 @@ public class TestMatrices {
         Mat.getRotate4( rz, 0, 0, 1, a );
         Mat.mult4( a, b, out );
     }
+
+
+    static Mat3 randRotation( Random rand ) {
+        Mat3 mat = new Mat3();
+        Vec4 quat = new Vec4();
+        Quat.sampleUniform( rand, quat );
+        Quat.quatToMat( quat, mat );
+        return mat;
+    }
+
 
 }

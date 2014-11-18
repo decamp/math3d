@@ -41,7 +41,7 @@ public final class Trans {
 
     public static void invert( Trans3 tr, Trans3 out ) {
         Mat.transpose( tr.mRot, out.mRot );
-        Vec.mult( -1f, out.mPos );
+        Vec.mult( -1f, tr.mPos, out.mPos );
         Mat.mult( out.mRot, out.mPos, out.mPos );
     }
 
