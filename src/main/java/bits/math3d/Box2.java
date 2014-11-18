@@ -36,7 +36,7 @@ public final class Box2 {
     }
 
 
-    public Box2( float x0, float y0, float z0, float x1, float y1, float z1 ) {
+    public Box2( float x0, float y0, float x1, float y1 ) {
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;
@@ -97,7 +97,6 @@ public final class Box2 {
         default: throw new NoSuchElementException();
         }
     }
-
 
 
 
