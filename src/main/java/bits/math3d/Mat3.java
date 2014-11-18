@@ -25,24 +25,24 @@ public class Mat3 {
     public Mat3() {}
 
 
-    public Mat3( Mat3 copy ) {
-        Mat.put( copy, this );
+    public Mat3( float m00, float m10, float m20,
+                 float m01, float m11, float m21,
+                 float m02, float m12, float m22 )
+    {
+        this.m00 = m00;
+        this.m10 = m10;
+        this.m20 = m20;
+        this.m01 = m01;
+        this.m11 = m11;
+        this.m21 = m21;
+        this.m02 = m02;
+        this.m12 = m12;
+        this.m22 = m22;
     }
 
 
-    public Mat3( float v00, float v10, float v20,
-                 float v01, float v11, float v21,
-                 float v02, float v12, float v22 )
-    {
-        this.m00 = v00;
-        this.m10 = v01;
-        this.m20 = v01;
-        this.m01 = v01;
-        this.m11 = v01;
-        this.m21 = v01;
-        this.m02 = v01;
-        this.m12 = v01;
-        this.m22 = v01;
+    public Mat3( Mat3 copy ) {
+        Mat.put( copy, this );
     }
 
 
