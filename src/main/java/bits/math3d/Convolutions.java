@@ -4,7 +4,7 @@
  * http://opensource.org/licenses/BSD-2-Clause
  */
 
-package bits.math3d.func;
+package bits.math3d;
 
 public class Convolutions {
 

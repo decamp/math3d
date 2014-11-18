@@ -1,11 +1,3 @@
-/*
- * Copyright (c) 2014. Massachusetts Institute of Technology
- * Released under the BSD 2-Clause License
- * http://opensource.org/licenses/BSD-2-Clause
- */
-
-package bits.math3d;
-
 /**
  * Class contains the implementation of: <br/>
  * - Normal Cummulative Distribution Function <br/>
@@ -23,6 +15,10 @@ package bits.math3d;
  *
  * (this file modified by Philip DeCamp)
  */
+
+package bits.math3d;
+
+
 public class Phi {
 
     /**

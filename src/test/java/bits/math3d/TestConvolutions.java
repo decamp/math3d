@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import bits.math3d.func.Convolutions;
 
 @SuppressWarnings( "unused" )
 public class TestConvolutions {
