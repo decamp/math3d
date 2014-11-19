@@ -448,7 +448,7 @@ public final class Mat {
 
         //Normalize length of X-axis.
         d = (float)Math.sqrt( mat.m00 * mat.m00 + mat.m10 * mat.m10 + mat.m20 * mat.m20 );
-        if( d > FSQRT_ABS_ERR || -d > FSQRT_ABS_ERR ) {
+        if( d > FSQRT_ABS_ERR || d > -FSQRT_ABS_ERR ) {
             d = 1f / d;
             mat.m00 *= d;
             mat.m10 *= d;
@@ -467,11 +467,11 @@ public final class Mat {
 
         //Normalize Y-axis.
         d = (float)Math.sqrt( mat.m01 * mat.m01 + mat.m11 * mat.m11 + mat.m21 * mat.m21 );
-        if( d > FSQRT_ABS_ERR || -d > FSQRT_ABS_ERR ) {
+        if( d > FSQRT_ABS_ERR || d > -FSQRT_ABS_ERR ) {
             d = 1.0f / d;
+            mat.m01 *= d;
             mat.m11 *= d;
             mat.m21 *= d;
-            mat.m02 *= d;
         } else {
             Vec3 ortho = new Vec3();
             Vec.chooseOrtho( mat.m00, mat.m10, mat.m20, ortho );
@@ -481,9 +481,9 @@ public final class Mat {
         }
 
         //Compute Z-axis
-        mat.m02 = mat.m10*mat.m21 - mat.m20*mat.m11;
-        mat.m12 = mat.m20*mat.m01 - mat.m00*mat.m21;
-        mat.m22 = mat.m00*mat.m11 - mat.m10*mat.m01;
+        mat.m02 = mat.m10 * mat.m21 - mat.m20 * mat.m11;
+        mat.m12 = mat.m20 * mat.m01 - mat.m00 * mat.m21;
+        mat.m22 = mat.m00 * mat.m11 - mat.m10 * mat.m01;
     }
 
 
@@ -1172,22 +1172,22 @@ public final class Mat {
 
 
     public static void getTranslation( float tx, float ty, float tz, Mat4 out ) {
-        out.m00 = 1.0f;
-        out.m10 = 0.0f;
-        out.m20 = 0.0f;
-        out.m30 = 0.0f;
-        out.m01 = 0.0f;
-        out.m11 = 1.0f;
-        out.m21 = 0.0f;
-        out.m31 = 0.0f;
-        out.m02 = 0.0f;
-        out.m12 = 0.0f;
-        out.m22 = 1.0f;
-        out.m32 = 0.0f;
+        out.m00 = 1;
+        out.m10 = 0;
+        out.m20 = 0;
+        out.m30 = 0;
+        out.m01 = 0;
+        out.m11 = 1;
+        out.m21 = 0;
+        out.m31 = 0;
+        out.m02 = 0;
+        out.m12 = 0;
+        out.m22 = 1;
+        out.m32 = 0;
         out.m03 = tx;
         out.m13 = ty;
         out.m23 = tz;
-        out.m33 = 1.0f;
+        out.m33 = 1;
     }
 
 

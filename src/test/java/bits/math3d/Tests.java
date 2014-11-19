@@ -21,7 +21,13 @@ public class Tests {
         if( Float.isNaN( a ) && Float.isNaN( b ) ) {
             return true;
         }
-        return Tol.approxEqual( a, b );
+
+        if( Tol.approxEqual( a, b, 0.001f, 1E-6f ) ) {
+            return true;
+        }
+
+        System.err.println( a + "  --  " + b );
+        return false;
     }
 
 
@@ -82,5 +88,25 @@ public class Tests {
     }
 
 
+    public static Mat3 randMat3( Random rand, float scale ) {
+        Mat3 mat = new Mat3( rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale,
+                             rand.nextFloat() * scale - 0.5f * scale );
+        return mat;
+    }
+
+
+
+    public static Vec3 randPos( Random rand ) {
+        return new Vec3( rand.nextFloat() * 20 - 10,
+                         rand.nextFloat() * 20 - 10,
+                         rand.nextFloat() * 20 - 10 );
+    }
 
 }
