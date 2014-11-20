@@ -825,8 +825,8 @@ public final class Vec {
 
         float den = dx * planeNorm.x + dy * planeNorm.y + dz * planeNorm.z;
 
-        if( den < FSQRT_ABS_ERR && -den < FSQRT_ABS_ERR ) {
-            return num < FSQRT_ABS_ERR && -num < FSQRT_ABS_ERR ? 2 : 0;
+        if( den < FSQRT_ABS_ERR && den > -FSQRT_ABS_ERR ) {
+            return num < FSQRT_ABS_ERR && num > -FSQRT_ABS_ERR ? 2 : 0;
         }
 
         if( optOut != null ) {
