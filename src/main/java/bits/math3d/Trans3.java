@@ -12,7 +12,7 @@ package bits.math3d;
  */
 public class Trans3 {
     public final Vec3 mPos = new Vec3();
-    public final Mat3 mRot = new Mat3();
+    public final Mat3 mRot = new Mat3(1,0,0,0,1,0,0,0,1);
 
 
     public Trans3() {}
