@@ -32,66 +32,23 @@ public interface VecView<T> {
 
         private final int mDim;
 
-
         public FloatArrayView( int dim ) {
             mDim = dim;
         }
 
-        @Override
-        public int dim() {
-            return mDim;
-        }
+        public int    dim(                               ) { return mDim; }
+        public double get( float[] item, int n           ) { return item[n]; }
+        public void   set( float[] item, int n, double v ) { item[n] = (float)v; }
 
-        @Override
-        public double get( float[] item, int n ) {
-            return item[n];
-        }
+        public double x  ( float[] item           ) { return item[0]; }
+        public double y  ( float[] item           ) { return item[1]; }
+        public double z  ( float[] item           ) { return item[2]; }
+        public double w  ( float[] item           ) { return item[3]; }
 
-        @Override
-        public void set( float[] item, int n, double v ) {
-            item[n] = (float)v;
-        }
-
-        @Override
-        public double x( float[] item ) {
-            return item[0];
-        }
-
-        @Override
-        public void x( float[] item, double x ) {
-            item[0] = (float)x;
-        }
-
-        @Override
-        public double y( float[] item ) {
-            return item[1];
-        }
-
-        @Override
-        public void y( float[] item, double y ) {
-            item[1] = (float)y;
-        }
-
-        @Override
-        public double z( float[] item ) {
-            return item[2];
-        }
-
-        @Override
-        public void z( float[] item, double z ) {
-            item[2] = (float)z;
-        }
-
-        @Override
-        public double w( float[] item ) {
-            return item[3];
-        }
-
-        @Override
-        public void w( float[] item, double w ) {
-            item[3] = (float)w;
-        }
-
+        public void   x  ( float[] item, double x ) { item[0] = (float)x; }
+        public void   y  ( float[] item, double y ) { item[1] = (float)y; }
+        public void   z  ( float[] item, double z ) { item[2] = (float)z; }
+        public void   w  ( float[] item, double w ) { item[3] = (float)w; }
     }
 
 
@@ -99,66 +56,23 @@ public interface VecView<T> {
 
         private final int mDim;
 
-
         public DoubleArrayView( int dim ) {
             mDim = dim;
         }
 
-        @Override
-        public int dim() {
-            return mDim;
-        }
+        public int    dim(                               ) { return mDim; }
+        public double get( double[] item, int n           ) { return item[n]; }
+        public void   set( double[] item, int n, double v ) { item[n] = v; }
 
-        @Override
-        public double get( double[] item, int n ) {
-            return item[n];
-        }
+        public double x  ( double[] item           ) { return item[0]; }
+        public double y  ( double[] item           ) { return item[1]; }
+        public double z  ( double[] item           ) { return item[2]; }
+        public double w  ( double[] item           ) { return item[3]; }
 
-        @Override
-        public void set( double[] item, int n, double v ) {
-            item[n] = v;
-        }
-
-        @Override
-        public double x( double[] item ) {
-            return item[0];
-        }
-
-        @Override
-        public void x( double[] item, double x ) {
-            item[0] = x;
-        }
-
-        @Override
-        public double y( double[] item ) {
-            return item[1];
-        }
-
-        @Override
-        public void y( double[] item, double y ) {
-            item[1] = y;
-        }
-
-        @Override
-        public double z( double[] item ) {
-            return item[2];
-        }
-
-        @Override
-        public void z( double[] item, double z ) {
-            item[2] = z;
-        }
-
-        @Override
-        public double w( double[] item ) {
-            return item[3];
-        }
-
-        @Override
-        public void w( double[] item, double w ) {
-            item[3] = w;
-        }
-
+        public void   x  ( double[] item, double x ) { item[0] = x; }
+        public void   y  ( double[] item, double y ) { item[1] = y; }
+        public void   z  ( double[] item, double z ) { item[2] = z; }
+        public void   w  ( double[] item, double w ) { item[3] = w; }
     }
 
 
