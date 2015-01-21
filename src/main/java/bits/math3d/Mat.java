@@ -320,7 +320,7 @@ public final class Mat {
     }
 
 
-    public static void getRotatation( float radians, float x, float y, float z, Mat3 out ) {
+    public static void getRotation( float radians, float x, float y, float z, Mat3 out ) {
         float c = (float)Math.cos( radians );
         float s = (float)Math.sin( radians );
 
