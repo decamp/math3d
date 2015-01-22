@@ -738,61 +738,156 @@ public final class Mat {
     /**
      * Multiplies two matrices.
      *
-     * @param a   Length-16 array. Holds matrix in column-major ordering.
-     * @param b   Length-16 array. Holds matrix in column-major ordering.
-     * @param out Length-16 array. On return, holds <tt>a * b</tt>. May be same array as <tt>a</tt> or <tt>b</tt>.
+     * @param a   Size-4 matrix.
+     * @param b   Size-4 matrix.
+     * @param out Size-4 matrix. On return, holds <tt>a * b</tt>. May be same array as <tt>a</tt> or <tt>b</tt>.
      */
     public static void mult( Mat4 a, Mat4 b, Mat4 out ) {
         // I tested many configurations for multiplication.
         // This one was the fastest as well as avoids array aliasing without branching.
         float a00 = a.m00;
-        float a01 = a.m10;
-        float a02 = a.m20;
-        float a03 = a.m30;
-        float a04 = a.m01;
-        float a05 = a.m11;
-        float a06 = a.m21;
-        float a07 = a.m31;
-        float a08 = a.m02;
-        float a09 = a.m12;
-        float a10 = a.m22;
-        float a11 = a.m32;
-        float a12 = a.m03;
+        float a10 = a.m10;
+        float a20 = a.m20;
+        float a30 = a.m30;
+        float a01 = a.m01;
+        float a11 = a.m11;
+        float a21 = a.m21;
+        float a31 = a.m31;
+        float a02 = a.m02;
+        float a12 = a.m12;
+        float a22 = a.m22;
+        float a32 = a.m32;
+        float a03 = a.m03;
         float a13 = a.m13;
-        float a14 = a.m23;
-        float a15 = a.m33;
+        float a23 = a.m23;
+        float a33 = a.m33;
         float b0 = b.m00;
         float b1 = b.m10;
         float b2 = b.m20;
         float b3 = b.m30;
-        out.m00 = a00*b0 + a04*b1 + a08*b2 + a12*b3;
-        out.m10 = a01*b0 + a05*b1 + a09*b2 + a13*b3;
-        out.m20 = a02*b0 + a06*b1 + a10*b2 + a14*b3;
-        out.m30 = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        out.m00 = a00*b0 + a01*b1 + a02*b2 + a03*b3;
+        out.m10 = a10*b0 + a11*b1 + a12*b2 + a13*b3;
+        out.m20 = a20*b0 + a21*b1 + a22*b2 + a23*b3;
+        out.m30 = a30*b0 + a31*b1 + a32*b2 + a33*b3;
         b0 = b.m01;
         b1 = b.m11;
         b2 = b.m21;
         b3 = b.m31;
-        out.m01 = a00*b0 + a04*b1 + a08*b2 + a12*b3;
-        out.m11 = a01*b0 + a05*b1 + a09*b2 + a13*b3;
-        out.m21 = a02*b0 + a06*b1 + a10*b2 + a14*b3;
-        out.m31 = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        out.m01 = a00*b0 + a01*b1 + a02*b2 + a03*b3;
+        out.m11 = a10*b0 + a11*b1 + a12*b2 + a13*b3;
+        out.m21 = a20*b0 + a21*b1 + a22*b2 + a23*b3;
+        out.m31 = a30*b0 + a31*b1 + a32*b2 + a33*b3;
         b0 = b.m02;
         b1 = b.m12;
         b2 = b.m22;
         b3 = b.m32;
-        out.m02 = a00*b0 + a04*b1 + a08*b2 + a12*b3;
-        out.m12 = a01*b0 + a05*b1 + a09*b2 + a13*b3;
-        out.m22 = a02*b0 + a06*b1 + a10*b2 + a14*b3;
-        out.m32 = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        out.m02 = a00*b0 + a01*b1 + a02*b2 + a03*b3;
+        out.m12 = a10*b0 + a11*b1 + a12*b2 + a13*b3;
+        out.m22 = a20*b0 + a21*b1 + a22*b2 + a23*b3;
+        out.m32 = a30*b0 + a31*b1 + a32*b2 + a33*b3;
         b0 = b.m03;
         b1 = b.m13;
         b2 = b.m23;
         b3 = b.m33;
-        out.m03 = a00*b0 + a04*b1 + a08*b2 + a12*b3;
-        out.m13 = a01*b0 + a05*b1 + a09*b2 + a13*b3;
-        out.m23 = a02*b0 + a06*b1 + a10*b2 + a14*b3;
-        out.m33 = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+        out.m03 = a00*b0 + a01*b1 + a02*b2 + a03*b3;
+        out.m13 = a10*b0 + a11*b1 + a12*b2 + a13*b3;
+        out.m23 = a20*b0 + a21*b1 + a22*b2 + a23*b3;
+        out.m33 = a30*b0 + a31*b1 + a32*b2 + a33*b3;
+    }
+
+    /**
+     * Multiplies two matrices.
+     *
+     * @param a   Size-4 matrix.
+     * @param b   Size-3 matrix.
+     * @param out Size-4 matrix. On return, holds <tt>a * b</tt>. May be same array as <tt>a</tt> or <tt>b</tt>.
+     */
+    public static void mult( Mat4 a, Mat3 b, Mat4 out ) {
+        float a00 = a.m00;
+        float a10 = a.m10;
+        float a20 = a.m20;
+        float a30 = a.m30;
+        float a01 = a.m01;
+        float a11 = a.m11;
+        float a21 = a.m21;
+        float a31 = a.m31;
+        float a02 = a.m02;
+        float a12 = a.m12;
+        float a22 = a.m22;
+        float a32 = a.m32;
+        float b0 = b.m00;
+        float b1 = b.m10;
+        float b2 = b.m20;
+        //float b3 = b.m30;
+        out.m00 = a00*b0 + a01*b1 + a02*b2;
+        out.m10 = a10*b0 + a11*b1 + a12*b2;
+        out.m20 = a20*b0 + a21*b1 + a22*b2;
+        out.m30 = a30*b0 + a31*b1 + a32*b2;
+        b0 = b.m01;
+        b1 = b.m11;
+        b2 = b.m21;
+        out.m01 = a00*b0 + a01*b1 + a02*b2;
+        out.m11 = a10*b0 + a11*b1 + a12*b2;
+        out.m21 = a20*b0 + a21*b1 + a22*b2;
+        out.m31 = a30*b0 + a31*b1 + a32*b2;
+        b0 = b.m02;
+        b1 = b.m12;
+        b2 = b.m22;
+        out.m02 = a00*b0 + a01*b1 + a02*b2;
+        out.m12 = a10*b0 + a11*b1 + a12*b2;
+        out.m22 = a20*b0 + a21*b1 + a22*b2;
+        out.m32 = a30*b0 + a31*b1 + a32*b2;
+        out.m03 = a.m03;
+        out.m13 = a.m13;
+        out.m23 = a.m23;
+        out.m33 = a.m33;
+    }
+
+    /**
+     * Multiplies two matrices.
+     *
+     * @param a   Size-4 matrix.
+     * @param b   Size-4 matrix.
+     * @param out Size-4 matrix. On return, holds <tt>a * b</tt>. May be same array as <tt>a</tt> or <tt>b</tt>.
+     */
+    public static void mult( Mat3 a, Mat4 b, Mat4 out ) {
+        float a00 = a.m00;
+        float a10 = a.m10;
+        float a20 = a.m20;
+        float a01 = a.m01;
+        float a11 = a.m11;
+        float a21 = a.m21;
+        float a02 = a.m02;
+        float a12 = a.m12;
+        float a22 = a.m22;
+        float b0 = b.m00;
+        float b1 = b.m10;
+        float b2 = b.m20;
+        out.m00 = a00*b0 + a01*b1 + a02*b2;
+        out.m10 = a10*b0 + a11*b1 + a12*b2;
+        out.m20 = a20*b0 + a21*b1 + a22*b2;
+        out.m30 = b.m30;
+        b0 = b.m01;
+        b1 = b.m11;
+        b2 = b.m21;
+        out.m01 = a00*b0 + a01*b1 + a02*b2;
+        out.m11 = a10*b0 + a11*b1 + a12*b2;
+        out.m21 = a20*b0 + a21*b1 + a22*b2;
+        out.m31 = b.m31;
+        b0 = b.m02;
+        b1 = b.m12;
+        b2 = b.m22;
+        out.m02 = a00*b0 + a01*b1 + a02*b2;
+        out.m12 = a10*b0 + a11*b1 + a12*b2;
+        out.m22 = a20*b0 + a21*b1 + a22*b2;
+        out.m32 = b.m32;
+        b0 = b.m03;
+        b1 = b.m13;
+        b2 = b.m23;
+        out.m03 = a00*b0 + a01*b1 + a02*b2;
+        out.m13 = a10*b0 + a11*b1 + a12*b2;
+        out.m23 = a20*b0 + a21*b1 + a22*b2;
+        out.m33 = b.m33;
     }
 
 

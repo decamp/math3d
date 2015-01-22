@@ -40,6 +40,11 @@ public class MatStack {
     public void set( Mat4 m ) {
         Mat.put( m, mMat );
     }
+
+
+    public void set( Mat3 m ) {
+        Mat.put( m, mMat );
+    }
     
     
     public void push() {
@@ -60,15 +65,25 @@ public class MatStack {
     public void identity() {
         Mat.identity( mMat );
     }
-    
+
 
     public void mult( Mat4 m ) {
         Mat.mult( mMat, m, mMat );
     }
-    
+
+
+    public void mult( Mat3 m ) {
+        Mat.mult( mMat, m, mMat );
+    }
+
     
     public void premult( Mat4 m ) {
-        Mat.mult( m, mMat, m );
+        Mat.mult( m, mMat, mMat );
+    }
+
+
+    public void premult( Mat3 m ) {
+        Mat.mult( m, mMat, mMat );
     }
 
 
