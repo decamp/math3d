@@ -193,6 +193,19 @@ public final class Mat {
         out.w = b.w;
     }
 
+
+    public static void multAdd( float sa, Mat3 a, float sb, Mat3 b, Mat3 out ) {
+        out.m00 = sa * a.m00 + sb * b.m00;
+        out.m10 = sa * a.m10 + sb * b.m10;
+        out.m20 = sa * a.m20 + sb * b.m20;
+        out.m01 = sa * a.m01 + sb * b.m01;
+        out.m11 = sa * a.m11 + sb * b.m11;
+        out.m21 = sa * a.m21 + sb * b.m21;
+        out.m02 = sa * a.m02 + sb * b.m02;
+        out.m12 = sa * a.m12 + sb * b.m12;
+        out.m22 = sa * a.m22 + sb * b.m22;
+    }
+
     /**
      * @param mat    Input matrix
      * @param out    Array to hold inverted matrix on return.
@@ -915,6 +928,26 @@ public final class Mat {
         out.y = t1;
         out.z = t2;
         out.w = t3;
+    }
+
+
+    public static void multAdd( float sa, Mat4 a, float sb, Mat4 b, Mat4 out ) {
+        out.m00 = sa * a.m00 + sb * b.m00;
+        out.m10 = sa * a.m10 + sb * b.m10;
+        out.m20 = sa * a.m20 + sb * b.m20;
+        out.m30 = sa * a.m30 + sb * b.m30;
+        out.m01 = sa * a.m01 + sb * b.m01;
+        out.m11 = sa * a.m11 + sb * b.m11;
+        out.m21 = sa * a.m21 + sb * b.m21;
+        out.m31 = sa * a.m31 + sb * b.m31;
+        out.m02 = sa * a.m02 + sb * b.m02;
+        out.m12 = sa * a.m12 + sb * b.m12;
+        out.m22 = sa * a.m22 + sb * b.m22;
+        out.m32 = sa * a.m32 + sb * b.m32;
+        out.m03 = sa * a.m03 + sb * b.m03;
+        out.m13 = sa * a.m13 + sb * b.m13;
+        out.m23 = sa * a.m23 + sb * b.m23;
+        out.m33 = sa * a.m33 + sb * b.m33;
     }
 
     /**
@@ -1864,6 +1897,26 @@ public final class Mat {
         out[13] = a01*b0 + a05*b1 + a09*b2 + a13*b3;
         out[14] = a02*b0 + a06*b1 + a10*b2 + a14*b3;
         out[15] = a03*b0 + a07*b1 + a11*b2 + a15*b3;
+    }
+
+
+    public static void multAdd4( float sa, float[] a, float sb, float[] b, float[] out ) {
+        out[ 0] = sa * a[ 0] + sb * b[ 0];
+        out[ 1] = sa * a[ 1] + sb * b[ 1];
+        out[ 2] = sa * a[ 2] + sb * b[ 2];
+        out[ 3] = sa * a[ 3] + sb * b[ 3];
+        out[ 4] = sa * a[ 4] + sb * b[ 4];
+        out[ 5] = sa * a[ 5] + sb * b[ 5];
+        out[ 6] = sa * a[ 6] + sb * b[ 6];
+        out[ 7] = sa * a[ 7] + sb * b[ 7];
+        out[ 8] = sa * a[ 8] + sb * b[ 8];
+        out[ 9] = sa * a[ 9] + sb * b[ 9];
+        out[10] = sa * a[10] + sb * b[10];
+        out[11] = sa * a[11] + sb * b[11];
+        out[12] = sa * a[12] + sb * b[12];
+        out[13] = sa * a[13] + sb * b[13];
+        out[14] = sa * a[14] + sb * b[14];
+        out[15] = sa * a[15] + sb * b[15];
     }
 
 
