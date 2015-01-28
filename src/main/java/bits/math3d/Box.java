@@ -6,9 +6,6 @@
 
 package bits.math3d;
 
-import bits.math3d.geom.Loop;
-import bits.math3d.geom.PolyLine;
-
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 

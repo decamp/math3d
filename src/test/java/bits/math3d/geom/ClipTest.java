@@ -46,12 +46,14 @@ public class ClipTest {
         }
 
         PolyLine loop = new PolyLine();
+        PolyLine workLoop = new PolyLine();
+
         for( int m = 0; m < 8; m++ ) {
             Vec3[] vv = mirror( v, m, clip );
 //            Vec3[] vv = v;
 
             for( int i = 0; i < 3; i++ ) {
-                assertTrue( Clip.clipPlanar( vv, 0, 3, clip, loop ) );
+                assertTrue( Clip.clipPlanarWithBox( vv, 0, 3, clip, workLoop, loop ) );
                 assertEquals( 3, loop.mSize );
                 //graph(clip, loop);
                 rotate( vv, 3 );
@@ -70,13 +72,14 @@ public class ClipTest {
         Vec3[] v = { v0, v1, v2 };
 
         PolyLine loop = new PolyLine();
+        PolyLine workLoop = new PolyLine();
 
         for( int m = 0; m < 8; m++ ) {
             //Vec3[] vv = mirror( v, m, clip );
             Vec3[] vv = v;
 
             for( int i = 0; i < 3; i++ ) {
-                assertTrue( Clip.clipPlanar( vv, 0, 3, clip, loop ) );
+                assertTrue( Clip.clipPlanarWithBox( vv, 0, 3, clip, workLoop, loop ) );
                 assertEquals( 4, loop.mSize );
                 // graph(clip, loop);
                 rotate( vv, 3 );
@@ -92,12 +95,13 @@ public class ClipTest {
         Vec3 v2 = new Vec3( 6, 5, 7  );
         Vec3[] v = { v0, v1, v2 };
         PolyLine loop = new PolyLine();
+        PolyLine workLoop = new PolyLine();
 
         for( int m = 0; m < 8; m++ ) {
             Vec3[] vv = mirror( v, m, clip );
 
             for( int i = 0; i < 3; i++ ) {
-                assertTrue( Clip.clipPlanar( vv, 0, 3, clip, loop ) );
+                assertTrue( Clip.clipPlanarWithBox( vv, 0, 3, clip, workLoop, loop ) );
                 assertEquals( 4, loop.mSize );
                 // graph(clip, loop);
                 rotate( vv, 3 );
@@ -113,11 +117,12 @@ public class ClipTest {
         Vec3 v2 = new Vec3( 6, 5, 7 );
         Vec3[] v = { v0, v1, v2 };
         PolyLine loop = new PolyLine();
+        PolyLine workLoop = new PolyLine();
 
         for( int m = 0; m < 8; m++ ) {
             Vec3[] vv = mirror( v, m, clip );
             for( int i = 0; i < 3; i++ ) {
-                assertTrue( Clip.clipPlanar( vv, 0, 3, clip, loop ) );
+                assertTrue( Clip.clipPlanarWithBox( vv, 0, 3, clip, workLoop, loop ) );
                 assertEquals( 3, loop.mSize );
                 // graph(clip, loop);
                 rotate( vv, 3 );
@@ -154,14 +159,112 @@ public class ClipTest {
         }
 
         PolyLine loop = new PolyLine();
+        PolyLine workLoop = new PolyLine();
+
         for( int m = 0; m < 8; m++ ) {
             Vec3[] vv = mirror( v, m, clip );
 
             for( int i = 0; i < 3; i++ ) {
-                assertFalse( Clip.clipPlanar( vv, 0, 3, clip, loop ) );
+                assertFalse( Clip.clipPlanarWithBox( vv, 0, 3, clip, workLoop, loop ) );
                 assertEquals( 0, loop.mSize );
                 rotate( vv, 3 );
             }
+        }
+    }
+
+
+    @Test public void testSplitTriangleMiss() throws Exception {
+        Vec3 v0  = new Vec3( 10,  0,  5 );
+        Vec3 v1  = new Vec3( 10,  5, 10 );
+        Vec3 v2  = new Vec3(  5,  0, 10 );
+        Vec3[] v = { v0, v1, v2 };
+
+        Vec4[] splits = { new Vec4(  1,  0,  0, -100 ),
+                          new Vec4(  0,  1,  0, -100 ),
+                          new Vec4(  0,  0,  1, -100 ),
+                          new Vec4(  1,  1,  1, -100 ) };
+
+        PolyLine polyNeg = new PolyLine();
+        PolyLine polyPos = new PolyLine();
+
+        for( int j = 0; j < splits.length; j++ ) {
+            for( int i = 0; i < 3; i++ ) {
+                assertEquals( -1, Clip.splitPlanarWithPlane( v, 0, 3, splits[j], polyNeg, polyPos ) );
+                assertEquals( 3, polyNeg.mSize );
+                assertEquals( 0, polyPos.mSize );
+
+                Vec4 mirror = new Vec4();
+                Vec.mult( -1, splits[j], mirror );
+                assertEquals( 1, Clip.splitPlanarWithPlane( v, 0, 3, mirror, polyNeg, polyPos ) );
+                assertEquals( 0, polyNeg.mSize );
+                assertEquals( 3, polyPos.mSize );
+
+                rotate( v, 3 );
+            }
+        }
+    }
+
+
+    @Test public void testSplitTriangleHit() throws Exception {
+        Vec3 v0  = new Vec3( 10,  0,  5 );
+        Vec3 v1  = new Vec3( 10,  5, 10 );
+        Vec3 v2  = new Vec3(  5,  0, 10 );
+        Vec3[] v = { v0, v1, v2 };
+
+        Vec4[] splits = { new Vec4(  1,  0,  0, -7 ),
+                          new Vec4(  0,  1,  0, -2 ),
+                          new Vec4(  0,  0,  1, -7 ),
+                          new Vec4(  1,  1,  1, -18.333333f ) };
+
+        int[][] vertNums = { { 3, 4 },
+                             { 4, 3 },
+                             { 3, 4 },
+                             { 4, 3 } };
+
+        PolyLine polyNeg  = new PolyLine();
+        PolyLine polyPos = new PolyLine();
+
+        for( int j = 0; j < splits.length; j++ ) {
+            for( int i = 0; i < 3; i++ ) {
+                assertEquals( 0, Clip.splitPlanarWithPlane( v, 0, 3, splits[j], polyNeg, polyPos ) );
+                assertEquals( vertNums[j][0], polyNeg.mSize );
+                assertEquals( vertNums[j][1], polyPos.mSize );
+
+                Vec4 mirror = new Vec4();
+                Vec.mult( -1, splits[j], mirror );
+                assertEquals( 0, Clip.splitPlanarWithPlane( v, 0, 3, mirror, polyNeg, polyPos ) );
+                assertEquals( vertNums[j][1], polyNeg.mSize );
+                assertEquals( vertNums[j][0], polyPos.mSize );
+
+                rotate( v, 3 );
+            }
+        }
+    }
+
+
+    @Test public void testSplitTriangleCoplanar() throws Exception {
+        Vec3 v0  = new Vec3( 0,  0, 0 );
+        Vec3 v1  = new Vec3( 5,  0, 0 );
+        Vec3 v2  = new Vec3( 5,  5, 0 );
+        Vec3[] v = { v0, v1, v2 };
+
+        PolyLine polyNeg = new PolyLine();
+        PolyLine polyPos = new PolyLine();
+        Vec4 split = new Vec4( 0, 0, 1, 0 );
+
+        for( int i = 0; i < 3; i++ ) {
+            assertEquals( 1, Clip.splitPlanarWithPlane( v, 0, 3, split, polyNeg, polyPos ) );
+            assertEquals( 0, polyNeg.mSize );
+            assertEquals( 3, polyPos.mSize );
+            rotate( v, 3 );
+        }
+
+        split = new Vec4( 0, 0, -1, 0 );
+        for( int i = 0; i < 3; i++ ) {
+            assertEquals( 1, Clip.splitPlanarWithPlane( v, 0, 3, split, polyNeg, polyPos ) );
+            assertEquals( 0, polyNeg.mSize );
+            assertEquals( 3, polyPos.mSize );
+            rotate( v, 3 );
         }
     }
 
@@ -170,7 +273,6 @@ public class ClipTest {
         if( len == 0 ) {
             return;
         }
-
         Vec3 temp = v[0];
         System.arraycopy( v, 1, v, 0, len - 1 );
         v[len - 1] = temp;
@@ -217,7 +319,7 @@ public class ClipTest {
                                                                 h / ( clip.z1 - clip.z0 + 20.0 ) );
         aff.translate( -clip.x0 + 10.0, -clip.z0 + 10.0 );
         g.setTransform( aff );
-        g.setStroke( new BasicStroke( (float)(1f * (clip.x1 - clip.x0) / w) ) );
+        g.setStroke( new BasicStroke( (1f * (clip.x1 - clip.x0) / w) ) );
 
         {
             g.draw( new Rectangle2D.Double( clip.x0, clip.z0, clip.x1 - clip.x0, clip.z1 - clip.z0 ) );

@@ -37,7 +37,6 @@ public class PolyLine {
     }
 
 
-
     public void ensureCapacity( int minCap ) {
         final int oldCap = mVerts.length;
         if( minCap <= oldCap ) {
@@ -54,6 +53,5 @@ public class PolyLine {
             mVerts[i] = new Vec3();
         }
     }
-
 
 }
