@@ -604,8 +604,6 @@ public class Clip {
     }
 
 
-
-
     /**
      * Provided with an array of COPLANAR vertices and an AABB, this method
      * will provide the geometric intersection.

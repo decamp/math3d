@@ -67,11 +67,11 @@ public class ExtrudedLineLoop implements Volume {
     }
 
 
-    public double minZ() {
+    public float minZ() {
         return mMinZ;
     }
 
-    public double maxZ() {
+    public float maxZ() {
         return mMaxZ;
     }
 
