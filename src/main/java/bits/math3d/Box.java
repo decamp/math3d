@@ -55,7 +55,7 @@ public final class Box {
 
 
     public static float centY( Box2 box ) {
-        return 0.5f * ( box.y0 + box.y1 );
+        return 0.5f * ( box.x0 + box.x1 );
     }
 
 
@@ -430,7 +430,7 @@ public final class Box {
 
 
     public static float centY( Box3 box ) {
-        return 0.5f * ( box.y0 + box.y1 );
+        return 0.5f * ( box.x0 + box.x1 );
     }
 
 

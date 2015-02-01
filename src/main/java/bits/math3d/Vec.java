@@ -7,7 +7,6 @@
 package bits.math3d;
 
 import java.nio.ByteBuffer;
-import java.util.NoSuchElementException;
 
 import static bits.math3d.Tol.FSQRT_ABS_ERR;
 import static bits.math3d.Tol.SQRT_ABS_ERR;
