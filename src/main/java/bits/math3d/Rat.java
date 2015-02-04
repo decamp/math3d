@@ -8,9 +8,8 @@ package bits.math3d;
 
 /**
  * Rationals Math
- *
- * @author Philip DeCamp
- */
+ * @Deprecated use Rational
+  */
 public class Rat {
 
     public static final int ROUND_ZERO     = 0x0000; ///< Round toward zero.
@@ -20,8 +19,8 @@ public class Rat {
     public static final int ROUND_NEAR_INF = 0x0005; ///< Round to nearest and halfway cases away from zero.
 
     /**
-     * Rescale a 64-bit integer, val * append / div, with protection against
-     * overflow.
+     * Rescale a 64-bit integer, val * append / div,
+     * with protection against overflow.
      *
      * @return long value nearest to val * append / div
      */
@@ -30,8 +29,8 @@ public class Rat {
     }
 
     /**
-     * Rescale a 64-bit integer, val * append / div, with specified rounding
-     * and protection against overflow.
+     * Rescale a 64-bit integer, val * append / div,
+     * with requested rounding and protection against overflow.
      *
      * @return long value nearest to val * append / div
      */
