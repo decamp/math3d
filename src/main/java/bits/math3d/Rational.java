@@ -17,9 +17,9 @@ public final class Rational implements Comparable<Rational> {
      * Reduces the fraction {@code num / den } to a <i>canonical</i> reduced representation, {@code out}, where:
      * <ul>
      * <li> There will exist no integer that can evenly divide both {@code out.num()} and {@code out.den()}.
-     * <li> {@code out.den() >= 0} </li>
      * <li> If {@code den == 0, then out.num == 0 && out.den == 0 }.
      * <li> If {@code den != 0 && num == 0, then out.num = 0 && out.den == 1}.
+     * <li> If {@code den != Integer.MIN_VALUE && num != Integer.MIN_VALUE, then out.den() >= 0} </li>
      * </ul>
      * <p>
      * As a consequnce, if Rationals {@code a} and {@code b} are both
@@ -39,7 +39,7 @@ public final class Rational implements Comparable<Rational> {
             int d = gcd( num, den );
             num /= d;
             den /= d;
-            if( den < 0 ) {
+            if( den < 0 && den != Integer.MIN_VALUE && num != Integer.MIN_VALUE ) {
                 num = -num;
                 den = -den;
             }
@@ -79,7 +79,7 @@ public final class Rational implements Comparable<Rational> {
         }
         return a;
     }
-    
+
     /**
      * Compute {@code val * num / den} with protection against overflow.
      * 
@@ -92,7 +92,7 @@ public final class Rational implements Comparable<Rational> {
     /**
      * Computes {@code val * num / den} with specified rounding
      * and protection against overflow.
-     * 
+     *
      * @return value nearest to {@code val * num / den},
      *          or if ROUND_PASS_MINMAX is set and a is Long.MIN_VALUE or
      *          Long.MAX_VALUE, then {@code val} is returned unchanged.
@@ -156,8 +156,8 @@ public final class Rational implements Comparable<Rational> {
      *
      * @return value nearest to {@code val * (multNum / multNum) / (divNum / divDen)}
      */
-    public static long rescale( long val, int multNum, int multDen, int divNum, int divDen ) {
-        return rescaleRound( val, multNum, multDen, divNum, divDen, ROUND_NEAR_INF );
+    public static long multDiv( long val, int multNum, int multDen, int divNum, int divDen ) {
+        return multDivRound( val, multNum, multDen, divNum, divDen, ROUND_NEAR_INF );
     }
 
     /**
@@ -167,34 +167,105 @@ public final class Rational implements Comparable<Rational> {
      *          or if ROUND_PASS_MINMAX is set and a is Long.MIN_VALUE or Long.MAX_VALUE,
      *          then val is returned unchanged.
      */
-    public static long rescaleRound( long val, int multNum, int multDen, int divNum, int divDen, int rnd ) {
+    public static long multDivRound( long val, int multNum, int multDen, int divNum, int divDen, int rnd ) {
         long b = multNum * (long)divDen;
         long c = divNum  * (long)multDen;
         return multRound( val, b, c, rnd );
     }
-    
+
+    /**
+     * Attempts to multiple two rationals.
+     *
+     * <p>If the rational cannot be represented by ints,
+     * the numerator and denominator will be bit-shifted into the 32-bit range to create
+     * an approximation and the function will return {@code false}.
+     * If the bit-shifting would cause the denominator to become 0,
+     * the denominator will be set to 1 (the denominator will always be non-negative).
+     *
+     * <p>On the output:
+     * <ul>
+     * <li> There will exist no integer that can evenly divide both {@code out.num()} and {@code out.den()}.
+     * <li> If {@code den == 0, then out.num == 0 && out.den == 0 }.
+     * <li> If {@code den != 0 && num == 0, then out.num = 0 && out.den == 1}.
+     * <li> {out.den() >= 0} </li>
+     * </ul>
+     *
+     */
+    public static boolean multRationals( int aNum, int aDen, int bNum, int bDen, Rational out ) {
+        long num = (long)aNum * bNum;
+        long den = (long)aDen * bDen;
+        if( den == 0 ) {
+            out.mNum = 0;
+            out.mDen = 0;
+            return true;
+        }
+        if( num == 0 ) {
+            out.mNum = 0;
+            out.mDen = 1;
+            return true;
+        }
+
+        long gcd = gcd( num, den );
+        num /= gcd;
+        den /= gcd;
+
+        // Switch to non-negative denominator if necessary.
+        if( den < 0 ) {
+            den = -den;
+            num = -num;
+        }
+
+        if( num >= Integer.MIN_VALUE &&
+            num <= Integer.MAX_VALUE &&
+            den <= Integer.MAX_VALUE )
+        {
+            out.mNum = (int)num;
+            out.mDen = (int)den;
+            return true;
+        }
+
+        // Bit shift down.
+        int zeroBits = Long.numberOfLeadingZeros( num < 0 ? -num : num ) - 1;
+        zeroBits = Math.min( zeroBits, Long.numberOfLeadingZeros( den ) - 1 );
+        int shiftBits = 32 - zeroBits;
+        out.mNum = (int)( num >> shiftBits );
+        out.mDen = Math.max( 1, (int)( den >> shiftBits ) );
+        out.reduce();
+        return false;
+    }
+
     /**
      * Compare 2 values each with own scaling.
      * The result of the function is undefined if one of the scalings is
-     * outside the Long range when represented in the others timebase.
+     * outside the Long range when represented in the others scaling.
      *
-     * @return -1 if valA is before valB, 1 if valA is after valB or 0 if they represent the same position
+     * @param aVal "A" value
+     * @param aNum "A" multiplier
+     * @param aDen "A" divisor
+     * @param bVal "B" value
+     * @param bNum "B" multiplier
+     * @param bDen "B" divisor
+
+     * @return -1 if {@code aVal*aNum/aDen > bVal*bNum/bDen}, <br>
+     *          0 if {@code aVal*aNum/aDen 0 bVal*bNum/bDen}, <br>
+     *          1 if {@code aVal*aNum/aDen < bVal*bNum/bDen}
      */
-    public static int compare( long valA, int aNum, int aDen, long valB, int bNum, int bDen ) {
+    public static int compareScaled( long aVal, int aNum, int aDen, long bVal, int bNum, int bDen ) {
         long a = aNum * (long)bDen;
         long b = bNum * (long)aDen;
-        if( ( Math.abs( valA ) | a | Math.abs( valB ) | b ) <= Integer.MAX_VALUE ) {
-            return ( valA * a > valB * b ? 1 : 0 ) - ( valA * a < valB * b ? 1 : 0 );
+        if( ( Math.abs( aVal ) | a | Math.abs( bVal ) | b ) <= Integer.MAX_VALUE ) {
+            return ( aVal * a > bVal * b ? 1 : 0 ) - ( aVal * a < bVal * b ? 1 : 0 );
         }
-        if( multRound( valA, a, b, ROUND_DOWN ) < valB ) {
+        if( multRound( aVal, a, b, ROUND_DOWN ) < bVal ) {
             return -1;
         }
-        if( multRound( valB, b, a, ROUND_DOWN ) < valA ) {
+        if( multRound( bVal, b, a, ROUND_DOWN ) < aVal ) {
             return 1;
         }
         
         return 0;
     }
+
 
 
 
@@ -228,6 +299,12 @@ public final class Rational implements Comparable<Rational> {
     }
 
 
+    public void set( Rational r ) {
+        mNum = r.mNum;
+        mDen = r.mDen;
+    }
+
+
     @Override
     public String toString() {
         return String.format( "%d/%d", mNum, mDen );
@@ -249,7 +326,7 @@ public final class Rational implements Comparable<Rational> {
 
     @Override
     public int compareTo( Rational r ) {
-        return compare( 1, mNum, mDen, 1, r.mNum, r.mDen );
+        return compareScaled( 1, mNum, mDen, 1, r.mNum, r.mDen );
     }
 
 }

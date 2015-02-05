@@ -15,7 +15,6 @@ public class TestPots {
         for( int i = 0; i < 66; i++ ) {
             System.out.println( i + "\t" + Pots.ceilLog2( (long)i ) );
         }
-
     }
 
 }
