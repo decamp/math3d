@@ -35,7 +35,7 @@ public class Phi {
     /**
      * Standard normal cumulative distribution function. (probit function).
      * 
-     * @param x Any value
+     * @param x Any mVal
      * @return Integral of the standard normal distridbution from -inf to x.
      */
     public static double ncdf( double x ) {
@@ -94,7 +94,7 @@ public class Phi {
     /**
      * Error function. 
      * 
-     * @param x Any value.
+     * @param x Any mVal.
      * @return the integral of the Gaussian distribution function from 0 to x.
      */
     public static double erf( double x ) { 
@@ -104,7 +104,7 @@ public class Phi {
     /**
      * Complementary error function.
      * 
-     * @param x Any value.
+     * @param x Any mVal.
      * @return the integral of the Gaussian distribution function from x to inf, or 1.0 - erf( x ).
      * 
      */

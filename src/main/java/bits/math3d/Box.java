@@ -346,7 +346,7 @@ public final class Box {
 
     /**
      * @param points  array of length-3 vertices.
-     * @param off     offset into points
+     * @param off     mOffset into points
      * @param len     number of points
      * @param out     length-6 array that to hold the pointUnion of the points on return.
      */
@@ -736,7 +736,7 @@ public final class Box {
 
     /**
      * @param points  array of length-3 vertices.
-     * @param off     offset into points
+     * @param off     mOffset into points
      * @param len     number of points
      * @param out     length-6 array that to hold the pointUnion of the points on return.
      */
@@ -1293,7 +1293,7 @@ public final class Box {
 
     /**
      * @param points  array of length-3 vertices.
-     * @param off     offset into points
+     * @param off     mOffset into points
      * @param len     number of points
      * @param out     length-6 array that to hold the pointUnion of the points on return.
      */

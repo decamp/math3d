@@ -64,15 +64,15 @@ public class Convolutions {
     /**
      * Performs 2-dimensional convolution with a 1-dimensional kernel.
      * 
-     * @param src            Source value matrix.
-     * @param srcOff         Offset into source value array
+     * @param src            Source mVal matrix.
+     * @param srcOff         Offset into source mVal array
      * @param w              Width of source matrix.
      * @param h              Height of source matrix.
      * @param xStride        Number of array indices between a sample and the sample to the left.
      * @param yStride        Number of array indices between a sample and the sample above.
      * @param kernel         Convolution kernel. 
      * @param borderBehavior Specifies how to treat borders. See BORDER_* constants. 
-     * @param borderConstant Meaning depends on borderBehavior. Currently, only BORDER_CONSTANT uses this value. 
+     * @param borderConstant Meaning depends on borderBehavior. Currently, only BORDER_CONSTANT uses this mVal.
      * @param dst            Array to hold output matrix. Must use same xStride and yStride as src.
      * @param dstOff         Offset into dst array.
      */

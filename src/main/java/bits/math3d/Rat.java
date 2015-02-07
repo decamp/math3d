@@ -22,7 +22,7 @@ public class Rat {
      * Rescale a 64-bit integer, val * append / div,
      * with protection against overflow.
      *
-     * @return long value nearest to val * append / div
+     * @return long mVal nearest to val * append / div
      */
     public static long mult( long val, long mult, long div ) {
         return mult( val, mult, div, ROUND_NEAR_INF );
@@ -32,7 +32,7 @@ public class Rat {
      * Rescale a 64-bit integer, val * append / div,
      * with requested rounding and protection against overflow.
      *
-     * @return long value nearest to val * append / div
+     * @return long mVal nearest to val * append / div
      */
     public static long mult( long val, long mult, long div, int round ) {
         assert( div > 0 );

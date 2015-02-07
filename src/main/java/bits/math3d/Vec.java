@@ -665,7 +665,7 @@ public final class Vec {
      * This method allows the user to define a "zero-dimension", where the
      * vector that is returned by this method is guaranteed to have a zero coordinate
      * for that dimension. Additionally, the coordinate after the zero-dimension will
-     * hold a non-negative value.
+     * hold a non-negative mVal.
      * <p>
      * For example, <br/>
      * <code>chooseOrtho3( 1.0f, 1.0f, 1.0f, 0, out )</code><br/>
@@ -1734,7 +1734,7 @@ public final class Vec {
      * This method allows the user to define a "zero-dimension", where the
      * vector that is returned by this method is guaranteed to have a zero coordinate
      * for that dimension. Additionally, the coordinate after the zero-dimension will
-     * hold a non-negative value.
+     * hold a non-negative mVal.
      * <p>
      * For example, <br/>
      * <code>chooseOrtho3( 1.0, 1.0, 1.0, 0, out )</code><br/>

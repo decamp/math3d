@@ -18,7 +18,7 @@ public class SimplexNoise {
      *
      * @param x coordinate
      * @param y coordinate
-     * @return noise value in range -1 ... +1.
+     * @return noise mVal in range -1 ... +1.
      */
     public static double noise( double x, double y ) {
         // Noise contributions from the three corners.
@@ -92,7 +92,7 @@ public class SimplexNoise {
             n2 = t2 * t2 * dot( GRADIENTS3[gi2], x2, y2 );
         }
 
-        // Add contributions from each corner to get the final noise value.
+        // Add contributions from each corner to get the final noise mVal.
         // The result is scaled to return values in the interval [-1,1].
         return 70.0 * ( n0 + n1 + n2 );
     }
@@ -103,7 +103,7 @@ public class SimplexNoise {
      * @param x coordinate
      * @param y coordinate
      * @param z coordinate
-     * @return noise value in range -1 ... +1
+     * @return noise mVal in range -1 ... +1
      */
     public static double noise( double x, double y, double z ) {
         // Noise contributions from the four corners.
@@ -242,7 +242,7 @@ public class SimplexNoise {
             t3 *= t3;
             n3 = t3 * t3 * dot( GRADIENTS3[gi3], x3, y3, z3 );
         }
-        // Add contributions from each corner to get the final noise value.
+        // Add contributions from each corner to get the final noise mVal.
         // The result is scaled to stay just inside [-1,1]
         return 32.0 * ( n0 + n1 + n2 + n3 );
     }
@@ -254,7 +254,7 @@ public class SimplexNoise {
      * @param y coordinate
      * @param z coordinate
      * @param w coordinate
-     * @return noise value in range -1 ... +1
+     * @return noise mVal in range -1 ... +1
      */
     public static double noise( double x, double y, double z, double w ) {
         // The skewing and unskewing factors are hairy again for the 4D case
@@ -508,7 +508,7 @@ public class SimplexNoise {
     /**
      * Computes dot product in 2D.
      *
-     * @param g 2-vector (grid offset)
+     * @param g 2-vector (grid mOffset)
      * @return dot product
      */
     private static double dot( double g[], double x, double y ) {
@@ -518,7 +518,7 @@ public class SimplexNoise {
     /**
      * Computes dot product in 3D.
      *
-     * @param g 3-vector (grid offset)
+     * @param g 3-vector (grid mOffset)
      * @return dot product
      */
     private static double dot( double g[], double x, double y, double z ) {
@@ -528,7 +528,7 @@ public class SimplexNoise {
     /**
      * Computes dot product in 4D.
      *
-     * @param g 4-vector (grid offset)
+     * @param g 4-vector (grid mOffset)
      * @return dot product
      */
     private static double dot( double g[], double x, double y, double z, double w ) {
@@ -538,7 +538,7 @@ public class SimplexNoise {
     /**
      * This method is a *lot* faster than using (int)Math.floor(x).
      *
-     * @param x value to be floored
+     * @param x mVal to be floored
      */
     private static int fastfloor( double x ) {
         return x >= 0 ? (int)x : (int)x - 1;

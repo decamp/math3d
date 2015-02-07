@@ -38,11 +38,11 @@ public final class Tol {
      * <p>
      * The absolute error is simply the magnitude of the difference between <code>a</code> and <code>b</code>:
      * <code>Math.abs(a-b)</code>.
-     * The absolute error is normally very small. The default value is ABS_ERR. 
+     * The absolute error is normally very small. The default mVal is ABS_ERR.
      * <p>
      * The relative error is the absolute error divided by the larger of the two magnitudes of <code>a</code> and
      * <code>b</code>: <code>abs(a-b)/max(abs(a),abs(b))</code>. A functional maxRelError should be no smaller than
-     * Tolerance.EPS.  The default value is REL_ERR.
+     * Tolerance.EPS.  The default mVal is REL_ERR.
      * 
      * @param a
      * @param b
@@ -79,8 +79,8 @@ public final class Tol {
     /**
      * Compares two numbers with allowance for errors.
      * 
-     * @param a A value.
-     * @param b A value.
+     * @param a A mVal.
+     * @param b A mVal.
      * @return 0 if a approximately equals b, -1 if a is smaller, 1 if a is greater.
      * 
      * @see #approxEqual
@@ -92,8 +92,8 @@ public final class Tol {
     /**
      * Compares two numbers with allowance for errors.
      * 
-     * @param a A value.
-     * @param b A value.
+     * @param a A mVal.
+     * @param b A mVal.
      * @param maxRelErr   Maximum relative error
      * @param maxAbsErr   Maximum absolute error.
      * @return 0 if a approximately equals b, -1 if a is smaller, 1 if a is greater.
@@ -112,7 +112,7 @@ public final class Tol {
     }
     
     /**
-     * Determines if some value is effectively zero compared to some reference.
+     * Determines if some mVal is effectively zero compared to some reference.
      * This method can be called when determining if values <code>ref</code> and 
      * <code>v</code> can be combined in a meaningful way, for example, before
      * computing <code>ref / v</code>. 
@@ -121,10 +121,10 @@ public final class Tol {
      * ensures that <code>abs(v)</code> is above some minimum absolute error. 
      * The second ensures that <code>abs(v / ref)</code> is above some minimum relative error.
      * 
-     * @param v       Some value
-     * @param ref     A reference value that might be divided or multiplied by
+     * @param v       Some mVal
+     * @param ref     A reference mVal that might be divided or multiplied by
      * @param relErr  Minimum ratio between abs(v) and abs(ref) for abs(v) to be considered non-zero.
-     * @param absErr  Minimum value abs(v) must be to be considered non-zero.
+     * @param absErr  Minimum mVal abs(v) must be to be considered non-zero.
      * @return true iff v is approximately equal to 0 relative to ref.
      */
     public static boolean approxZero( double v, double ref, double relErr, double absErr ) {
@@ -154,7 +154,7 @@ public final class Tol {
      * <p>
      * The relative error is the absolute error divided by the larger of the two magnitudes of <code>a</code> and
      * <code>b</code>: <code>abs(a-b)/max(abs(a),abs(b))</code>. A functional maxRelError should be no smaller than
-     * Tolerance.FEPS. The default value is FREL_ERR.
+     * Tolerance.FEPS. The default mVal is FREL_ERR.
      * 
      * @param a
      * @param b
@@ -190,8 +190,8 @@ public final class Tol {
     /**
      * Compares two numbers with allowance for errors.
      * 
-     * @param a A value.
-     * @param b A value.
+     * @param a A mVal.
+     * @param b A mVal.
      * @return 0 if a approximately equals b, -1 if a is smaller, 1 if a is greater.
      * 
      * @see #approxEqual
@@ -203,8 +203,8 @@ public final class Tol {
     /**
      * Compares two numbers with allowance for errors.
      * 
-     * @param a A value.
-     * @param b A value.
+     * @param a A mVal.
+     * @param b A mVal.
      * @param maxRelErr   Maximum relative error
      * @param maxAbsErr   Maximum absolute error.
      * @return 0 if a approximately equals b, -1 if a is smaller, 1 if a is greater.
@@ -223,7 +223,7 @@ public final class Tol {
     }
     
     /**
-     * Determines if some value is effectively zero compared to some reference.
+     * Determines if some mVal is effectively zero compared to some reference.
      * This method can be called when determining if values <code>ref</code> and 
      * <code>v</code> can be combined in a meaningful way, for example, before
      * computing <code>ref / v</code>. 
@@ -232,10 +232,10 @@ public final class Tol {
      * ensures that <code>abs(v)</code> is above some minimum absolute error. 
      * The second ensures that <code>abs(v / ref)</code> is above some minimum relative error.
      * 
-     * @param v       Some value
-     * @param ref     A reference value that might be divided or multiplied by
+     * @param v       Some mVal
+     * @param ref     A reference mVal that might be divided or multiplied by
      * @param relErr  Minimum ratio between abs(v) and abs(ref) for abs(v) to be considered non-zero.
-     * @param absErr  Minimum value abs(v) must be to be considered non-zero.
+     * @param absErr  Minimum mVal abs(v) must be to be considered non-zero.
      * @return true iff v is approximately equal to 0 relative to ref.
      */
     public static boolean approxZero( float v, float ref, float relErr, float absErr ) {
@@ -262,8 +262,8 @@ public final class Tol {
 
     /**
      * Equivalent to <code>approxZero( v, ref, relErr, ABS_ERR )</code>
-     * @param v      Some value.
-     * @param ref    Another value to compare {@code v} with.
+     * @param v      Some mVal.
+     * @param ref    Another mVal to compare {@code v} with.
      * @param relErr
      * @return
      */
@@ -272,7 +272,7 @@ public final class Tol {
     }
 
     /**
-     * @param v Some value
+     * @param v Some mVal
      * @return true iff <code>abs(v) < ABS_ERR</code>
      * 
      * @deprecated You will almost never be dealing with doubles with minimal exponents,
@@ -284,7 +284,7 @@ public final class Tol {
     }
 
     /**
-     * @param v Some value
+     * @param v Some mVal
      * @return true iff <code>abs(v) < ABS_ERR</code>
      * 
      * @deprecated You will almost never be dealing with doubles with minimal exponents,

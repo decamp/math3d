@@ -31,7 +31,7 @@ public class Ang {
 
     /**
      * Normalizes an angle to fall within a 2PI range centered on a specified
-     * value. For a range of [-PI, PI], call {@code normalize( ang, 0.0 ) }.
+     * mVal. For a range of [-PI, PI], call {@code normalize( ang, 0.0 ) }.
      * For a range of [0, 2PI], call {@code normalize( ang, PI ) }.
      *
      * @param ang  Angle in radians.

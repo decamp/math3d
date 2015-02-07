@@ -221,9 +221,9 @@ public final class Quat {
      * One implication of this function is that it can be used
      * to uniformly sample a 2-sphere.
      *
-     * @param rand0 Arbitrary value in [0,1]
-     * @param rand1 Arbitrary value in [0,1]
-     * @param rand2 Arbitrary value in [0,1]
+     * @param rand0 Arbitrary mVal in [0,1]
+     * @param rand1 Arbitrary mVal in [0,1]
+     * @param rand2 Arbitrary mVal in [0,1]
      * @param out   Holds quaternion on return.
      */
     public static void randToQuat( float rand0, float rand1, float rand2, Vec4 out ) {
@@ -232,7 +232,7 @@ public final class Quat {
         float sign2 = 1f;
 
         // Sort three numbers.
-        // Use the sort order to generate 3 random booleans for sign values.
+        // Use the sort order to generate 3 random booleans for mSign values.
         if( rand0 > rand1 ) {
             sign0 = -1;
             sign1 = -1;
@@ -488,9 +488,9 @@ public final class Quat {
      * One implication of this function is that it can be used
      * to uniformly sample a 2-sphere.
      *
-     * @param rand0 Arbitrary value in [0,1]
-     * @param rand1 Arbitrary value in [0,1]
-     * @param rand2 Arbitrary value in [0,1]
+     * @param rand0 Arbitrary mVal in [0,1]
+     * @param rand1 Arbitrary mVal in [0,1]
+     * @param rand2 Arbitrary mVal in [0,1]
      * @param out   Holds quaternion on return.
      */
     public static void randToQuat( double rand0, double rand1, double rand2, double[] out ) {
@@ -499,7 +499,7 @@ public final class Quat {
         double sign2 = 1.0;
 
         // Sort three numbers.
-        // Use the sort order to generate 3 random booleans for sign values.
+        // Use the sort order to generate 3 random booleans for mSign values.
         if( rand0 > rand1 ) {
             sign0 = -1;
             sign1 = -1;

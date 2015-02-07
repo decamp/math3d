@@ -219,7 +219,7 @@ public final class Interp {
      * @param x0 Value before sample
      * @param x1 Value after sample
      * @param t  Parameterized position to sample, parameterized between [0,1].
-     * @return   interpolated value
+     * @return   interpolated mVal
      */
     public static float lerp( float x0, float x1, float t ) {
         return x0 * ( 1.0f - t ) + x1 * t;
