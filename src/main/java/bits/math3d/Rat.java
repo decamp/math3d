@@ -8,7 +8,7 @@ package bits.math3d;
 
 /**
  * Rationals Math
- * @Deprecated use Rational
+ * @Deprecated use bits.microtime.Frac
   */
 public class Rat {
 
