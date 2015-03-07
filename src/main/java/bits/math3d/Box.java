@@ -24,8 +24,8 @@ public final class Box {
     //== BOX2 Functions ===========================
 
     public static void put( Box2 box, Box2 out ) {
-        out.x1 = box.x1;
-        out.y1 = box.y1;
+        out.x0 = box.x0;
+        out.y0 = box.y0;
         out.x1 = box.x1;
         out.y1 = box.y1;
     }
