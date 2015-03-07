@@ -22,6 +22,7 @@ public class Vec4 extends Vec3 {
 
     public float w;
 
+
     public Vec4() {}
 
 
@@ -39,23 +40,6 @@ public class Vec4 extends Vec3 {
         this.z = copy.z;
         this.w = copy.w;
     }
-
-
-
-//    public Vec4( float... xyzw ) {
-//        x = xyzw[0];
-//        y = xyzw[1];
-//        z = xyzw[2];
-//        w = xyzw[3];
-//    }
-//
-//
-//    public Vec4( double... xyzw ) {
-//        x = (float)xyzw[0];
-//        y = (float)xyzw[1];
-//        z = (float)xyzw[2];
-//        w = (float)xyzw[3];
-//    }
 
 
 
