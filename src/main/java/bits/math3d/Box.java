@@ -174,19 +174,19 @@ public final class Box {
     }
 
     /**
-     * Computes pointUnion between a point {@code [x,y]} and {@code b}
+     * Computes pointUnion between a point {@code [x,y]} and {@code box}
      * and returns the smallest box that contains both.
      *
-     * @param x   X-Coordinat of point.
+     * @param x   X-Coordinate of point.
      * @param y   Y-Coordinate of point.
-     * @param b   Second box.
-     * @param out Output box. May be same object as a or b.
+     * @param box Box
+     * @param out Output box. May be same object as {@code box}.
      */
-    public static void union( float x, float y, Box2 b, Box2 out ) {
-        out.x0 = x <= b.x0 ? x : b.x0;
-        out.x1 = x >= b.x1 ? x : b.x1;
-        out.y0 = y <= b.y0 ? y : b.y0;
-        out.y1 = y >= b.y1 ? y : b.y1;
+    public static void union( float x, float y, Box2 box, Box2 out ) {
+        out.x0 = x <= box.x0 ? x : box.x0;
+        out.x1 = x >= box.x1 ? x : box.x1;
+        out.y0 = y <= box.y0 ? y : box.y0;
+        out.y1 = y >= box.y1 ? y : box.y1;
     }
 
     /**
@@ -577,6 +577,25 @@ public final class Box {
         out.x1 = a.x1 >= b.x1 ? a.x1 : b.x1;
         out.y1 = a.y1 >= b.y1 ? a.y1 : b.y1;
         out.z1 = a.z1 >= b.z1 ? a.z1 : b.z1;
+    }
+
+    /**
+     * Computes pointUnion between a point {@code [x,y,z]} and {@code box}
+     * and returns the smallest box that contains both.
+     *
+     * @param x   X-Coordinate of point.
+     * @param y   Y-Coordinate of point.
+     * @param z   Z-Coordinate of point.
+     * @param box Box
+     * @param out Output box. May be same object as {@code box}.
+     */
+    public static void union( float x, float y, float z, Box3 box, Box3 out ) {
+        out.x0 = x <= box.x0 ? x : box.x0;
+        out.x1 = x >= box.x1 ? x : box.x1;
+        out.y0 = y <= box.y0 ? y : box.y0;
+        out.y1 = y >= box.y1 ? y : box.y1;
+        out.z0 = z <= box.z0 ? z : box.z0;
+        out.z1 = z >= box.z1 ? z : box.z1;
     }
 
     /**
