@@ -166,30 +166,27 @@ public final class Quat {
      */
     public static void slerp( Vec4 qa, Vec4 qb, float t, Vec4 out ) {
         // Calculate angle between them.
-        float cosHalfTheta = Vec.dot( qa, qb );
+        float cosTheta  = Vec.dot( qa, qb );
+        float inversion = 1f;
+        if( cosTheta < 0 ) {
+            inversion = -1f;
+            cosTheta  = -cosTheta;
+        }
 
-        // if qa=qb or qa=-qb then theta = 0 and we can return qa
-        if( cosHalfTheta >= 1.0 || cosHalfTheta <= -1.0 ) {
-            Vec.put( qa, out );
+        // 1.0 <= cosTheta if qa == qb or qa == -qb.
+        // In this case, return qb.
+        if( 1.0 <= cosTheta ) {
+            Vec.put( qb, out );
             return;
         }
 
-        // Calculate temporary values.
-        float halfTheta = (float)Math.acos( cosHalfTheta );
-        float sinHalfTheta = (float)Math.sqrt( 1.0 - cosHalfTheta*cosHalfTheta );
+        float theta    = (float)Math.acos( cosTheta );
+        float sinTheta = (float)Math.sin( theta );
 
-        // if theta = 180 degrees then result is not fully defined
-        // we could rotate around any axis normal to qa or qb
-        if( sinHalfTheta < 0.00001f && sinHalfTheta > -0.00001f ) {
-            out.x = ( qa.x * 0.5f + qb.x * 0.5f );
-            out.y = ( qa.y * 0.5f + qb.y * 0.5f );
-            out.z = ( qa.z * 0.5f + qb.z * 0.5f );
-            out.w = ( qa.w * 0.5f + qb.w * 0.5f );
-            return;
-        }
-        
-        float ratioA = (float)Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta;
-        float ratioB = (float)Math.sin( t * halfTheta ) / sinHalfTheta; 
+        // TODO: Check case when rotation is 180-degrees.
+
+        float ratioA = (float)Math.sin( ( 1 - t ) * theta ) / sinTheta;
+        float ratioB = (float)Math.sin(   t       * theta ) / sinTheta * inversion;
         //calculate Quaternion.
         out.x = ( qa.x * ratioA + qb.x * ratioB );
         out.y = ( qa.y * ratioA + qb.y * ratioB );

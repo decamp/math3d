@@ -2039,7 +2039,7 @@ public final class Vec {
 
 
     public static double lenSquared4( double[] a ) {
-        return a[0] * a[0] + a[1] * a[1] + a[3] * a[3] + a[4] * a[4];
+        return a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3];
     }
 
 
