@@ -18,21 +18,85 @@ public class Polygons {
         return area( p, 0, p.length );
     }
 
-
+    /**
+     * Computes area of polygon defined by points starting at {@code p[off]}.
+     * <p>
+     * The first point does not need to be repeated. For example,
+     * a triangle should have {@code len == 3}. However, if the first
+     * point is repeated, it will not affect the answer.
+     *
+     * @param p   Array of points of polygon.
+     * @param off Offset into array.
+     * @param len Number of points in polygon.
+     * @return Area of polygon.
+     * The area is non-negative if polygon is oriented counter-clockwise,
+     * non-positive if oriented clockwise.
+     */
     public static float area( Vec2[] p, int off, int len ) {
-        Vec2 p0 = p[len-1+off];
-        float sum  = 0;
-        for( int i = 0; i < len; i++ ) {
-            Vec2 p1 = p[i+off];
-            sum += ( p1.x - p0.x ) * ( p1.y + p0.y );
-            p0 = p1;
+        if( len <= 0 ) {
+            return Float.NaN;
         }
-        return ( sum < 0 ? -sum : sum ) * 0.5f;
+
+        final int end = off + len;
+        Vec2  a   = p[end - 1];
+        float sum = 0;
+
+        for( int i = off; i < end; i++ ) {
+            Vec2 b = p[i];
+            sum += ( a.x - b.x ) * ( a.y + b.y );
+            a = b;
+        }
+
+        return 0.5f * sum;
+    }
+
+    /**
+     * Computes centroid of polygon.
+     * <p>
+     * The first point does not need to be repeated. For example,
+     * a triangle should have {@code len == 3}. However, if the first
+     * point is repeated, it will not affect the answer.
+     *
+     * @param p   Array of points of polygon.
+     * @param off Offset into array.
+     * @param len Number of points in polygon.
+     * @param out Holds centroid on return.
+     * @return Area of polygon.
+     * The area is non-negative if polygon is oriented counter-clockwise,
+     * non-positive if oriented clockwise.
+     */
+    public static float centroid( Vec2[] p, int off, int len, Vec2 out ) {
+        if( len <= 0 ) {
+            out.x = out.y = Float.NaN;
+            return Float.NaN;
+        }
+
+        final int end = off + len;
+
+        Vec2  a    = p[end - 1];
+        float cx   = 0;
+        float cy   = 0;
+        float area = 0;
+
+        for( int i = off; i < end; i++ ) {
+            Vec2 b = p[i];
+            double part = ( a.x * b.y ) - ( b.x * a.y );
+
+            cx += ( a.x + b.x ) * part;
+            cy += ( a.y + b.y ) * part;
+            area += part;
+
+            a = b;
+        }
+
+        out.x = ( 1.0f / 3.0f ) / area * cx;
+        out.y = ( 1.0f / 3.0f ) / area * cy;
+        return 0.5f * area;
     }
 
 
     public static float triArea( Vec2 a, Vec2 b, Vec2 c ) {
-        return Math.abs( 0.5f * ( (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y) ) );
+        return 0.5f * ( (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y) );
     }
 
 
