@@ -41,5 +41,16 @@ public class PolyTest {
         assertTrue( Tol.approxEqual( 0.5, cent.y ) );
     }
 
+    @Test
+    public void testClockwiseCentroid() {
+        Vec2[] t = { new Vec2( 0, 0 ), new Vec2( 0, 1 ), new Vec2( 1, 1 ), new Vec2( 1, 0 ) };
+        Vec2 cent = new Vec2();
+        float area = Polygons.centroid( t, 0, 4, cent );
+
+        assertTrue( Tol.approxEqual( -1, area ) );
+        assertTrue( Tol.approxEqual( 0.5, cent.x ) );
+        assertTrue( Tol.approxEqual( 0.5, cent.y ) );
+    }
+
 
 }
