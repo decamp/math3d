@@ -6,7 +6,9 @@
 
 package bits.math3d;
 
-/** 
+/**
+ * Angle Functions.
+ *
  * @author Philip DeCamp  
  */
 public class Ang {

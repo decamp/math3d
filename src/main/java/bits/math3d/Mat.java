@@ -13,7 +13,7 @@ import static bits.math3d.Tol.*;
 
 
 /**
- * These are all homographic coordinates, yo.  Matrices are 4x4.  Vectors are 3x1.
+ * Matrix functions.
  *
  * @author Philip DeCamp
  */

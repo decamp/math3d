@@ -11,7 +11,7 @@ import java.util.Random;
 
 
 /**
- * Methods for quaternions.
+ * Quaternion functions.
  * 
  * @author decamp
  */

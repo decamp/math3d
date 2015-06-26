@@ -6,29 +6,27 @@
 
 package bits.math3d;
 
-
 import java.util.NoSuchElementException;
-
 
 /**
  * @author Philip DeCamp
  */
 public interface VecView<T> {
 
-    public int dim();
-    public double get( T item, int n );
-    public void set( T item, int n, double v );
-    public double x( T item );
-    public void x( T item, double x );
-    public double y( T item );
-    public void y( T item, double y );
-    public double z( T item );
-    public void z( T item, double z );
-    public double w( T item );
-    public void w( T item, double w );
+    int dim();
+    double get( T item, int n );
+    void set( T item, int n, double v );
+    double x( T item );
+    void x( T item, double x );
+    double y( T item );
+    void y( T item, double y );
+    double z( T item );
+    void z( T item, double z );
+    double w( T item );
+    void w( T item, double w );
 
 
-    public static class FloatArrayView implements VecView<float[]> {
+    class FloatArrayView implements VecView<float[]> {
 
         private final int mDim;
 
@@ -52,7 +50,7 @@ public interface VecView<T> {
     }
 
 
-    public static class DoubleArrayView implements VecView<double[]> {
+    class DoubleArrayView implements VecView<double[]> {
 
         private final int mDim;
 
@@ -76,7 +74,7 @@ public interface VecView<T> {
     }
 
 
-    public static VecView<Vec3> VEC3 = new VecView<Vec3>() {
+    VecView<Vec3> VEC3 = new VecView<Vec3>() {
         public int dim() { return 3; }
         public double x( Vec3 item )           { return item.x; }
         public void   x( Vec3 item, double x ) { item.x = (float)x; }

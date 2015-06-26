@@ -8,7 +8,7 @@ package bits.math3d;
 
 
 /**
- * Fast routines for finding Power-Of-Two numbers.
+ * Power-Of-Two utilities.
  * 
  * @author Philip DeCamp
  */

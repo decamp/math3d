@@ -8,7 +8,7 @@ package bits.math3d;
 
 
 /**
- * Trans3 (3D Transform) represents a getRotation and getTranslation, in that order.
+ * Trans3 (3D Transform) represents a rotation and translation, in that order.
  */
 public class Trans3 {
     public final Vec3 mPos = new Vec3();
@@ -29,7 +29,6 @@ public class Trans3 {
     }
 
 
-
     @Override
     public boolean equals( Object obj ) {
         if( !(obj instanceof Trans3) ) {
@@ -48,4 +47,5 @@ public class Trans3 {
     public String toString() {
         return Trans.format( this );
     }
+
 }

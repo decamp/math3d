@@ -6,6 +6,11 @@
 
 package bits.math3d;
 
+/**
+ * Convolution functions
+ *
+ * @author Philip DeCamp
+ */
 public class Convolutions {
 
     /** abcd|00000000 **/

@@ -1,3 +1,5 @@
+package bits.math3d;
+
 /**
  * Class contains the implementation of: <br/>
  * - Normal Cummulative Distribution Function <br/>
@@ -15,10 +17,6 @@
  *
  * (this file modified by Philip DeCamp)
  */
-
-package bits.math3d;
-
-
 public class Phi {
 
     /**

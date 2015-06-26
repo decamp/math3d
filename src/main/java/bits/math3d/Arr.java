@@ -8,7 +8,10 @@ package bits.math3d;
 
 import java.util.Random;
 
+
 /**
+ * Array functions.
+ *
  * @author decamp
  */
 public final class Arr {

@@ -13,7 +13,7 @@ import static bits.math3d.Tol.SQRT_ABS_ERR;
 
 
 /**
- * Functions for length-3 vectors.
+ * Vector functions.
  *
  * @author Philip DeCamp
  */

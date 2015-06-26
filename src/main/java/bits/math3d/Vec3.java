@@ -12,10 +12,6 @@ import java.util.NoSuchElementException;
 /**
  * 3-dimensional vector.
  *
- * Extending {@code Vec2} might seem kind of weird, but I tested allocation time and it was
- * slower by about 2%. I was using arrays before, which are nice and general purpose, but
- * require an extra 4 bytes of memory, are slower to createGeom, and require runtime rangeOf checks.
- *
  * @author Philip DeCamp
  */
 public class Vec3 {

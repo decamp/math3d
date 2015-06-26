@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.EmptyStackException;
 
 
+/**
+ * Matrix stack.
+ */
 public class MatStack {
 
     private Mat4[] mStack;

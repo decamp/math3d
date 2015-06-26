@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 
 /**
- * These are all homographic coordinates, yo.  Matrices are 4x4.  Vectors are 3x1.
+ * 3x3 Matrix
  *
  * @author Philip DeCamp
  */

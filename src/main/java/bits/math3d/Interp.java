@@ -8,7 +8,7 @@ package bits.math3d;
 
 
 /**
- * Methods for interpolation. 
+ * Interpolation functions
  * 
  * @author decamp
  */

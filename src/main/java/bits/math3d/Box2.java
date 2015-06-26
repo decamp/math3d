@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 
 /**
- * 2D Axis-Aligned Bounding-Box
+ * 2D Axis-Aligned Bounding-Box.
  *
  * @author decamp
  */

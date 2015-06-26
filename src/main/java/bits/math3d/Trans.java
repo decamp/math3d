@@ -7,6 +7,9 @@
 package bits.math3d;
 
 
+/**
+ * Methods for transform objects.
+ */
 public final class Trans {
 
     public static void put( Trans3 a, Trans3 out ) {

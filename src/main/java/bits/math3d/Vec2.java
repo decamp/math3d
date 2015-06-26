@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 
 /**
- * Functions for length-2 vectors.
+ * 2-dimensional Vector
  *
  * @author Philip DeCamp  
  */

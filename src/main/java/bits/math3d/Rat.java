@@ -8,8 +8,9 @@ package bits.math3d;
 
 /**
  * Rationals Math
- * @Deprecated use bits.microtime.Frac
-  */
+ *
+ * @deprecated use bits.microtime.Frac
+ */
 public class Rat {
 
     public static final int ROUND_ZERO     = 0x0000; ///< Round toward zero.

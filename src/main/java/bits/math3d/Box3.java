@@ -10,6 +10,8 @@ import java.util.NoSuchElementException;
 
 
 /**
+ * 3D Axis Aligned Bounding Box
+ *
  * @author Philip DeCamp
  */
 public class Box3 {

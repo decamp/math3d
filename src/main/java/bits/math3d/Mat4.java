@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 
 /**
- * These are all homographic coordinates.
+ * 4x4 Matrix
  *
  * @author Philip DeCamp
  */

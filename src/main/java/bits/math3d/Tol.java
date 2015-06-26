@@ -7,7 +7,7 @@
 package bits.math3d;
 
 /**
- * Tools for managing tolerance and protecting against rounding errors.
+ * Tolerance functions. Help for protecting against rounding errors.
  *  
  * @author Philip DeCamp  
  */

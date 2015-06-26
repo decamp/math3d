@@ -1,3 +1,5 @@
+package bits.math3d;
+
 /**
  * Simplex Noise in 2D, 3D and 4D. Based on the example code of this paper:
  * http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
@@ -8,9 +10,6 @@
  * @author Karsten Schmidt (info at toxi dot co dot uk)
  *
  */
-
-package bits.math3d;
-
 public class SimplexNoise {
 
     /**
