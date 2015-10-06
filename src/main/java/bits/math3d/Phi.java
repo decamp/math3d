@@ -2,8 +2,8 @@ package bits.math3d;
 
 /**
  * Class contains the implementation of: <br/>
- * - Normal Cummulative Distribution Function <br/>
- * - Inverse Normal Cummulative Distribution Function. <br/>
+ * - Normal Cumulative Distribution Function <br/>
+ * - Inverse Normal Cumulative Distribution Function. <br/>
  * - Error Function <br/>
  * - Complimentary Error Function <br/> 
  * - Scaled Complimentary Error Function <br/<>
@@ -34,7 +34,7 @@ public class Phi {
      * Standard normal cumulative distribution function. (probit function).
      * 
      * @param x Any mVal
-     * @return Integral of the standard normal distridbution from -inf to x.
+     * @return Integral of the standard normal distribution from -inf to x.
      */
     public static double ncdf( double x ) {
         return 0.5 * ( 1.0 + erf( x / SQRT_2 ) );
