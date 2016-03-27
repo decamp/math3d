@@ -1,0 +1,140 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+
+configure( subprojects ) { project ->
+    group = 'com.github.decamp'
+    buildDir = "$projectDir/build"
+    def type = gradle.projectTypes[ project.name ]
+
+    repositories {
+        jcenter()
+    }
+
+    apply plugin: 'idea'
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+
+    if( type.startsWith( 'java' ) ) {
+        apply plugin: 'java'
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+
+
+        if( type == 'java_app' ) {
+            apply plugin: 'application'
+        }
+
+        test {
+            workingDir = "$buildDir/resources/main"
+            jvmArgs = []
+            systemProperties = [:]
+            testLogging.showStandardStreams = true
+
+            onOutput { descriptor, event ->
+                logger.lifecycle( "Test: " + descriptor + " produced standard out/err: " + event.message )
+            }
+
+            beforeTest { descriptor ->
+                logger.lifecycle( "Running test: " + descriptor )
+            }
+        }
+
+        dependencies {
+            testCompile 'junit:junit:4.11'
+        }
+
+        tasks.assemble.doFirst {
+            // Workaround for gradle bug.
+            new File( "$buildDir/resources/main" ).mkdirs();
+        }
+
+        tasks.withType( Javadoc ) {
+            options.addStringOption( 'Xdoclint:none', '-quiet' )
+        }
+
+        task javadocJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from "$buildDir/docs/javadoc"
+        }
+
+        task sourcesJar( type: Jar ) {
+            from sourceSets.main.allJava
+        }
+    }
+}
+
+
+project( ':core' ) {
+    description = 'Math3D Lib'
+    version = 'v0.0.0'
+
+    jar {
+        from sourceSets.main.allJava
+    }
+
+    apply plugin: 'maven'
+    configurations {
+        deployerJars
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.11'
+    }
+
+    artifacts {
+        archives jar
+        archives javadocJar
+        archives sourcesJar
+    }
+
+    install {
+        repositories.mavenInstaller {
+            pom.project {
+                description = project.description
+                licenses {
+                    license {
+                        name 'BSD 2-Clause License'
+                        url 'http://opensource.org/licenses/BSD-2-Clause'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'decamp'
+                        name 'Philip DeCamp'
+                        url 'http://de.camp'
+                        organization ''
+                        organizationUrl ''
+                        roles {
+                            role 'developer'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+project( ':legacy' ) {
+    description = 'Legacy math code'
+    version = 'v0.0.0'
+
+    dependencies {
+        compile project( ':core' )
+    }
+
+    jar {
+        from sourceSets.main.allJava
+    }
+
+
+}

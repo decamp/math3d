@@ -1,0 +1,8 @@
+rootProject.name = 'math3d'
+
+gradle.ext.projectTypes = [
+        core: 'java_lib',
+        legacy: 'java_lib',
+]
+
+gradle.ext.projectTypes.keySet().each { include it }
