@@ -44,10 +44,10 @@ public final class Tol {
      * {@code b}: {@code abs(a-b)/max(abs(a),abs(b))}. A functional maxRelError should be no smaller than
      * Tolerance.EPS.  The default mVal is REL_ERR.
      * 
-     * @param a
-     * @param b
-     * @param maxRelError   Maximum relative error.
-     * @param maxAbsError   Maximum absolute error.
+     * @param a           Input value
+     * @param b           Input value
+     * @param maxRelError Maximum relative error.
+     * @param maxAbsError Maximum absolute error.
      * @return true if {@code a} and {@code b} are approximately equal.
      */
     public static boolean approxEqual( double a, double b, double maxRelError, double maxAbsError ) {
@@ -156,10 +156,10 @@ public final class Tol {
      * {@code b}: {@code abs(a-b)/max(abs(a),abs(b))}. A functional maxRelError should be no smaller than
      * Tolerance.FEPS. The default mVal is FREL_ERR.
      * 
-     * @param a
-     * @param b
-     * @param maxRelError   Maximum relative error.
-     * @param maxAbsError   Maximum absolute error.
+     * @param a           Input value
+     * @param b           Input value
+     * @param maxRelError Maximum relative error.
+     * @param maxAbsError Maximum absolute error.
      * @return true if {@code a} and {@code b} are approximately equal.
      */
     public static boolean approxEqual( float a, float b, float maxRelError, float maxAbsError ) {
@@ -264,8 +264,8 @@ public final class Tol {
      * Equivalent to {@code approxZero( v, ref, relErr, ABS_ERR )}
      * @param v      Some mVal.
      * @param ref    Another mVal to compare {@code v} with.
-     * @param relErr
-     * @return
+     * @param relErr Maximum relative error
+     * @return true if v is approximately zero.
      */
     @Deprecated public static boolean approxZero( float v, float ref, float relErr ) {
         return approxZero( v, ref, relErr, FABS_ERR );
@@ -308,7 +308,9 @@ public final class Tol {
         return approxEqual( a, b, maxRelError, FABS_ERR );
     }
 
+
     @Deprecated public static final double TOL = 1E-10;
+
 
     @Deprecated public static final float FTOL = 1E-5f;
 

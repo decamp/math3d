@@ -24,7 +24,8 @@ import java.io.Serializable;
  * </p>
  * @author Philip DeCamp  
  */
-@Deprecated public class Rect implements Serializable {
+@Deprecated
+public class Rect implements Serializable {
 
     private static final long serialVersionUID = 2023954814050670713L;
     
@@ -40,7 +41,7 @@ import java.io.Serializable;
      * @param minY    The min Y edge of the rectangle.
      * @param width   The width of the rectangle.
      * @param height  The height of the rectangle.
-     * @returns a newFRect object with the specified edges and dimensions.
+     * @return a newFRect object with the specified edges and dimensions.
      */
     public static Rect fromBounds(double minX, double minY, double width, double height) {
         return new Rect(minX, minY, minX + width, minY + height);
@@ -53,7 +54,7 @@ import java.io.Serializable;
      * @param minY  The y0 edge of the rectangle.
      * @param maxX  The x1 edge of the rectangle.
      * @param maxY  The y1 edge of the rectangle.
-     * @returns a new Rect object with the specified edges.
+     * @return a new Rect object with the specified edges.
      */
     public static Rect fromEdges(double minX, double minY, double maxX, double maxY) {
         return new Rect(minX, minY, maxX, maxY);
@@ -61,12 +62,7 @@ import java.io.Serializable;
     
     /**
      * Creates a new Rect by specifying center and size.
-     * 
-     * @param centerX
-     * @param centerY
-     * @param width
-     * @param height
-     * @returns new Rect
+     * @return new Rect
      */ 
     public static Rect fromCenter(double centerX, double centerY, double width, double height) {
         return new Rect(   centerX - width / 2f, 
@@ -101,42 +97,42 @@ import java.io.Serializable;
     /****** POSITION ******/    
     
     /**
-     * @returns the min x value at the contained edge of this rectangle.
+     * @return the min x value at the contained edge of this rectangle.
      */
     public double minX() {
         return mMinX;
     }
     
     /**
-     * @returns the min y value at the contained edge of this rectangle.
+     * @return the min y value at the contained edge of this rectangle.
      */
     public double minY() {
         return mMinY;
     }
 
     /**
-     * @returns the max x value at the uncontained edge of this Rect.
+     * @return the max x value at the uncontained edge of this Rect.
      */
     public double maxX() {
         return mMaxX;
     }
         
     /**
-     * @returns the max y value at the uncontained edge of this Rect.
+     * @return the max y value at the uncontained edge of this Rect.
      */
     public double maxY() {
         return mMaxY;
     }
     
     /**
-     * @returns the center point between the left and right edges.
+     * @return the center point between the left and right edges.
      */
     public double centerX() {
         return (mMinX + mMaxX) * 0.5f;
     }
     
     /**
-     * @returns the center point between the bottom and top edges.
+     * @return the center point between the bottom and top edges.
      */
     public double centerY() {
         return (mMinY + mMaxY) * 0.5f;
@@ -146,21 +142,21 @@ import java.io.Serializable;
     /****** SIZE ******/
     
     /**
-     * @returns the width of this rectangle.
+     * @return the width of this rectangle.
      */
     public double spanX() {
         return mMaxX - mMinX;
     }
     
     /**
-     * @returns the height of this rectangle.
+     * @return the height of this rectangle.
      */
     public double spanY() {
         return mMaxY - mMinY;
     }
                 
     /**
-     * @returns the absolute area of this rectangle.
+     * @return the absolute area of this rectangle.
      */
     public double area() {
         return Math.abs((mMaxX - mMinX) * (mMaxY - mMinY));
@@ -176,7 +172,7 @@ import java.io.Serializable;
      * size is not changed.
      * 
      * @param bounds - Rect in which to fit <code>this</code> rectangle.
-     * @returns a new Rect.
+     * @return a new Rect.
      */
     public Rect clamp(Rect bounds) {
         double left, right, top, bottom;
@@ -231,7 +227,7 @@ import java.io.Serializable;
     }
     
     /**
-     * @returns the intersection between <code>this</code> Rect and the Parameter Rect.
+     * @return the intersection between <code>this</code> Rect and the Parameter Rect.
      * If the two FRects do not overlap, a Rect with 0 size is returned.
      */
     public Rect clip(Rect bounds) {
@@ -246,7 +242,7 @@ import java.io.Serializable;
      * two rectangles share borders, but does not affect the aspect ratio.
      * 
      * @param bounds - Rectangle into which to fit this Rect.
-     * @returns new Rect object that fits inside bounds.
+     * @return new Rect object that fits inside bounds.
      */
     public Rect fit(Rect bounds) {
         if(spanX() * bounds.spanY() > bounds.spanX() * spanY()) {
@@ -273,7 +269,7 @@ import java.io.Serializable;
      * Scales the size of the Rect without changing the center point.
      * 
      * @param scale - Amount to scale width and height.
-     * @returns new Rect with scaled width and height.
+     * @return new Rect with scaled width and height.
      */
     public Rect inflate(double scale) {
         double width  = (mMaxX - mMinX) * scale;
@@ -288,9 +284,9 @@ import java.io.Serializable;
     /**
      * Scales the size of the Rect without changing the center point.
      * 
-     * @param scaleX - Amount to scale width.
-     * @param scaleY - Amount to scale height.
-     * @returns new Rect with scaled width and height.
+     * @param scaleWidth Amount to scale width.
+     * @param scaleHeight Amount to scale height.
+     * @return new Rect with scaled width and height.
      */
     public Rect inflate(double scaleWidth, double scaleHeight) {
         double width  = (mMaxX - mMinX) * scaleWidth;
@@ -303,7 +299,7 @@ import java.io.Serializable;
     }
     
     /**
-     * @returns the pointUnion between <code>this</code> Rect and the parameter Rect.  The
+     * @return the pointUnion between <code>this</code> Rect and the parameter Rect.  The
      * pointUnion may contain area not covered by either input Rect.
      */
     public Rect union(Rect r) {
@@ -317,7 +313,7 @@ import java.io.Serializable;
      * This will flip the width or height of a rectangle if it has a negative 
      * size. The rectangle will remain in the same place, with only the sides swapped.
      * 
-     * @returns a new Rect.
+     * @return a new Rect.
      */
     public Rect normalize() {
         if(mMinX < mMaxX){
@@ -339,7 +335,7 @@ import java.io.Serializable;
      * Multiplies location and size.
      * @param multX - Amount to multiply the width and left edge.
      * @param multY - Amount to multiply the height and top edge.
-     * @returns new Rect object.
+     * @return new Rect object.
      */
     public Rect scale(double multX, double multY) {
         return new Rect(mMinX * multX, mMinY * multY, mMaxX * multX, mMaxY * multY);
@@ -349,7 +345,7 @@ import java.io.Serializable;
      * Moves the Rect.
      * @param dx - Amount to move the rectangle horizantally.
      * @param dy - Amount to move the rectangle vertically.
-     * @returns a new rectangle.
+     * @return a new rectangle.
      */
     public Rect translate(double dx, double dy) {
         return new Rect(mMinX + dx, mMinY + dy, mMaxX + dx, mMaxY + dy);
@@ -357,7 +353,7 @@ import java.io.Serializable;
     
     /**
      * Rounds each edge to the nearest int.
-     * @returns Rect with near integer values.
+     * @return Rect with near integer values.
      */
     public Rect round() {
         return new Rect(Math.round(mMinX),
@@ -371,7 +367,7 @@ import java.io.Serializable;
      * 
      * @param x - The new horizontal center.
      * @param y - The new vertical center.
-     * @returns a new Rect centered at (x, y)
+     * @return a new Rect centered at (x, y)
      */
     public Rect setCenter(double x, double y) {
         x -= (mMaxX - mMinX) * 0.5;
@@ -384,7 +380,7 @@ import java.io.Serializable;
     /****** TESTS ******/
     
     /**
-     * @returns true iff both dimensions are non-negative. 
+     * @return true iff both dimensions are non-negative. 
      */
     public boolean isValid() {
         return mMaxX >= mMinX && mMaxY >= mMinY;
@@ -395,7 +391,7 @@ import java.io.Serializable;
      * 
      * @param x - The x coordinate of a point.
      * @param y - The y coordinate of a point.
-     * @returns true if the point lies within the rectangle, otherwise false.
+     * @return true if the point lies within the rectangle, otherwise false.
      */
     public boolean intersects(double x, double y) {
         return x >= mMinX && x < mMaxX && y >= mMinY && y < mMaxY;
@@ -405,7 +401,7 @@ import java.io.Serializable;
      * Tests if this rectangle has any intersection with other rectangle.  
      * 
      * @param rect - A rect to check for overlap.
-     * @returns true if rectangles have any intersection.
+     * @return true if rectangles have any intersection.
      */
     public boolean intersects(Rect rect) {
         return !(mMinX <  rect.mMinX   && mMaxX  <  rect.mMinX   ||
@@ -444,7 +440,7 @@ import java.io.Serializable;
     
     /**
      * Rounds Rect values to nearest integers.
-     * @returns new LongRect object.
+     * @return new LongRect object.
      */
     public LongRect roundToLong() {
         return LongRect.fromEdges( Math.round(mMinX),
@@ -455,7 +451,7 @@ import java.io.Serializable;
     
     /**
      * Truncates Rect values to nearest longs.
-     * @returns new LongRect object.
+     * @return new LongRect object.
      */
     public LongRect floorToLong() {
         return LongRect.fromEdges( (long)mMinX,
@@ -469,7 +465,7 @@ import java.io.Serializable;
      * 
      * @param scaleX  Amount to scale horizontal dimensions.
      * @param scaleY  Amount to scale vertical dimensions.
-     * @returns equivalent LongRect object.
+     * @return equivalent LongRect object.
      */
     public LongRect scaleAndRoundToLong(double scaleX, double scaleY) {
         return LongRect.fromEdges(  Math.round(mMinX * scaleX),
@@ -483,7 +479,7 @@ import java.io.Serializable;
      * 
      * @param scaleX  Amount to scale horizontal dimensions. 
      * @param scaleY  Amount to scale vertical dimensions.
-     * @returns equivalent Rect object.
+     * @return equivalent Rect object.
      */
     public LongRect scaleAndFloorToLong(double scaleX, double scaleY) {
         return LongRect.fromEdges( (long)(mMinX * scaleX),

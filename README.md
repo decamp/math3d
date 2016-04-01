@@ -1,5 +1,5 @@
 ### Math3D Library:
-Basic vector math library suitable for 3D graphics.
+Deprecated. Maintained here for legacy reasons. Basic vector math library suitable for 3D graphics.
 
 ### Build:
 $ ant
