@@ -37,7 +37,7 @@ public class Phi {
      * @return Integral of the standard normal distribution from -inf to x.
      */
     public static double ncdf( double x ) {
-        return 0.5 * ( 1.0 + erf( x / SQRT_2 ) );
+        return 0.5 * ( 1.0 + erf( x * INV_SQRT_2 ) );
     }
 
     /**
@@ -113,7 +113,7 @@ public class Phi {
     /**
      * Scaled complementary error function.
      * 
-     * @param x
+     * @param x Value
      * @return e^(x*x) * erfc( x )
      */
     public static double erfcx( double x ) { 
@@ -123,23 +123,21 @@ public class Phi {
     /**
      * Inverse of the error function with refinement.
      * 
-     * @param y
+     * @param y Value
      * @return x such that erf( x ) == y.
      */
     public static double erfInvPrecise( double y ) {
-        double d = ncdfInv( 0.5 * ( y + 1.0 ) );
-        return d / SQRT_2;
+        return INV_SQRT_2 * ncdfInv( 0.5 * ( y + 1.0 ) );
     }
     
     /**
      * Inverse of the error function.
      * 
-     * @param y  
+     * @param y Value  
      * @return x such that erf( x ) == y.
      */
     public static double erfInvFast( double y ) {
-        double d = ncdfInvFast( 0.5 * ( y + 1.0 ) );
-        return d / SQRT_2;
+        return INV_SQRT_2 * ncdfInvFast( 0.5 * ( y + 1.0 ) );
     }
     
     
@@ -153,7 +151,7 @@ public class Phi {
      *  jacklam@math.uio.no
      * ****************************************** */
     
-    private static final double SQRT_2      = Math.sqrt( 2.0 );
+    private static final double INV_SQRT_2  = 1.0 / Math.sqrt( 2.0 );
     private static final double SQRT_PI     = Math.sqrt( Math.PI );
     private static final double INV_SQRT2PI = 1.0 / Math.sqrt( Math.PI * 2.0 );
     private static final double P_LOW       = 0.02425;
@@ -245,13 +243,13 @@ public class Phi {
      * - Pentium III 800 MHz
      * running Microsoft Windows 2000
      * ************************************* */
-    private static final double X_MIN   = Double.MIN_VALUE;
-    private static final double X_INF   = Double.MAX_VALUE;
+//    private static final double X_MIN   = Double.MIN_VALUE;
+//    private static final double X_INF   = Double.MAX_VALUE;
     private static final double X_NEG   = -9.38241396824444;
     private static final double X_SMALL = 1.110223024625156663E-16;
     private static final double X_BIG   = 9.194E0;
-    private static final double X_HUGE  = 1.0D / ( 2.0 * Math.sqrt( X_SMALL ) );
-    private static final double X_MAX   = Math.min( X_INF, ( 1 / ( SQRT_PI * X_MIN ) ) );
+    private static final double X_HUGE  = 1 / ( 2 * Math.sqrt( X_SMALL ) );
+    private static final double X_MAX   = 1 / ( SQRT_PI * Double.MIN_VALUE );
 
     /*******************************************
      * ORIGINAL FORTRAN version can be found at:
@@ -301,60 +299,60 @@ public class Phi {
      */
     private static double calerf( double x, int type ) {
         double result = 0;
-        double y = Math.abs( x );
-        double yy;
+        double mag = Math.abs( x );
+        double magMag;
         double xNum;
         double xDen;
 
-        if( y <= THRESHOLD ) {
-            yy = 0.0;
-            if( y > X_SMALL )
-                yy = y * y;
-            xNum = ERF_A[4] * yy;
-            xDen = yy;
+        if( mag <= THRESHOLD ) {
+            magMag = 0.0;
+            if( mag > X_SMALL )
+                magMag = mag * mag;
+            xNum = ERF_A[4] * magMag;
+            xDen = magMag;
             for( int i = 0; i < 3; i++ ) {
-                xNum = (xNum + ERF_A[i]) * yy;
-                xDen = (xDen + ERF_B[i]) * yy;
+                xNum = (xNum + ERF_A[i]) * magMag;
+                xDen = (xDen + ERF_B[i]) * magMag;
             }
             result = x * (xNum + ERF_A[3]) / (xDen + ERF_B[3]);
             if( type != 0 )
                 result = 1 - result;
             if( type == 2 )
-                result = Math.exp( yy ) * result;
+                result = Math.exp( magMag ) * result;
             return result;
-        } else if( y <= 4.0 ) {
-            xNum = ERF_C[8] * y;
-            xDen = y;
+        } else if( mag <= 4.0 ) {
+            xNum = ERF_C[8] * mag;
+            xDen = mag;
             for( int i = 0; i < 7; i++ ) {
-                xNum = (xNum + ERF_C[i]) * y;
-                xDen = (xDen + ERF_D[i]) * y;
+                xNum = (xNum + ERF_C[i]) * mag;
+                xDen = (xDen + ERF_D[i]) * mag;
             }
             result = ( xNum + ERF_C[7] ) / ( xDen + ERF_D[7] );
             if( type != 2 ) {
-                yy = Math.round( y * 16.0D ) / 16.0D;
-                double del = (y - yy) * (y + yy);
-                result = Math.exp( -yy * yy ) * Math.exp( -del ) * result;
+                magMag = Math.round( mag * 16.0D ) / 16.0D;
+                double del = (mag - magMag) * (mag + magMag);
+                result = Math.exp( -magMag * magMag ) * Math.exp( -del ) * result;
             }
         } else {
             result = 0.0;
-            if( y >= X_BIG && (type != 2 || y >= X_MAX) ) {
+            if( mag >= X_BIG && (type != 2 || mag >= X_MAX) ) {
                     
-            } else if( y >= X_BIG && y >= X_HUGE ) {
-                result = SQRT_PI / y;
+            } else if( mag >= X_BIG && mag >= X_HUGE ) {
+                result = SQRT_PI / mag;
             } else {
-                yy = 1.0 / (y * y);
-                xNum = ERF_P[5] * yy;
-                xDen = yy;
+                magMag = 1.0 / (mag * mag);
+                xNum = ERF_P[5] * magMag;
+                xDen = magMag;
                 for( int i = 0; i < 4; i++ ) {
-                    xNum = (xNum + ERF_P[i]) * yy;
-                    xDen = (xDen + ERF_Q[i]) * yy;
+                    xNum = (xNum + ERF_P[i]) * magMag;
+                    xDen = (xDen + ERF_Q[i]) * magMag;
                 }
-                result = yy * ( xNum + ERF_P[4] ) / ( xDen + ERF_Q[4] );
-                result = ( SQRT_PI - result ) / y;
+                result = magMag * ( xNum + ERF_P[4] ) / ( xDen + ERF_Q[4] );
+                result = ( SQRT_PI - result ) / mag;
                 if( type != 2 ) {
-                    yy = Math.round( y * 16.0 ) / 16.0;
-                    double del = (y - yy) * (y + yy);
-                    result = Math.exp( -yy * yy ) * Math.exp( -del ) * result;
+                    magMag = Math.round( mag * 16.0 ) / 16.0;
+                    double del = (mag - magMag) * (mag + magMag);
+                    result = Math.exp( -magMag * magMag ) * Math.exp( -del ) * result;
                 }
             }
         }
@@ -370,12 +368,12 @@ public class Phi {
         } else {
             if( x < 0 ) {
                 if( x < X_NEG ) {
-                    result = X_INF;
+                    result = Double.POSITIVE_INFINITY;
                 } else {
-                    yy = Math.round( x * 16.0D ) / 16.0D;
-                    double del = (x - yy) * (x + yy);
-                    y = Math.exp( yy * yy ) * Math.exp( del );
-                    result = (y + y) - result;
+                    magMag = Math.round( x * 16.0D ) / 16.0D;
+                    double del = (x - magMag) * (x + magMag);
+                    mag = Math.exp( magMag * magMag ) * Math.exp( del );
+                    result = (mag + mag) - result;
                 }
             }
         }
@@ -391,14 +389,14 @@ public class Phi {
      *  Peter J. Acklam
      *  jacklam@math.uio.no
      *************************************************** */
-    private static double refineNcdfInv( double x, double d ) {
-        if( d > 0 && d < 1) {
-            double e = 0.5D * erfc( -x / SQRT_2 ) - d;
-            double u = e * Math.sqrt( 2.0 * Math.PI ) * Math.exp( (x * x) / 2.0 );
-            x = x - u / ( 1.0 + x * u / 2.0 );
+    private static double refineNcdfInv( double result, double input ) {
+        if( input > 0 && input < 1) {
+            double err = ncdf( result ) - input;
+            double u = err * Math.sqrt( 2.0 * Math.PI ) * Math.exp( 0.5 * result * result );
+            result = result - u / ( 1.0 + result * u / 2.0 );
         }
         
-        return x;
+        return result;
     }
     
 }
